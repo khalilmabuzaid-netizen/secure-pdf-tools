@@ -1,6 +1,6 @@
 /**
  * CompressPDF Pro - Client-Side PDF Compression Tool
- * Built with Mozilla PDF.js (page rasterization) and jsPDF (compressed document synthesis)
+ * Built with Mozilla PDF.js (page rendering) and jsPDF (compressed document synthesis)
  * 100% Client-Side Processing • Strict Memory Protection (25MB Limit) • Zero Server Uploads
  * Full Bilingual English / Arabic (RTL) Support
  */
@@ -28,6 +28,8 @@ const translations = {
     hero_subtitle: "Reduce document file size with smart quality presets right inside your browser without sacrificing legibility.",
     alert_title: "Memory Protection Alert",
     alert_message: "For optimal browser performance and 100% privacy, please select a PDF under 25MB.",
+    alert_text_optimized_title: "File Already Optimized",
+    alert_text_optimized: "This file is mostly text and is already highly optimized. It cannot be compressed further without losing data.",
     dropzone_title: "Drop your PDF file here",
     dropzone_subtitle: "Drag and drop any PDF file under 25MB to reduce its size, or browse from your computer",
     btn_browse_file: "Browse PDF File",
@@ -106,6 +108,8 @@ const translations = {
     hero_subtitle: "قلل حجم ملفات PDF باستخدام إعدادات جودة ذكية مباشرة في متصفحك دون التأثير على وضوح القراءة.",
     alert_title: "تنبيه حماية الذاكرة",
     alert_message: "للحفاظ على أفضل أداء للمتصفح وخصوصية تامة ١٠٠٪، يرجى اختيار ملف PDF أقل من 25 ميجابايت.",
+    alert_text_optimized_title: "الملف مُحسَّن بالفعل",
+    alert_text_optimized: "هذا الملف يحتوي على نصوص في الغالب وهو مُحسَّن ومضغوط بالفعل بأعلى كفاءة. لا يمكن ضغطه أكثر من ذلك دون فقدان البيانات.",
     dropzone_title: "اسحب ملف PDF هنا",
     dropzone_subtitle: "اسحب وأفلت أي ملف PDF أقل من 25 ميجابايت لتقليل حجمه، أو تصفح من جهازك",
     btn_browse_file: "استعراض ملف PDF",
@@ -178,21 +182,21 @@ const translations = {
 const COMPRESSION_PRESETS = {
   extreme: {
     name: "Low Quality (Max Compression)",
-    renderScale: 0.9,
-    jpegQuality: 0.40,
-    sliderValue: 40
+    renderScale: 0.75,
+    jpegQuality: 0.35,
+    sliderValue: 35
   },
   balanced: {
     name: "Medium Quality (Balanced)",
-    renderScale: 1.25,
-    jpegQuality: 0.65,
-    sliderValue: 65
+    renderScale: 1.0,
+    jpegQuality: 0.60,
+    sliderValue: 60
   },
   light: {
     name: "High Quality (Mild Compression)",
-    renderScale: 1.6,
-    jpegQuality: 0.85,
-    sliderValue: 85
+    renderScale: 1.25,
+    jpegQuality: 0.80,
+    sliderValue: 80
   }
 };
 
@@ -202,7 +206,7 @@ let currentFileName = "document.pdf";
 let currentTotalPages = 0;
 let currentFileSize = 0;
 let selectedPreset = "balanced";
-let currentQualityValue = 65; // percentage (20 - 95)
+let currentQualityValue = 60; // percentage (20 - 95)
 let isCompressing = false;
 let currentLang = 'en';
 
@@ -610,7 +614,7 @@ function selectPreset(level) {
 function updatePresetHighlightForSlider(sliderVal) {
   if (sliderVal <= 45) {
     selectedPreset = "extreme";
-  } else if (sliderVal <= 75) {
+  } else if (sliderVal <= 70) {
     selectedPreset = "balanced";
   } else {
     selectedPreset = "light";
@@ -626,18 +630,18 @@ function updatePresetHighlightForSlider(sliderVal) {
 }
 
 function getActiveCompressionSettings() {
-  const customJpegQuality = currentQualityValue / 100;
-  let renderScale = 1.25;
+  const customJpegQuality = Math.min(0.92, Math.max(0.2, currentQualityValue / 100));
+  let renderScale = 1.0;
 
   if (selectedPreset === "extreme") {
-    renderScale = 0.9;
+    renderScale = 0.75;
   } else if (selectedPreset === "light") {
-    renderScale = 1.6;
-  } else if (selectedPreset === "balanced") {
     renderScale = 1.25;
+  } else if (selectedPreset === "balanced") {
+    renderScale = 1.0;
   } else {
     // Dynamic scale interpolation based on quality percentage
-    renderScale = 0.8 + (customJpegQuality * 0.8);
+    renderScale = 0.65 + (customJpegQuality * 0.6);
   }
 
   return {
@@ -682,7 +686,7 @@ async function executeCompressionAndDownload() {
 
     // 2. Loop through each page: Render to Canvas -> Convert to JPEG -> Append to jsPDF
     for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-      const percentBase = Math.round(((pageNum - 1) / totalPages) * 92);
+      const percentBase = Math.round(((pageNum - 1) / totalPages) * 90);
       updateProgress(percentBase, t('rendering_page', { current: pageNum, total: totalPages }));
 
       const page = await pdfDoc.getPage(pageNum);
@@ -722,7 +726,8 @@ async function executeCompressionAndDownload() {
         targetDoc = new jsPDFConstructor({
           orientation: orientation,
           unit: 'pt',
-          format: [pageWidthPt, pageHeightPt]
+          format: [pageWidthPt, pageHeightPt],
+          compress: true
         });
         targetDoc.addImage(jpegDataUrl, 'JPEG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
       } else {
@@ -734,16 +739,33 @@ async function executeCompressionAndDownload() {
       canvas.width = 0;
       canvas.height = 0;
 
-      const pageDonePercent = Math.round((pageNum / totalPages) * 92);
+      const pageDonePercent = Math.round((pageNum / totalPages) * 90);
       updateProgress(pageDonePercent, t('processed_page', { current: pageNum, total: totalPages }));
     }
 
-    updateProgress(96, t('generating_pdf'));
+    updateProgress(95, t('generating_pdf'));
 
     // 3. Output binary blob and measure compressed size
     const compressedPdfBlob = targetDoc.output('blob');
     const finalSize = compressedPdfBlob.size;
     const originalSize = currentFileSize || currentPdfBytes.byteLength;
+
+    // SIZE CHECK FALLBACK & ABORT CHECK:
+    // If the compressed output is equal or larger than original, abort download and display alert
+    if (finalSize >= originalSize) {
+      // Reset progress bar
+      updateProgress(0, "");
+      if (progressCard) progressCard.classList.add('hidden');
+      if (resultCard) resultCard.classList.add('hidden');
+
+      const alertMsg = t('alert_text_optimized');
+      const alertTitle = t('alert_text_optimized_title');
+
+      showMemoryAlert(true, alertMsg, alertTitle);
+      showToast(alertMsg, "warning");
+      return;
+    }
+
     const bytesSaved = Math.max(0, originalSize - finalSize);
     const reductionPercent = originalSize > 0
       ? Math.round((bytesSaved / originalSize) * 100)
