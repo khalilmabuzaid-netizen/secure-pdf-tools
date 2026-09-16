@@ -62,7 +62,23 @@
       toast_no_text: "No readable text was detected in the document.",
       toast_error: "An error occurred during OCR processing. Please try again.",
       toast_sample_loaded: "Sample document loaded successfully.",
-      toast_pdf_page_changed: "Rendered page {n} of {total}."
+      toast_pdf_page_changed: "Rendered page {n} of {total}.",
+      ocr_seo_badge: "Privacy-First Text Recognition",
+      ocr_seo_title: "How to Extract Text from PDF & Images with OCR",
+      ocr_seo_subtitle: "Convert scanned documents and image files into searchable, editable text with 100% client-side processing and zero server uploads.",
+      ocr_step1_title: "1. Upload Document",
+      ocr_step1_desc: "Select or drag-and-drop any PDF file or image (PNG, JPG, WebP) directly into the secure browser workspace.",
+      ocr_step2_title: "2. Choose Recognition Language",
+      ocr_step2_desc: "Select English, Arabic, or Bilingual recognition, and pick the specific document page you wish to process.",
+      ocr_step3_title: "3. Extract & Export Text",
+      ocr_step3_desc: "Click Extract Text to run instant on-device OCR. Copy the editable text to your clipboard or download it as a .TXT file.",
+      ocr_faq_title: "Frequently Asked Questions",
+      ocr_faq_q1: "Are my documents or confidential files uploaded to any server?",
+      ocr_faq_a1: "No. Our OCR engine operates with 100% client-side processing directly in your browser. With no server uploads, your confidential files never leave your computer, ensuring absolute privacy as part of our secure PDF tools suite.",
+      ocr_faq_q2: "What file formats and image types can I extract text from?",
+      ocr_faq_a2: "You can extract text from single or multi-page PDF documents, as well as PNG, JPG, JPEG, and WebP image formats. The built-in renderer preserves clarity for crisp character recognition.",
+      ocr_faq_q3: "Can I extract mixed English and Arabic text from the same page?",
+      ocr_faq_a3: "Yes! You can choose the Bilingual mode to recognize both English and Arabic script simultaneously on contracts, invoices, receipts, and research papers."
     },
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -112,7 +128,23 @@
       toast_no_text: "لم يتم العثور على نصوص واضحة في المستند.",
       toast_error: "حدث خطأ أثناء معالجة المستند. يرجى المحاولة مرة أخرى.",
       toast_sample_loaded: "تم تحميل المستند النموذجي بنجاح.",
-      toast_pdf_page_changed: "تم عرض الصفحة {n} من {total}."
+      toast_pdf_page_changed: "تم عرض الصفحة {n} من {total}.",
+      ocr_seo_badge: "التعرف الضوئي على النصوص مع حماية الخصوصية",
+      ocr_seo_title: "كيفية استخراج النصوص من ملفات PDF والصور باستخدام OCR",
+      ocr_seo_subtitle: "حول المستندات الممسوحة ضوئياً وملفات الصور إلى نصوص قابلة للبحث والتعديل مع معالجة محلية ١٠٠٪ دون رفع إلى خوادم.",
+      ocr_step1_title: "١. رفع المستند أو الصورة",
+      ocr_step1_desc: "حدد أو اسحب وأفلت أي ملف PDF أو صورة (PNG, JPG, WebP) مباشرة داخل مساحة العمل الآمنة في المتصفح.",
+      ocr_step2_title: "٢. اختيار لغة التعرف",
+      ocr_step2_desc: "اختر اللغة الإنجليزية أو العربية أو التعرف ثنائي اللغة، وحدد صفحة المستند المحددة التي ترغب في معالجتها.",
+      ocr_step3_title: "٣. استخراج النص وتصديره",
+      ocr_step3_desc: "انقر على استخراج النص لتشغيل التعرف الفوري محلياً. انسخ النص القابل للتعديل إلى الحافظة أو قم بتنزيله كملف TXT.",
+      ocr_faq_title: "الأسئلة الشائعة",
+      ocr_faq_q1: "هل يتم رفع مستنداتي أو ملفاتي الحساسة إلى أي خادم خارجي؟",
+      ocr_faq_a1: "لا على الإطلاق. يعمل محرك OCR لدينا بمعالجة محلية ١٠٠٪ مباشرة داخل متصفحك. مع انعدام الرفع إلى الخوادم تماماً، لا تغادر مستنداتك جهازك أبداً، مما يضمن أقصى درجات الخصوصية والأمان.",
+      ocr_faq_q2: "ما هي صيغ الملفات والصور المدعومة لاستخراج النصوص؟",
+      ocr_faq_a2: "يمكنك استخراج النصوص من مستندات PDF متعددة الصفحات بالإضافة إلى صيغ الصور PNG و JPG و JPEG و WebP بدقة ووضوح فائقين.",
+      ocr_faq_q3: "هل يمكنني استخراج نصوص تحتوي على اللغتين العربية والإنجليزية معاً؟",
+      ocr_faq_a3: "نعم بكل تأكيد! يمكنك اختيار وضع ثنائي اللغة للتعرف على النصوص العربية والإنجليزية في وقت واحد على العقود والفواتير والأوراق البحثية."
     }
   };
 

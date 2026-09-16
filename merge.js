@@ -55,7 +55,23 @@
       toast_cleared: "Queue cleared",
       toast_select_min: "Please select at least 2 PDF files to merge.",
       toast_library_error: "PDF-Lib library is not ready. Please check your internet connection.",
-      toast_success: "Merged {files} documents ({pages} pages) in {time}s!"
+      toast_success: "Merged {files} documents ({pages} pages) in {time}s!",
+      merge_seo_badge: "Fast & Private PDF Combiner",
+      merge_seo_title: "How to Merge Multiple PDF Files Online for Free",
+      merge_seo_subtitle: "Combine reports, contracts, receipts, and scans into a single organized document with 100% client-side processing.",
+      merge_step1_title: "1. Select Multiple PDFs",
+      merge_step1_desc: "Drag and drop two or more PDF files into the upload box or browse from your desktop or mobile device.",
+      merge_step2_title: "2. Verify Order & Pages",
+      merge_step2_desc: "Review the queued files, check their total page counts, and arrange them into your preferred sequence.",
+      merge_step3_title: "3. Merge & Save Instantly",
+      merge_step3_desc: "Enter an output filename, click Merge PDFs, and download your consolidated PDF file in seconds.",
+      merge_faq_title: "Frequently Asked Questions",
+      merge_faq_q1: "Are my documents uploaded to a cloud server to merge?",
+      merge_faq_a1: "No. Merge PDF Pro executes with 100% client-side processing in your browser. With no server uploads, your private files never touch the internet, ensuring optimal privacy and compliance.",
+      merge_faq_q2: "Does merging affect the quality of text or images in my PDFs?",
+      merge_faq_a2: "Not at all. The merging engine uses native vector page cloning, preserving original document formatting, sharp text, and high-resolution images without compression artifacts.",
+      merge_faq_q3: "How many files can I combine in a single merge operation?",
+      merge_faq_a3: "You can combine multiple documents simultaneously. The process is powered directly by your computer hardware for lightning-fast results."
     },
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -103,7 +119,23 @@
       toast_cleared: "تم مسح قائمة الانتظار",
       toast_select_min: "يرجى اختيار ملفين PDF على الأقل للدمج.",
       toast_library_error: "مكتبة PDF-Lib غير جاهزة. يرجى التحقق من اتصالك بالإنترنت.",
-      toast_success: "تم دمج {files} مستندات ({pages} صفحة) في {time} ثانية!"
+      toast_success: "تم دمج {files} مستندات ({pages} صفحة) في {time} ثانية!",
+      merge_seo_badge: "دمج ملفات PDF سريع وآمن",
+      merge_seo_title: "كيفية دمج عدة ملفات PDF معاً عبر الإنترنت مجاناً",
+      merge_seo_subtitle: "اجمع التقارير والعقود والإيصالات في مستند واحد منظم بسرعة فائقة ومعالجة محلية ١٠٠٪.",
+      merge_step1_title: "١. اختيار ملفات PDF متعددة",
+      merge_step1_desc: "اسحب وأفلت ملفين أو أكثر من ملفات PDF في منطقة التحميل أو تصفح من جهازك المكتبي أو المحمول.",
+      merge_step2_title: "٢. التحقق من الترتيب والصفحات",
+      merge_step2_desc: "راجع الملفات المدرجة في قائمة الانتظار، وتحقق من عدد صفحاتها، ورتبها بالترتيب المطلوب.",
+      merge_step3_title: "٣. الدمج والتحميل الفوري",
+      merge_step3_desc: "اكتب اسم الملف المدمج، ثم اضغط على زر دمج PDF لتحميل ملفك الموحد في ثوانٍ معدودة.",
+      merge_faq_title: "الأسئلة الشائعة",
+      merge_faq_q1: "هل يتم رفع مستنداتي إلى خادم سحابي لدمجها؟",
+      merge_faq_a1: "كلا. تعمل أداة دمج PDF بمعالجة محلية ١٠٠٪ داخل متصفحك. مع انعدام الرفع إلى أي خادم، تبقى ملفاتك آمنة وخاصة على جهازك تماماً.",
+      merge_faq_q2: "هل يؤثر الدمج على جودة النصوص أو الصور داخل المستند؟",
+      merge_faq_a2: "أبداً. تعتمد الأداة على استنساخ الصفحات بصيغتها الأصلية، مما يحافظ على وضوح الخطوط وجودة الصور دون أي تشويه أو ضغط.",
+      merge_faq_q3: "كم عدد الملفات التي يمكنني دمجها في عملية واحدة؟",
+      merge_faq_a3: "يمكنك دمج العديد من الملفات في نفس الوقت بكل سلاسة، حيث تعتمد سرعة المعالجة على موارد جهازك مباشرة."
     }
   };
 

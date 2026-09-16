@@ -76,7 +76,23 @@ const translations = {
     toast_compress_success: "PDF compressed successfully! ({n}% size reduction)",
     toast_upload_first: "Please upload a PDF document first.",
     toast_sample_generating: "Generating sample multi-page document...",
-    toast_sample_error: "Error creating sample: "
+    toast_sample_error: "Error creating sample: ",
+    compress_seo_badge: "Smart Client-Side Optimization",
+    compress_seo_title: "How to Compress & Reduce PDF File Size Online",
+    compress_seo_subtitle: "Shrink heavy PDF documents with intelligent quality presets while maintaining crisp text and 100% client-side privacy.",
+    compress_step1_title: "1. Upload Your PDF File",
+    compress_step1_desc: "Select any PDF document up to 25MB to begin on-device compression directly inside your browser.",
+    compress_step2_title: "2. Choose Compression Level",
+    compress_step2_desc: "Select Low Quality (maximum reduction), Medium Quality (recommended balance), or High Quality (crisp graphics).",
+    compress_step3_title: "3. Compress & Save",
+    compress_step3_desc: "Click Compress & Download to process pages in real-time, view your saved kilobytes, and download your optimized PDF.",
+    compress_faq_title: "Frequently Asked Questions",
+    compress_faq_q1: "Are my documents uploaded to a remote server for compression?",
+    compress_faq_a1: "No. Our compression engine runs with 100% client-side processing. With no server uploads, your private financial, legal, and personal files stay securely on your computer.",
+    compress_faq_q2: "How much file size reduction can I expect?",
+    compress_faq_a2: "Depending on your selected preset and original image density, you can achieve between 30% and 85% reduction in total file size, making documents ideal for email attachments.",
+    compress_faq_q3: "Why is there a 25MB file limit for compression?",
+    compress_faq_a3: "Because processing runs entirely within your device's browser memory, the 25MB threshold prevents browser tab crashes and guarantees lightning-fast performance on all devices."
   },
   ar: {
     badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -138,7 +154,23 @@ const translations = {
     toast_compress_success: "تم ضغط ملف PDF بنجاح! (تقليل الحجم بنسبة {n}٪)",
     toast_upload_first: "يرجى رفع مستند PDF أولاً.",
     toast_sample_generating: "جاري توليد نموذج مستند متعدد الصفحات...",
-    toast_sample_error: "حدث خطأ أثناء إنشاء النموذج: "
+    toast_sample_error: "حدث خطأ أثناء إنشاء النموذج: ",
+    compress_seo_badge: "ضغط ذكي للبيانات في المتصفح",
+    compress_seo_title: "كيفية ضغط وتقليل حجم ملفات PDF عبر الإنترنت",
+    compress_seo_subtitle: "قلل حجم ملفات PDF الكبيرة مع خيارات جودة ذكية تحافظ على وضوح النصوص وخصوصية محلية ١٠٠٪.",
+    compress_step1_title: "١. رفع ملف PDF",
+    compress_step1_desc: "اختر أي مستند PDF بحجم يصل حتى 25 ميجابايت لبدء الضغط محلياً داخل متصفحك.",
+    compress_step2_title: "٢. اختيار مستوى الضغط",
+    compress_step2_desc: "اختر جودة منخفضة (أقصى تقليل للحجم)، أو متوسطة (توازن مثالي موصى به)، أو عالية (وضوح تام للرسومات).",
+    compress_step3_title: "٣. الضغط والتنزيل",
+    compress_step3_desc: "اضغط على ضغط وتنزيل PDF لمعالجة الصفحات فورياً، ومعاينة المساحة الموفرة، وتحميل الملف المضغوط.",
+    compress_faq_title: "الأسئلة الشائعة",
+    compress_faq_q1: "هل يتم نقل مستنداتي إلى خوادم خارجية لضغطها؟",
+    compress_faq_a1: "لا على الإطلاق. يعمل محرك الضغط بمعالجة محلية ١٠٠٪. وبدون أي رفع للخوادم، تبقى مستنداتك المالية والقانونية آمنة على جهازك.",
+    compress_faq_q2: "ما مقدار تقليل الحجم الذي يمكنني توقعه؟",
+    compress_faq_a2: "بناءً على الإعداد المختار ونوعية الصور في المستند، يمكنك تقليل الحجم بنسبة تتراوح بين 30% إلى 85%، مما يجعله مثالياً للإرسال عبر البريد الإلكتروني.",
+    compress_faq_q3: "لماذا يوجد حد أقصى 25 ميجابايت لضغط الملفات؟",
+    compress_faq_a3: "نظراً لأن المعالجة تتم بالكامل داخل ذاكرة المتصفح في جهازك، فإن هذا الحد يضمن استقرار المتصفح وسرعة الأداء دون أي تهنيج."
   }
 };
 

@@ -56,7 +56,23 @@ const translations = {
     toast_success: "Successfully extracted and saved {n} page(s)!",
     toast_error_split: "Extraction failed: ",
     toast_sample_generating: "Generating interactive sample document...",
-    toast_sample_error: "Error creating sample: "
+    toast_sample_error: "Error creating sample: ",
+    split_seo_badge: "Precision Page Extraction",
+    split_seo_title: "How to Split & Extract Pages from PDF Documents",
+    split_seo_subtitle: "Extract specific pages or custom ranges to create a new organized document in seconds with 100% client-side privacy.",
+    split_step1_title: "1. Open PDF Document",
+    split_step1_desc: "Select or drag your PDF file into the dropzone to inspect its total page count.",
+    split_step2_title: "2. Define Pages or Use Presets",
+    split_step2_desc: "Type custom page numbers (e.g. 1, 3-5, 8) or select presets such as Odd Pages, Even Pages, or First Half.",
+    split_step3_title: "3. Extract & Download",
+    split_step3_desc: "Set your output document name and click Split & Download to instantly save your tailored PDF.",
+    split_faq_title: "Frequently Asked Questions",
+    split_faq_q1: "Is my document uploaded to a server during page extraction?",
+    split_faq_a1: "No. Split PDF Pro operates with 100% client-side processing in your browser. With no server uploads, your financial statements and confidential files retain complete privacy on your local machine.",
+    split_faq_q2: "How do I format complex page ranges for extraction?",
+    split_faq_a2: "You can combine individual numbers and hyphens separated by commas, such as '1, 3, 5-9, 12'. The live counter confirms the exact page count before you extract.",
+    split_faq_q3: "Can I extract pages from password-protected or large PDFs?",
+    split_faq_a3: "Yes, our client-side engine rapidly scans and extracts pages from documents of any length directly using your device's memory."
   },
   ar: {
     badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -106,7 +122,23 @@ const translations = {
     toast_success: "تم استخراج وحفظ {n} صفحة بنجاح!",
     toast_error_split: "فشل الاستخراج: ",
     toast_sample_generating: "جاري إنشاء المستند النموذجي...",
-    toast_sample_error: "فشل إنشاء النموذج: "
+    toast_sample_error: "فشل إنشاء النموذج: ",
+    split_seo_badge: "استخراج الصفحات بدقة واحترافية",
+    split_seo_title: "كيفية تقسيم واستخراج صفحات من مستندات PDF",
+    split_seo_subtitle: "استخرج صفحات محددة أو نطاقات مخصصة لإنشاء مستند جديد منظم في ثوانٍ مع خصوصية محلية ١٠٠٪.",
+    split_step1_title: "١. فتح مستند PDF",
+    split_step1_desc: "اختر أو اسحب ملف PDF الخاص بك إلى منطقة الرفع لمعاينة إجمالي عدد الصفحات.",
+    split_step2_title: "٢. تحديد الصفحات أو استخدام النماذج",
+    split_step2_desc: "اكتب أرقام الصفحات المطلوبة (مثل: 1, 3-5, 8) أو اختر من الخيارات الجاهزة مثل الصفحات الفردية أو الزوجية.",
+    split_step3_title: "٣. الاستخراج والتنزيل",
+    split_step3_desc: "حدد اسم الملف المخرج واضغط على تقسيم وتنزيل PDF لحفظ مستندك المستخرج فوراً.",
+    split_faq_title: "الأسئلة الشائعة",
+    split_faq_q1: "هل يتم رفع مستندي إلى أي خادم أثناء استخراج الصفحات؟",
+    split_faq_a1: "كلا. تعمل أداة تقسيم PDF بمعالجة محلية ١٠٠٪ داخل المتصفح. ومع انعدام الرفع للخوادم، تحظى كشوفات حساباتك ومستنداتك الحساسة بخصوصية مطلقة.",
+    split_faq_q2: "كيف يمكنني كتابة نطاقات صفحات متعددة ومخصصة؟",
+    split_faq_a2: "يمكنك الجمع بين الأرقام الفردية والنطاقات مفصولة بفواصل، مثل '1, 3, 5-9, 12'. ويقوم العداد التفاعلي بتأكيد عدد الصفحات المختارة فوراً.",
+    split_faq_q3: "هل يمكنني استخراج صفحات محددة من مستندات كبيرة؟",
+    split_faq_a3: "نعم، يستطيع محرك المعالجة المحلي مسح واستخراج الصفحات من المستندات الطويلة بكل سرعة وسهولة."
   }
 };
 

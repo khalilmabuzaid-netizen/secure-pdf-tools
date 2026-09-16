@@ -1218,6 +1218,175 @@
         width: 100%;
       }
     }
+
+    /* SEO Rich Content Section - Dark Glassmorphism */
+    .seo-section {
+      max-width: 1040px;
+      margin: 3.5rem auto 2.5rem;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+
+    .seo-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 2.75rem 2.25rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .seo-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 24px var(--primary-glow);
+    }
+
+    .seo-header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .seo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .seo-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .step-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .step-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', 'JetBrains Mono', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+
+    .step-card h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .faq-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .faq-item {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0.6rem;
+    }
+
+    .faq-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .faq-question h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .faq-answer {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 32px;
+    }
+
+    [dir="rtl"] .faq-answer {
+      padding-left: 0;
+      padding-right: 32px;
+    }
   </style>
 </head>
 
@@ -1516,6 +1685,82 @@
           <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
         </div>
       </div>
+
+      <!-- SEO Content Section: How-To & FAQ -->
+      <section class="seo-section" aria-label="eSignature Guide and FAQ">
+        <div class="seo-card">
+          <div class="seo-header">
+            <div class="seo-badge">
+              <i data-lucide="shield-check"></i>
+              <span data-i18n="sign_seo_badge">Confidential & Private eSignatures</span>
+            </div>
+            <h3 class="seo-title" data-i18n="sign_seo_title">How to Electronically Sign PDF Documents Online</h3>
+            <p class="seo-subtitle" data-i18n="sign_seo_subtitle">Draw your custom signature and stamp it securely onto
+              any page with 100% client-side processing and zero cloud uploads.</p>
+          </div>
+
+          <!-- 3-Step Guide -->
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-number">1</div>
+              <h4 data-i18n="sign_step1_title">1. Open Your PDF File</h4>
+              <p data-i18n="sign_step1_desc">Drop your agreement, contract, or form into the secure dropzone to open it
+                locally in your browser.</p>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">2</div>
+              <h4 data-i18n="sign_step2_title">2. Draw Electronic Signature</h4>
+              <p data-i18n="sign_step2_desc">Use your mouse, finger, or digital pen on the canvas. Customize your ink
+                color and stroke thickness to match your style.</p>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">3</div>
+              <h4 data-i18n="sign_step3_title">3. Position & Save Document</h4>
+              <p data-i18n="sign_step3_desc">Select the target page, choose the signature position (e.g. Bottom Right),
+                adjust the size, and download your signed PDF.</p>
+            </article>
+          </div>
+
+          <!-- FAQ -->
+          <div class="faq-grid" style="margin-top: 2.5rem;">
+            <h4
+              style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);"
+              data-i18n="sign_faq_title">Frequently Asked Questions</h4>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <i data-lucide="help-circle" class="faq-icon"></i>
+                <h4 data-i18n="sign_faq_q1">Does anyone else see my signature or contract?</h4>
+              </div>
+              <p class="faq-answer" data-i18n="sign_faq_a1">Never. Sign PDF Pro operates with 100% client-side
+                processing directly in your browser session. With no server uploads, your signature data and document
+                content remain completely private on your own device.</p>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <i data-lucide="help-circle" class="faq-icon"></i>
+                <h4 data-i18n="sign_faq_q2">Can I sign documents on my phone or tablet screen?</h4>
+              </div>
+              <p class="faq-answer" data-i18n="sign_faq_a2">Yes! The signature pad is fully optimized for touchscreens
+                and stylus pens, offering smooth stroke rendering for authentic, professional signatures on mobile and
+                desktop.</p>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <i data-lucide="help-circle" class="faq-icon"></i>
+                <h4 data-i18n="sign_faq_q3">Can I place multiple signatures or sign specific pages?</h4>
+              </div>
+              <p class="faq-answer" data-i18n="sign_faq_a3">You can designate any page of your document and precisely
+                position the signature in standard signing locations such as bottom right, bottom left, or center with
+                adjustable scaling.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
     </main>
 

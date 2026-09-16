@@ -61,7 +61,23 @@
       toast_no_file: "Please upload a PDF document first.",
       toast_signed_success: "Document signed and downloaded successfully!",
       toast_sample_loaded: "Sample agreement document loaded.",
-      toast_error: "An error occurred while signing the document."
+      toast_error: "An error occurred while signing the document.",
+      sign_seo_badge: "Confidential & Private eSignatures",
+      sign_seo_title: "How to Electronically Sign PDF Documents Online",
+      sign_seo_subtitle: "Draw your custom signature and stamp it securely onto any page with 100% client-side processing and zero cloud uploads.",
+      sign_step1_title: "1. Open Your PDF File",
+      sign_step1_desc: "Drop your agreement, contract, or form into the secure dropzone to open it locally in your browser.",
+      sign_step2_title: "2. Draw Electronic Signature",
+      sign_step2_desc: "Use your mouse, finger, or digital pen on the canvas. Customize your ink color and stroke thickness to match your style.",
+      sign_step3_title: "3. Position & Save Document",
+      sign_step3_desc: "Select the target page, choose the signature position (e.g. Bottom Right), adjust the size, and download your signed PDF.",
+      sign_faq_title: "Frequently Asked Questions",
+      sign_faq_q1: "Does anyone else see my signature or contract?",
+      sign_faq_a1: "Never. Sign PDF Pro operates with 100% client-side processing directly in your browser session. With no server uploads, your signature data and document content remain completely private on your own device.",
+      sign_faq_q2: "Can I sign documents on my phone or tablet screen?",
+      sign_faq_a2: "Yes! The signature pad is fully optimized for touchscreens and stylus pens, offering smooth stroke rendering for authentic, professional signatures on mobile and desktop.",
+      sign_faq_q3: "Can I place multiple signatures or sign specific pages?",
+      sign_faq_a3: "You can designate any page of your document and precisely position the signature in standard signing locations such as bottom right, bottom left, or center with adjustable scaling."
     },
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -115,7 +131,23 @@
       toast_no_file: "يرجى رفع ملف PDF أولاً.",
       toast_signed_success: "تم توقيع المستند وتحميله بنجاح!",
       toast_sample_loaded: "تم تحميل المستند النموذجي بنجاح.",
-      toast_error: "حدث خطأ أثناء معالجة التوقيع. يرجى المحاولة مجدداً."
+      toast_error: "حدث خطأ أثناء معالجة التوقيع. يرجى المحاولة مجدداً.",
+      sign_seo_badge: "توقيع إلكتروني آمن وخاص تماماً",
+      sign_seo_title: "كيفية توقيع مستندات PDF إلكترونياً عبر الإنترنت",
+      sign_seo_subtitle: "ارسم توقيعك المخصص وثبته بأمان في أي صفحة مع معالجة محلية ١٠٠٪ وبدون أي رفع سحابي.",
+      sign_step1_title: "١. فتح ملف PDF",
+      sign_step1_desc: "أفلت اتفاقيتك أو عقدك أو نموذجك داخل منطقة الرفع لفتحه محلياً وفورياً داخل متصفحك.",
+      sign_step2_title: "٢. رسم التوقيع الإلكتروني",
+      sign_step2_desc: "استخدم الفأرة أو إصبعك أو القلم الرقمي على لوحة الرسم. خصص لون الحبر وسُمك الخط بما يناسب أسلوبك.",
+      sign_step3_title: "٣. تحديد الموضع والحفظ",
+      sign_step3_desc: "حدد الصفحة المستهدفة، واختر موضع التوقيع (مثل أسفل اليمين)، واضبط الحجم، ثم حمّل المستند الموقع فوراً.",
+      sign_faq_title: "الأسئلة الشائعة",
+      sign_faq_q1: "هل يمكن لأي جهة رؤية توقيعي أو محتوى عقودي؟",
+      sign_faq_a1: "مستحيل. تعمل أداة التوقيع بمعالجة محلية ١٠٠٪ في المتصفح. ومع عدم وجود أي رفع للخوادم، تظل بيانات توقيعك ومحتوى مستنداتك خاصة ومحمية بالكامل على جهازك الشخصي.",
+      sign_faq_q2: "هل يمكنني التوقيع باستخدام شاشة الهاتف أو الجهاز اللوحي؟",
+      sign_faq_a2: "نعم! لوحة التوقيع مهيأة بالكامل لشاشات اللمس والأقلام الرقمية، مما يتيح لك تجربة توقيع طبيعية واحترافية على الهواتف والأجهزة اللوحية.",
+      sign_faq_q3: "هل يمكنني اختيار صفحة محددة وموضع دقيق للتوقيع؟",
+      sign_faq_a3: "يمكنك اختيار أي صفحة من صفحات المستند وتحديد موضع التوقيع بدقة متناهية (أسفل اليمين، أسفل اليسار، الوسط) مع التحكم الكامل في حجم التوقيع."
     }
   };
 

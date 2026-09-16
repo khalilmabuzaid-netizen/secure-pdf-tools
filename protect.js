@@ -71,7 +71,23 @@
       toast_sample_error: "Error creating sample PDF: ",
       toast_invalid_pdf: "Please upload a valid PDF document.",
       toast_file_reset: "File cleared and settings reset.",
-      toast_already_encrypted: "This PDF file is already encrypted or password protected."
+      toast_already_encrypted: "This PDF file is already encrypted or password protected.",
+      protect_seo_badge: "Military-Grade Document Security",
+      protect_seo_title: "How to Password Protect & Encrypt PDF Files Online",
+      protect_seo_subtitle: "Secure your confidential files with strong AES-256 encryption and custom permission controls with 100% client-side privacy.",
+      protect_step1_title: "1. Select Confidential PDF",
+      protect_step1_desc: "Drop any PDF document you wish to lock and protect into the secure browser interface.",
+      protect_step2_title: "2. Set Strong Password",
+      protect_step2_desc: "Enter and confirm your secret password, check the real-time strength meter, and select document permissions.",
+      protect_step3_title: "3. Encrypt & Download",
+      protect_step3_desc: "Click Encrypt & Download to generate an AES-256 password-locked PDF compatible with all standard PDF readers.",
+      protect_faq_title: "Frequently Asked Questions",
+      protect_faq_q1: "Is my password or original PDF sent over the internet?",
+      protect_faq_a1: "Never. Protect PDF Pro relies on 100% client-side processing using Web Cryptography. With no server uploads, your password and files never leave your device, ensuring total privacy.",
+      protect_faq_q2: "Which PDF viewers can open my encrypted documents?",
+      protect_faq_a2: "Your protected PDF complies with universal ISO PDF encryption standards and opens seamlessly in Adobe Acrobat, Google Chrome, Microsoft Edge, Apple Preview, and mobile readers.",
+      protect_faq_q3: "Can you recover my PDF if I forget my password?",
+      protect_faq_a3: "No. Because encryption is performed locally on your device without backdoors or master keys, forgotten passwords cannot be recovered. Be sure to remember or safely store your password."
     },
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
@@ -135,7 +151,23 @@
       toast_sample_error: "حدث خطأ أثناء إنشاء الملف التجريبي: ",
       toast_invalid_pdf: "يرجى رفع ملف PDF صالح.",
       toast_file_reset: "تم إلغاء الملف وإعادة ضبط الإعدادات.",
-      toast_already_encrypted: "ملف الـ PDF هذا مشفر ومحمي بكلمة مرور بالفعل."
+      toast_already_encrypted: "ملف الـ PDF هذا مشفر ومحمي بكلمة مرور بالفعل.",
+      protect_seo_badge: "حماية وتشفير المستندات بأعلى المعايير",
+      protect_seo_title: "كيفية حماية وتشفير ملفات PDF بكلمة مرور عبر الإنترنت",
+      protect_seo_subtitle: "احمِ مستنداتك السرية بتشفير AES-256 القوي مع التحكم في الصلاحيات وخصوصية محلية ١٠٠٪.",
+      protect_step1_title: "١. اختيار المستند السري",
+      protect_step1_desc: "أفلت أي مستند PDF ترغب في حمايته وإقفاله داخل واجهة المتصفح الآمنة.",
+      protect_step2_title: "٢. تعيين كلمة مرور قوية",
+      protect_step2_desc: "أدخل كلمة المرور وأكّدها، وتابع مقياس قوة كلمة المرور، وحدد أذونات الطباعة ونسخ النصوص.",
+      protect_step3_title: "٣. التشفير والتحميل الفوري",
+      protect_step3_desc: "اضغط على تشفير وتحميل PDF لتوليد مستند مشفر بتقنية AES-256 متوافق مع كافة برامج قراءة PDF.",
+      protect_faq_title: "الأسئلة الشائعة",
+      protect_faq_q1: "هل يتم إرسال كلمة المرور أو المستند الأصلي عبر الإنترنت؟",
+      protect_faq_a1: "مستحيل. تعتمد أداة حماية وتشفير PDF على معالجة محلية ١٠٠٪ باستخدام التشفير البرمجي في المتصفح. مع انعدام الرفع إلى أي خادم، تظل ملفاتك وكلمات مرورك في أمان تام.",
+      protect_faq_q2: "ما هي البرامج المتوافقة لفتح المستندات المشفرة؟",
+      protect_faq_a2: "يتوافق مستندك المشفر مع معايير تشفير PDF العالمية (ISO)، ويفتح بسلاسة في برامج Adobe Acrobat و Google Chrome و Microsoft Edge و Apple Preview.",
+      protect_faq_q3: "هل يمكنكم استرجاع المستند إذا نسيت كلمة المرور؟",
+      protect_faq_a3: "كلا. نظراً لأن التشفير يتم محلياً على جهازك دون أي أبواب خلفية أو مفاتيح رئيسية، لا يمكن استرجاع كلمة المرور المنسية. يرجى حفظ كلمة المرور في مكان آمن."
     }
   };
 
