@@ -200,6 +200,7 @@
     setupDropzone();
     setupLanguageSelector();
     setupCookieBanner();
+    applyLanguage(currentLang);
     if (window.lucide) {
       lucide.createIcons();
     }

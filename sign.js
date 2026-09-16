@@ -213,6 +213,7 @@
     setupEventListeners();
     setupDropzone();
     setupCookieBanner();
+    applyLanguage(currentLang);
     if (window.lucide) {
       lucide.createIcons();
     }
