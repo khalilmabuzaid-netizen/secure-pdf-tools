@@ -14,7 +14,7 @@ const master = { en: {}, ar: {} };
 files.forEach(file => {
   const filePath = path.join(baseDir, file);
   const content = fs.readFileSync(filePath, 'utf8');
-  
+
   // Extract translations object
   const transMatch = content.match(/const translations\s*=\s*(\{[\s\S]*?\n\s*\};)/);
   if (transMatch) {
