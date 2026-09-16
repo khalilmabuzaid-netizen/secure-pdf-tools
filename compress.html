@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress PDF Pro - Reduce PDF File Size Client-Side</title>
+  <meta name="description"
+    content="Reduce PDF file size directly in your browser with custom quality presets. 100% private client-side processing with zero server uploads.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF.js CDN (for rendering original pages) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- jsPDF CDN (for client-side PDF document construction) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(16, 185, 129, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #10b981;
+      --border-active: rgba(16, 185, 129, 0.6);
+
+      /* Accents & Brand */
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --primary-glow: rgba(16, 185, 129, 0.35);
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(16, 185, 129, 0.25);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(6, 182, 212, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(99, 102, 241, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .btn i {
+      order: 0;
+    }
+
+    [dir="rtl"] .preset-tag {
+      right: auto;
+      left: 12px;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 28px;
+    }
+
+    [dir="rtl"] .filename-input-group {
+      flex-direction: row-reverse;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-brand:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #34d399, #10b981, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 2px 12px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+
+    .hidden-input {
+      display: none !important;
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      padding: 36px 24px 80px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .compress-container {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #6ee7b7;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge i {
+      width: 15px;
+      height: 15px;
+      color: #34d399;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* Warning / Memory Protection Alert Box */
+    .alert-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);
+      animation: alertSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .alert-box.alert-danger {
+      background: rgba(244, 63, 94, 0.12);
+      border-color: rgba(244, 63, 94, 0.35);
+      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.15);
+    }
+
+    .alert-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      flex-shrink: 0;
+    }
+
+    .alert-box.alert-danger .alert-icon-wrap {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fb7185;
+    }
+
+    .alert-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .alert-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .alert-message {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .alert-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color var(--transition-fast);
+    }
+
+    .alert-close-btn:hover {
+      color: var(--text-primary);
+    }
+
+    @keyframes alertSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dropzone Styles */
+    .dropzone {
+      width: 100%;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .dropzone-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .dropzone:hover .dropzone-card,
+    .dropzone.drag-over .dropzone-card {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.25);
+    }
+
+    .dropzone-icon-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      margin-bottom: 20px;
+      animation: pulse-ring 3s infinite ease-in-out;
+    }
+
+    .dropzone-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    @keyframes pulse-ring {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+        transform: scale(1.04);
+      }
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .feature-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-emerald);
+    }
+
+    /* Configuration & Compression Panel */
+    .config-panel {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* File Overview Card */
+    .file-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-info-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .file-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #34d399;
+      flex-shrink: 0;
+    }
+
+    .file-icon-box i {
+      width: 24px;
+      height: 24px;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 400px;
+    }
+
+    .file-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-badge.highlight {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+      font-weight: 600;
+    }
+
+    /* Compression Quality Controls */
+    .quality-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quality-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label i {
+      width: 17px;
+      height: 17px;
+      color: var(--primary);
+    }
+
+    .quality-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quality-select {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .quality-select:focus {
+      border-color: var(--border-focus);
+    }
+
+    .quality-select option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .preset-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .preset-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(16, 185, 129, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .preset-card.selected {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+    }
+
+    .preset-tag {
+      position: absolute;
+      top: -10px;
+      right: 12px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+
+    .preset-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .preset-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+    }
+
+    .preset-card.selected .preset-icon {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .preset-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .preset-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .preset-savings {
+      margin-top: auto;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    /* Slider / Custom Setting Row */
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .slider-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .slider-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .quality-slider {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Output Filename Setting */
+    .output-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filename-input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2px 14px;
+    }
+
+    .filename-input-group:focus-within {
+      border-color: var(--border-focus);
+    }
+
+    .filename-input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-suffix {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Compression Progress Container */
+    .progress-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease-out;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+    }
+
+    .progress-subtext {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Result Comparison Card */
+    .result-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      gap: 20px;
+      flex-wrap: wrap;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .result-stat-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-val.reduced {
+      color: #34d399;
+    }
+
+    .savings-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* Actions Footer */
+    .panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 999;
+      max-width: 440px;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastSlide {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.toast-success {
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .toast.toast-success i {
+      color: #34d399;
+    }
+
+    .toast.toast-error {
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .toast.toast-error i {
+      color: #fb7185;
+    }
+
+    .toast.toast-warning {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .toast.toast-warning i {
+      color: #fcd34d;
+    }
+
+    @media (max-width: 768px) {
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding: 24px 16px 60px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .config-panel {
+        padding: 20px;
+      }
+
+      .file-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .panel-footer {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .panel-footer .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-dark">
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="minimize-2" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Compress<span class="gradient-text">PDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <a href="annotator.html" class="btn btn-secondary" title="Annotate PDF Tool">
+          <i data-lucide="file-signature"></i>
+          <span data-i18n="nav_annotator">Annotator</span>
+        </a>
+
+        <a href="merge.html" class="btn btn-secondary" title="Merge multiple PDF files">
+          <i data-lucide="layers"></i>
+          <span data-i18n="nav_merge">Merge PDF</span>
+        </a>
+
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+
+        <button id="btn-header-reset" class="btn btn-ghost" title="Reset file selection" disabled>
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_reset">Reset</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="compress-container">
+
+        <!-- Hero Header -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="hero_badge">Local & Secure • 100% Client-Side Compression • No Cloud Uploads</span>
+          </div>
+          <h2 class="hero-title" data-i18n="hero_title">Compress & Optimize <span class="gradient-text">PDF Files</span>
+            Instantly</h2>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">Reduce document file size with smart quality presets right
+            inside your browser without sacrificing legibility.</p>
+        </section>
+
+        <!-- Dynamic Warning / Memory Protection Alert Banner (Hidden by default) -->
+        <div id="memory-alert-box" class="alert-box alert-danger hidden" role="alert">
+          <div class="alert-icon-wrap">
+            <i data-lucide="alert-triangle"></i>
+          </div>
+          <div class="alert-content">
+            <h4 class="alert-title" id="alert-title" data-i18n="alert_title">Memory Protection Alert</h4>
+            <p class="alert-message" id="alert-message" data-i18n="alert_message">For optimal browser performance and
+              100% privacy, please select a PDF under 25MB.</p>
+          </div>
+          <button type="button" id="btn-close-alert" class="alert-close-btn" aria-label="Dismiss alert">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <!-- Hidden File Input -->
+        <input type="file" id="pdf-file-input" accept="application/pdf" class="hidden-input"
+          aria-label="Upload PDF file">
+
+        <!-- Drag & Drop Zone (Default State) -->
+        <section class="dropzone" id="dropzone" tabindex="0" role="region" aria-label="PDF upload dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="cloud-upload" class="dropzone-icon"></i>
+            </div>
+            <h3 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF file here</h3>
+            <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Drag and drop any PDF file under 25MB to reduce
+              its size, or browse from your computer</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-file" type="button" class="btn btn-primary btn-lg">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="btn_browse_file">Browse PDF File</span>
+              </button>
+              <button id="btn-load-sample" type="button" class="btn btn-secondary btn-lg">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="btn_load_sample">Try Sample PDF</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="sliders"></i>
+                <span data-i18n="feature_quality">High, Medium & Low Quality</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="shield-check"></i>
+                <span data-i18n="feature_memory">Memory Protected (Max 25MB)</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="zap"></i>
+                <span data-i18n="feature_client">100% Client-Side Engine</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active PDF Configuration & Compression Panel -->
+        <section class="config-panel hidden" id="config-panel">
+
+          <!-- File Overview Card -->
+          <div class="file-card">
+            <div class="file-info-group">
+              <div class="file-icon-box">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div class="file-details">
+                <span class="file-name" id="file-name-display">document.pdf</span>
+                <div class="file-badges">
+                  <span class="meta-badge highlight" id="file-size-display">0 KB</span>
+                  <span class="meta-badge" id="file-pages-display">0 Pages Total</span>
+                </div>
+              </div>
+            </div>
+            <button id="btn-change-file" class="btn btn-secondary btn-sm" title="Choose a different PDF file">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="btn_change_file">Change File</span>
+            </button>
+          </div>
+
+          <!-- Quality Presets Section -->
+          <div class="quality-section">
+            <div class="quality-header-row">
+              <label class="section-label">
+                <i data-lucide="gauge"></i>
+                <span data-i18n="label_quality">Compression Quality</span>
+              </label>
+
+              <!-- Dropdown Selector Option -->
+              <div class="quality-select-wrap">
+                <select id="quality-select-dropdown" class="quality-select"
+                  aria-label="Select compression quality level">
+                  <option value="extreme" data-i18n="opt_extreme">Low Quality (Maximum Compression ~80%)</option>
+                  <option value="balanced" data-i18n="opt_balanced" selected>Medium Quality (Balanced ~60%)</option>
+                  <option value="light" data-i18n="opt_light">High Quality (Light Compression ~30%)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="presets-grid" id="presets-grid">
+
+              <!-- Low Quality / Maximum Compression -->
+              <div class="preset-card" data-level="extreme">
+                <div class="preset-header">
+                  <div class="preset-icon">
+                    <i data-lucide="zap"></i>
+                  </div>
+                  <span class="preset-title" data-i18n="preset_low_title">Low Quality</span>
+                </div>
+                <p class="preset-desc" data-i18n="preset_low_desc">Maximum size reduction (~75-90%). Ideal for email
+                  limits and fast sharing.</p>
+                <span class="preset-savings" data-i18n="preset_low_savings">Max Reduction</span>
+              </div>
+
+              <!-- Medium Quality / Recommended Balanced -->
+              <div class="preset-card selected" data-level="balanced">
+                <span class="preset-tag" data-i18n="preset_recommended">Recommended</span>
+                <div class="preset-header">
+                  <div class="preset-icon">
+                    <i data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="preset-title" data-i18n="preset_med_title">Medium Quality</span>
+                </div>
+                <p class="preset-desc" data-i18n="preset_med_desc">Balanced compression maintaining great readability
+                  with ~50-70% size reduction.</p>
+                <span class="preset-savings" data-i18n="preset_med_savings">~65% Smaller</span>
+              </div>
+
+              <!-- High Quality / Mild Compression -->
+              <div class="preset-card" data-level="light">
+                <div class="preset-header">
+                  <div class="preset-icon">
+                    <i data-lucide="sparkles"></i>
+                  </div>
+                  <span class="preset-title" data-i18n="preset_high_title">High Quality</span>
+                </div>
+                <p class="preset-desc" data-i18n="preset_high_desc">Crisp text and sharp images with mild compression
+                  (~25-40% reduction).</p>
+                <span class="preset-savings" data-i18n="preset_high_savings">Preserve Quality</span>
+              </div>
+
+            </div>
+
+            <!-- Fine-Tune Quality Slider -->
+            <div class="slider-row">
+              <div class="slider-header">
+                <span class="slider-label" data-i18n="label_finetune">Fine-Tune Quality Level</span>
+                <span class="slider-val" id="slider-quality-val">65%</span>
+              </div>
+              <input type="range" id="quality-slider" min="20" max="95" value="65" class="quality-slider"
+                aria-label="Fine tune JPEG quality">
+            </div>
+          </div>
+
+          <!-- Output Filename Setting -->
+          <div class="output-section">
+            <label for="output-filename" class="section-label">
+              <i data-lucide="file-output"></i>
+              <span data-i18n="label_output_filename">Output File Name</span>
+            </label>
+            <div class="filename-input-group">
+              <input type="text" id="output-filename" value="compressed_document" placeholder="compressed_document"
+                data-i18n-placeholder="placeholder_output_filename" spellcheck="false">
+              <span class="input-suffix">.pdf</span>
+            </div>
+          </div>
+
+          <!-- Live Progress Bar Card (Hidden by default) -->
+          <div class="progress-card hidden" id="progress-card">
+            <div class="progress-header">
+              <span class="progress-label">
+                <div class="spinner"></div>
+                <span id="progress-status-text" data-i18n="progress_compressing">Compressing pages...</span>
+              </span>
+              <span class="progress-percent" id="progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span class="progress-subtext" id="progress-subtext">Rendering page 1...</span>
+          </div>
+
+          <!-- Results Summary Card (Shown after compression) -->
+          <div class="result-card hidden" id="result-card">
+            <div class="result-stat-group">
+              <div class="stat-item">
+                <span class="stat-label" data-i18n="stat_original_size">Original Size</span>
+                <span class="stat-val" id="stat-original-size">0 KB</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label" data-i18n="stat_compressed_size">Compressed Size</span>
+                <span class="stat-val reduced" id="stat-compressed-size">0 KB</span>
+              </div>
+            </div>
+            <div class="savings-badge" id="savings-badge">
+              <i data-lucide="arrow-down-right"></i>
+              <span id="savings-percent">0% Smaller</span>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="panel-footer">
+            <button id="btn-cancel-compress" class="btn btn-ghost">
+              <i data-lucide="x"></i>
+              <span data-i18n="btn_cancel">Cancel</span>
+            </button>
+            <button id="btn-execute-compress" class="btn btn-primary btn-lg">
+              <i data-lucide="minimize-2"></i>
+              <span id="btn-execute-text" data-i18n="btn_compress_download">Compress & Download PDF</span>
+              <div class="spinner hidden" id="btn-spinner"></div>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification message</span>
+    </div>
+
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="compress.js"></script>
+</body>
+
+</html>

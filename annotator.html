@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnnotatePDF Pro - Interactive Client-Side PDF Annotator</title>
+  <meta name="description"
+    content="Fast, private client-side interactive PDF annotator with freehand drawing, text formatting, and MathJax formula integration.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Fabric.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+  <!-- PDF-Lib CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- MathJax Configuration & Script -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'local'
+      },
+      startup: {
+        typeset: false
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-dark">
+  <div id="app-container" class="app-layout">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="Return to PDF Tools Hub">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="file-signature" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Annotate<span class="gradient-text">PDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Hidden file input -->
+        <input type="file" id="pdf-file-input" accept="application/pdf" class="hidden-input"
+          aria-label="Upload PDF file">
+
+        <a href="index.html" class="btn btn-secondary" title="Return to PDF Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <button id="btn-upload-trigger" class="btn btn-secondary" title="Upload a new PDF">
+          <i data-lucide="upload"></i>
+          <span data-i18n="nav_upload">Upload PDF</span>
+        </button>
+
+        <button id="btn-sample-pdf" class="btn btn-secondary" title="Try with an interactive sample document">
+          <i data-lucide="sparkles"></i>
+          <span data-i18n="nav_sample">Try Sample</span>
+        </button>
+
+        <a href="merge.html" class="btn btn-secondary" title="Merge multiple PDF files">
+          <i data-lucide="layers"></i>
+          <span data-i18n="nav_merge">Merge PDF</span>
+        </a>
+
+        <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+          <i data-lucide="minimize-2"></i>
+          <span data-i18n="nav_compress">Compress PDF</span>
+        </a>
+
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+
+        <button id="btn-clear-page" class="btn btn-ghost" title="Clear annotations on current page">
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_clear">Clear Page</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+
+        <!-- Primary Export Button -->
+        <button id="btn-export-pdf" class="btn btn-primary" title="Merge annotations and download PDF">
+          <i data-lucide="download"></i>
+          <span data-i18n="nav_export">Download PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="main-workspace" id="main-workspace">
+
+      <!-- Floating Tool Dock -->
+      <aside class="tool-dock" id="tool-dock" aria-label="Annotation Tools">
+        <div class="dock-section">
+          <!-- Selection / Transform Tool -->
+          <button id="tool-select" class="tool-btn active" data-tool="select" title="Select & Transform (V)"
+            aria-label="Select tool">
+            <i data-lucide="mouse-pointer"></i>
+            <span class="tooltip" data-i18n="tool_select">Select</span>
+          </button>
+
+          <!-- Freehand Pen -->
+          <button id="tool-pen" class="tool-btn" data-tool="pen" title="Freehand Pen (P)" aria-label="Pen tool">
+            <i data-lucide="pencil"></i>
+            <span class="tooltip" data-i18n="tool_pen">Pen</span>
+          </button>
+
+          <!-- Highlighter Tool -->
+          <button id="tool-highlighter" class="tool-btn" data-tool="highlighter" title="Highlighter (H)"
+            aria-label="Highlighter tool">
+            <i data-lucide="highlighter"></i>
+            <span class="tooltip" data-i18n="tool_highlighter">Highlighter</span>
+          </button>
+
+          <!-- Text Tool -->
+          <button id="tool-text" class="tool-btn" data-tool="text" title="Insert Text (T)" aria-label="Text tool">
+            <i data-lucide="type"></i>
+            <span class="tooltip" data-i18n="tool_text">Text</span>
+          </button>
+
+          <!-- MathJax LaTeX Formula Tool -->
+          <button id="tool-math" class="tool-btn" data-tool="math" title="MathJax Formula (M)"
+            aria-label="Math formula tool">
+            <i data-lucide="sigma"></i>
+            <span class="tooltip" data-i18n="tool_math">Math LaTeX</span>
+          </button>
+
+          <div class="dock-divider"></div>
+
+          <!-- Delete Object -->
+          <button id="tool-delete" class="tool-btn danger-hover" title="Delete Selected (Del)"
+            aria-label="Delete selected">
+            <i data-lucide="trash-2"></i>
+            <span class="tooltip" data-i18n="tool_delete">Delete</span>
+          </button>
+        </div>
+
+        <div class="dock-section">
+          <!-- Undo & Redo -->
+          <button id="btn-undo" class="tool-btn" title="Undo (Ctrl+Z)" disabled aria-label="Undo">
+            <i data-lucide="undo-2"></i>
+            <span class="tooltip" data-i18n="action_undo">Undo</span>
+          </button>
+          <button id="btn-redo" class="tool-btn" title="Redo (Ctrl+Y)" disabled aria-label="Redo">
+            <i data-lucide="redo-2"></i>
+            <span class="tooltip" data-i18n="action_redo">Redo</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Dynamic Context Properties Toolbar -->
+      <section class="properties-bar" id="properties-bar" aria-label="Tool Properties">
+        <!-- Drawing / Pen & Highlighter Properties -->
+        <div id="props-drawing" class="prop-group">
+          <div class="prop-item">
+            <label for="brush-color" data-i18n="prop_color">Color</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="brush-color" value="#6366f1" class="color-input" aria-label="Brush color">
+              <div class="color-presets" id="color-presets">
+                <button type="button" class="preset-color" style="background:#6366f1" data-color="#6366f1"
+                  aria-label="Indigo"></button>
+                <button type="button" class="preset-color" style="background:#ef4444" data-color="#ef4444"
+                  aria-label="Red"></button>
+                <button type="button" class="preset-color" style="background:#10b981" data-color="#10b981"
+                  aria-label="Emerald"></button>
+                <button type="button" class="preset-color" style="background:#f59e0b" data-color="#f59e0b"
+                  aria-label="Amber"></button>
+                <button type="button" class="preset-color" style="background:#06b6d4" data-color="#06b6d4"
+                  aria-label="Cyan"></button>
+                <button type="button" class="preset-color" style="background:#ffffff" data-color="#ffffff"
+                  aria-label="White"></button>
+                <button type="button" class="preset-color" style="background:#0f172a" data-color="#0f172a"
+                  aria-label="Dark"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="prop-item">
+            <label for="brush-size" data-i18n="prop_size">Size</label>
+            <div class="slider-wrapper">
+              <input type="range" id="brush-size" min="1" max="50" value="4" class="slider" aria-label="Brush size">
+              <span id="brush-size-val" class="slider-val">4px</span>
+            </div>
+          </div>
+
+          <div class="prop-item">
+            <label for="brush-opacity" data-i18n="prop_opacity">Opacity</label>
+            <div class="slider-wrapper">
+              <input type="range" id="brush-opacity" min="0.1" max="1" step="0.05" value="1" class="slider"
+                aria-label="Brush opacity">
+              <span id="brush-opacity-val" class="slider-val">100%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text Properties -->
+        <div id="props-text" class="prop-group hidden">
+          <div class="prop-item">
+            <label for="font-family-select" data-i18n="prop_font">Font</label>
+            <select id="font-family-select" class="prop-select" aria-label="Font family">
+              <option value="Inter, sans-serif">Inter (Modern Sans)</option>
+              <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+              <option value="'Outfit', sans-serif">Outfit (Clean Display)</option>
+              <option value="Georgia, serif">Georgia (Serif)</option>
+              <option value="'Comic Sans MS', cursive">Handwritten</option>
+            </select>
+          </div>
+
+          <div class="prop-item">
+            <label for="font-size-select" data-i18n="prop_font_size">Size</label>
+            <select id="font-size-select" class="prop-select" aria-label="Font size">
+              <option value="14">14px</option>
+              <option value="18" selected>18px</option>
+              <option value="24">24px</option>
+              <option value="32">32px</option>
+              <option value="48">48px</option>
+            </select>
+          </div>
+
+          <div class="prop-item button-toggles">
+            <button id="btn-text-bold" class="toggle-btn" title="Bold" aria-label="Bold text">
+              <i data-lucide="bold"></i>
+            </button>
+            <button id="btn-text-italic" class="toggle-btn" title="Italic" aria-label="Italic text">
+              <i data-lucide="italic"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Hint Message -->
+        <div class="props-status" id="props-status">
+          <span id="status-hint" data-i18n="hint_default">Select or draw on the document</span>
+        </div>
+      </section>
+
+      <!-- Viewport & Canvas Area -->
+      <section class="document-viewport" id="document-viewport">
+
+        <!-- Drag & Drop Zone (Default state when no PDF is active) -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="cloud-upload" class="dropzone-icon"></i>
+            </div>
+            <h2 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF here</h2>
+            <p class="dropzone-subtitle" data-i18n="dropzone_desc">Drag and drop any PDF file to start annotating
+              immediately with zero cloud uploads.</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-file" class="btn btn-primary">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="dropzone_browse">Browse Local File</span>
+              </button>
+              <button id="btn-dropzone-sample" class="btn btn-secondary">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="dropzone_sample">Load Sample File</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="shield-check"></i>
+                <span data-i18n="feature_private">100% Private Client-Side</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="sigma"></i>
+                <span data-i18n="feature_math">MathJax LaTeX Integration</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="layers"></i>
+                <span data-i18n="feature_flatten">Flatten & Export to PDF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDF Canvas & Annotation Layer Workspace Container -->
+        <div class="canvas-stage-wrapper hidden" id="canvas-stage-wrapper" dir="ltr">
+          <div class="canvas-shadow-container" id="canvas-shadow-container" dir="ltr">
+            <!-- Background Layer: PDF.js rendered page -->
+            <canvas id="pdf-canvas" class="pdf-canvas-layer" dir="ltr"></canvas>
+
+            <!-- Foreground Layer: Fabric.js interactive workspace -->
+            <canvas id="annotation-canvas" class="annotation-canvas-layer" dir="ltr"></canvas>
+          </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+          <div class="spinner"></div>
+          <p id="loading-text" data-i18n="loading_text">Rendering document...</p>
+        </div>
+
+      </section>
+
+      <!-- Bottom Floating Pagination & Zoom Bar -->
+      <footer class="viewport-controls" id="viewport-controls">
+        <div class="controls-group">
+          <!-- Previous Page -->
+          <button id="btn-prev-page" class="nav-control-btn" title="Previous Page (Left Arrow)" disabled
+            aria-label="Previous Page">
+            <i data-lucide="chevron-left"></i>
+          </button>
+
+          <!-- Page indicator -->
+          <div class="page-indicator">
+            <span data-i18n="label_page">Page</span>
+            <input type="number" id="current-page-input" min="1" value="1" class="page-num-input"
+              aria-label="Current Page">
+            <span>/</span>
+            <span id="total-pages-count">1</span>
+          </div>
+
+          <!-- Next Page -->
+          <button id="btn-next-page" class="nav-control-btn" title="Next Page (Right Arrow)" disabled
+            aria-label="Next Page">
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="controls-divider"></div>
+
+        <div class="controls-group">
+          <!-- Zoom Out -->
+          <button id="btn-zoom-out" class="nav-control-btn" title="Zoom Out" aria-label="Zoom Out">
+            <i data-lucide="zoom-out"></i>
+          </button>
+
+          <!-- Zoom Display -->
+          <span id="zoom-level-text" class="zoom-level">100%</span>
+
+          <!-- Zoom In -->
+          <button id="btn-zoom-in" class="nav-control-btn" title="Zoom In" aria-label="Zoom In">
+            <i data-lucide="zoom-in"></i>
+          </button>
+
+          <!-- Fit to Width -->
+          <button id="btn-zoom-fit" class="nav-control-btn" title="Fit to Viewport" aria-label="Fit to Viewport">
+            <i data-lucide="maximize-2"></i>
+          </button>
+        </div>
+      </footer>
+
+    </main>
+
+    <!-- MathJax LaTeX Formula Modal -->
+    <div id="math-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"
+      aria-labelledby="math-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <i data-lucide="sigma" class="modal-icon"></i>
+            <h3 id="math-modal-title" class="modal-title" data-i18n="math_modal_title">Insert Math Formula</h3>
+          </div>
+          <button id="btn-close-math" class="modal-close-btn" aria-label="Close modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Formula Presets -->
+          <div class="preset-formulas-bar">
+            <span class="preset-label" data-i18n="math_presets">Presets:</span>
+            <div class="preset-chips">
+              <button type="button" class="preset-chip" data-latex="E = mc^2">E = mc²</button>
+              <button type="button" class="preset-chip"
+                data-latex="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}">Quadratic</button>
+              <button type="button" class="preset-chip"
+                data-latex="\int_{a}^{b} f(x) \, dx = F(b) - F(a)">Calculus</button>
+              <button type="button" class="preset-chip"
+                data-latex="\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}">Euler</button>
+              <button type="button" class="preset-chip"
+                data-latex="\begin{bmatrix} a & b \\ c & d \end{bmatrix}">Matrix</button>
+              <button type="button" class="preset-chip" data-latex="a^2 + b^2 = c^2">Pythagoras</button>
+            </div>
+          </div>
+
+          <!-- LaTeX Editor Input -->
+          <div class="form-group">
+            <label for="latex-input" data-i18n="math_input_label">LaTeX Equation Syntax</label>
+            <textarea id="latex-input" class="latex-textarea" rows="3"
+              placeholder="\int_{0}^{\infty} e^{-x^2} dx = \frac{\sqrt{\pi}}{2}"></textarea>
+          </div>
+
+          <!-- Live MathJax Preview Box -->
+          <div class="form-group">
+            <label data-i18n="math_preview_label">Live Formula Preview</label>
+            <div id="math-preview-box" class="math-preview-box">
+              <span class="math-preview-placeholder" data-i18n="math_preview_placeholder">Type LaTeX above to render
+                live preview</span>
+            </div>
+          </div>
+
+          <!-- Formula Color & Font Controls -->
+          <div class="math-options-row">
+            <div class="math-opt-item">
+              <label for="math-color" data-i18n="math_color_label">Formula Color</label>
+              <input type="color" id="math-color" value="#6366f1" class="color-input">
+            </div>
+            <div class="math-opt-item">
+              <label for="math-scale" data-i18n="math_scale_label">Initial Scale</label>
+              <select id="math-scale" class="prop-select">
+                <option value="1">Medium (1.0x)</option>
+                <option value="1.5" selected>Large (1.5x)</option>
+                <option value="2">Extra Large (2.0x)</option>
+                <option value="0.75">Small (0.75x)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-cancel-math" class="btn btn-ghost" data-i18n="btn_cancel">Cancel</button>
+          <button id="btn-insert-math" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i>
+            <span data-i18n="btn_insert_formula">Insert onto PDF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Message</span>
+    </div>
+
+  </div>
+  <!-- Main Application Script -->
+  <script src="app.js"></script>
+</body>
+
+</html>

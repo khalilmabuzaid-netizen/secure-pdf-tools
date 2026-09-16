@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protect PDF Pro - Encrypt PDF with Password Client-Side</title>
+  <meta name="description"
+    content="Encrypt and password protect your PDF documents directly in your browser with AES-256 encryption. 100% private client-side processing with zero server uploads.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF-Lib CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- PDF-Encrypt UMD CDN (Browser-ready PDF encryption using Web Crypto) -->
+  <script src="https://unpkg.com/@pdfsmaller/pdf-encrypt/dist/pdf-encrypt.umd.js"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(244, 63, 94, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #f43f5e;
+      --border-active: rgba(244, 63, 94, 0.6);
+
+      /* Accents & Brand (Rose / Crimson Theme) */
+      --primary: #f43f5e;
+      --primary-hover: #e11d48;
+      --primary-glow: rgba(244, 63, 94, 0.35);
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-indigo: #6366f1;
+      --accent-cyan: #06b6d4;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(244, 63, 94, 0.25);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.12), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(99, 102, 241, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .btn i {
+      order: 0;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 28px;
+    }
+
+    [dir="rtl"] .filename-input-group {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .password-input-wrapper {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .checkbox-label {
+      flex-direction: row;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-brand:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #f43f5e, #fb7185);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fb7185, #f43f5e, #e11d48);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(244, 63, 94, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #fb7185, #f43f5e);
+      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .btn-icon-only {
+      padding: 8px;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hidden-input {
+      display: none !important;
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      padding: 36px 24px 80px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .protect-container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: #fb7185;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge i {
+      width: 15px;
+      height: 15px;
+      color: #f43f5e;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Styles */
+    .dropzone {
+      width: 100%;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .dropzone-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(244, 63, 94, 0.35);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .dropzone:hover .dropzone-card,
+    .dropzone.drag-over .dropzone-card {
+      border-color: #f43f5e;
+      background: rgba(244, 63, 94, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(244, 63, 94, 0.25);
+    }
+
+    .dropzone-icon-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: #fb7185;
+      margin-bottom: 20px;
+      animation: pulse-ring 3s infinite ease-in-out;
+    }
+
+    .dropzone-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    @keyframes pulse-ring {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);
+        transform: scale(1.04);
+      }
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .feature-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    /* Active Protection Configuration Panel */
+    .config-panel {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* File Overview Card */
+    .file-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-info-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .file-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.2));
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fb7185;
+      flex-shrink: 0;
+    }
+
+    .file-icon-box i {
+      width: 24px;
+      height: 24px;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 400px;
+    }
+
+    .file-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-badge.highlight {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #fb7185;
+      font-weight: 600;
+    }
+
+    /* 2-Column Controls Layout */
+    .protect-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .controls-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .info-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 84px;
+    }
+
+    .section-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-label i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Password Input Wrapper */
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2px 8px;
+      transition: all var(--transition-fast);
+    }
+
+    .password-input-wrapper:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .password-input-wrapper input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .password-toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-fast);
+    }
+
+    .password-toggle-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .password-toggle-btn i {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Password Strength Meter */
+    .strength-meter-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .strength-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+
+    .strength-label {
+      color: var(--text-secondary);
+    }
+
+    .strength-text {
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .strength-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      height: 5px;
+    }
+
+    .strength-bar {
+      height: 100%;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    /* Password Match Status */
+    .match-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      transition: all var(--transition-fast);
+    }
+
+    .match-status i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .match-status.match-success {
+      color: var(--accent-emerald);
+    }
+
+    .match-status.match-error {
+      color: var(--primary);
+    }
+
+    .match-status.match-idle {
+      color: var(--text-muted);
+    }
+
+    /* Security Options Cards */
+    .controls-row-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .control-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .select-dropdown {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .select-dropdown:focus {
+      border-color: var(--border-focus);
+    }
+
+    .select-dropdown option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    /* Checkbox Group */
+    .permissions-group {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .checkbox-label input[type="checkbox"]:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-label input[type="checkbox"]:checked::after {
+      content: '✓';
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Output Filename */
+    .filename-input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2px 14px;
+    }
+
+    .filename-input-group:focus-within {
+      border-color: var(--border-focus);
+    }
+
+    .filename-input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-suffix {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Security Info Box */
+    .security-info-card {
+      background: rgba(244, 63, 94, 0.05);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: #fb7185;
+      font-size: 0.95rem;
+    }
+
+    .info-header i {
+      width: 18px;
+      height: 18px;
+      color: var(--primary);
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .info-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-emerald);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Progress Card */
+    .progress-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(244, 63, 94, 0.08);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #fb7185;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f43f5e, #fb7185);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease-out;
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+    }
+
+    /* Actions Footer */
+    .panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 999;
+      max-width: 440px;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastSlide {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.toast-success {
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .toast.toast-success i {
+      color: #34d399;
+    }
+
+    .toast.toast-error {
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+
+    .toast.toast-error i {
+      color: #fb7185;
+    }
+
+    .toast.toast-warning {
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    .toast.toast-warning i {
+      color: #fbbf24;
+    }
+
+    @media (max-width: 768px) {
+      .protect-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls-row-group {
+        grid-template-columns: 1fr;
+      }
+
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding: 24px 16px 60px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .config-panel {
+        padding: 20px;
+      }
+
+      .file-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .panel-footer {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .panel-footer .btn {
+        width: 100%;
+      }
+
+      .info-column {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-dark">
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="lock" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Protect<span class="gradient-text">PDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <a href="annotator.html" class="btn btn-secondary" title="Annotate PDF Tool">
+          <i data-lucide="file-signature"></i>
+          <span data-i18n="nav_annotator">Annotator</span>
+        </a>
+
+        <a href="merge.html" class="btn btn-secondary" title="Merge multiple PDF files">
+          <i data-lucide="layers"></i>
+          <span data-i18n="nav_merge">Merge PDF</span>
+        </a>
+
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+
+        <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+          <i data-lucide="minimize-2"></i>
+          <span data-i18n="nav_compress">Compress PDF</span>
+        </a>
+
+        <a href="watermark.html" class="btn btn-secondary" title="Watermark PDF Tool">
+          <i data-lucide="stamp"></i>
+          <span data-i18n="nav_watermark">Watermark PDF</span>
+        </a>
+
+        <a href="img2pdf.html" class="btn btn-secondary" title="Convert Images to PDF">
+          <i data-lucide="image"></i>
+          <span data-i18n="nav_img2pdf">Image to PDF</span>
+        </a>
+
+        <button id="btn-header-reset" class="btn btn-ghost" title="Reset file selection" disabled>
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_reset">Reset</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="protect-container">
+
+        <!-- Hero Header -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="hero_badge">Local & Secure • 100% Client-Side PDF Encryption • Zero Server Uploads</span>
+          </div>
+          <h2 class="hero-title" data-i18n="hero_title">Protect & <span class="gradient-text">Encrypt PDF</span> Files
+          </h2>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">Secure your sensitive documents with military-grade AES-256
+            encryption and a custom password right inside your browser.</p>
+        </section>
+
+        <!-- Hidden File Input -->
+        <input type="file" id="pdf-file-input" accept="application/pdf" class="hidden-input"
+          aria-label="Upload PDF file">
+
+        <!-- Drag & Drop Zone (Default State) -->
+        <section class="dropzone" id="dropzone" tabindex="0" role="region" aria-label="PDF upload dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="lock" class="dropzone-icon"></i>
+            </div>
+            <h3 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF file here</h3>
+            <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Drag and drop any PDF file to encrypt with a
+              password, or browse from your device</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-file" type="button" class="btn btn-primary btn-lg">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="btn_browse_file">Browse PDF File</span>
+              </button>
+              <button id="btn-load-sample" type="button" class="btn btn-secondary btn-lg">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="btn_load_sample">Try Sample PDF</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="shield"></i>
+                <span data-i18n="feature_aes">AES-256 Bit Encryption</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="cpu"></i>
+                <span data-i18n="feature_client">100% Client-Side Privacy</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="file-check"></i>
+                <span data-i18n="feature_compat">Universal PDF Compatibility</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Protection Configuration Panel -->
+        <section class="config-panel hidden" id="config-panel">
+
+          <!-- File Overview Card -->
+          <div class="file-card">
+            <div class="file-info-group">
+              <div class="file-icon-box">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div class="file-details">
+                <span class="file-name" id="file-name-display">document.pdf</span>
+                <div class="file-badges">
+                  <span class="meta-badge highlight" id="file-size-display">0 KB</span>
+                  <span class="meta-badge" id="file-pages-display">0 Pages Total</span>
+                </div>
+              </div>
+            </div>
+            <button id="btn-change-file" class="btn btn-secondary btn-sm" title="Choose a different PDF file">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="btn_change_file">Change File</span>
+            </button>
+          </div>
+
+          <!-- Main 2-Column Controls & Security Info -->
+          <div class="protect-grid">
+
+            <!-- Left Controls Column -->
+            <div class="controls-column">
+
+              <!-- Password Input 1 -->
+              <div class="control-group">
+                <label for="password-input" class="section-label">
+                  <i data-lucide="key"></i>
+                  <span data-i18n="label_enter_password">Enter Password</span>
+                </label>
+                <div class="password-input-wrapper">
+                  <input type="password" id="password-input" placeholder="Enter a secure password"
+                    data-i18n-placeholder="placeholder_enter_password" autocomplete="new-password">
+                  <button type="button" id="btn-toggle-pwd-1" class="password-toggle-btn"
+                    aria-label="Toggle password visibility">
+                    <i data-lucide="eye" id="pwd-icon-1"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Password Input 2 (Confirm) -->
+              <div class="control-group">
+                <label for="confirm-password-input" class="section-label">
+                  <i data-lucide="check-check"></i>
+                  <span data-i18n="label_confirm_password">Confirm Password</span>
+                </label>
+                <div class="password-input-wrapper">
+                  <input type="password" id="confirm-password-input" placeholder="Repeat your password"
+                    data-i18n-placeholder="placeholder_confirm_password" autocomplete="new-password">
+                  <button type="button" id="btn-toggle-pwd-2" class="password-toggle-btn"
+                    aria-label="Toggle confirm password visibility">
+                    <i data-lucide="eye" id="pwd-icon-2"></i>
+                  </button>
+                </div>
+                <!-- Real-time Match Status -->
+                <div class="match-status match-idle" id="pwd-match-status">
+                  <i data-lucide="info" id="match-status-icon"></i>
+                  <span id="match-status-text" data-i18n="match_idle">Enter matching passwords to secure the
+                    document</span>
+                </div>
+              </div>
+
+              <!-- Password Strength Meter -->
+              <div class="strength-meter-card">
+                <div class="strength-header">
+                  <span class="strength-label" data-i18n="strength_label">Password Strength:</span>
+                  <span class="strength-text" id="pwd-strength-label" data-i18n="strength_empty">Empty</span>
+                </div>
+                <div class="strength-bars">
+                  <div class="strength-bar" id="pwd-bar-1"></div>
+                  <div class="strength-bar" id="pwd-bar-2"></div>
+                  <div class="strength-bar" id="pwd-bar-3"></div>
+                  <div class="strength-bar" id="pwd-bar-4"></div>
+                </div>
+              </div>
+
+              <!-- Encryption Algorithm & Output Filename -->
+              <div class="controls-row-group">
+
+                <!-- Algorithm Select -->
+                <div class="control-card">
+                  <label for="encryption-algorithm" class="section-label" style="margin-bottom: 4px;">
+                    <i data-lucide="shield"></i>
+                    <span data-i18n="label_algorithm">Encryption Method</span>
+                  </label>
+                  <select id="encryption-algorithm" class="select-dropdown" aria-label="Select encryption algorithm">
+                    <option value="AES-256" selected data-i18n="opt_aes256">AES-256 (Recommended • High Security)
+                    </option>
+                    <option value="RC4" data-i18n="opt_rc4">RC4 128-bit (Standard Compatibility)</option>
+                  </select>
+                </div>
+
+                <!-- Output Filename Setting -->
+                <div class="control-card">
+                  <label for="output-filename" class="section-label" style="margin-bottom: 4px;">
+                    <i data-lucide="file-output"></i>
+                    <span data-i18n="label_output_filename">Output File Name</span>
+                  </label>
+                  <div class="filename-input-group">
+                    <input type="text" id="output-filename" value="protected_document" placeholder="protected_document"
+                      data-i18n-placeholder="placeholder_output_filename" spellcheck="false">
+                    <span class="input-suffix">.pdf</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Optional Permissions -->
+              <div class="permissions-group">
+                <span class="section-label" style="margin-bottom: 0;">
+                  <i data-lucide="sliders-horizontal"></i>
+                  <span data-i18n="label_permissions">Document Permissions</span>
+                </span>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="perm-printing" checked>
+                  <span data-i18n="perm_allow_printing">Allow Printing</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="perm-copying" checked>
+                  <span data-i18n="perm_allow_copying">Allow Copying text and graphics</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="perm-modifying">
+                  <span data-i18n="perm_allow_modifying">Allow Modifying document</span>
+                </label>
+              </div>
+
+            </div>
+
+            <!-- Right Column: Security & Privacy Info Card -->
+            <div class="info-column">
+              <div class="security-info-card">
+                <div class="info-header">
+                  <i data-lucide="shield-check"></i>
+                  <span data-i18n="security_card_title">Security & Privacy Assurance</span>
+                </div>
+                <ul class="info-list">
+                  <li class="info-item">
+                    <i data-lucide="check"></i>
+                    <span data-i18n="security_bullet_1">100% Client-Side encryption using modern Web Cryptography
+                      API.</span>
+                  </li>
+                  <li class="info-item">
+                    <i data-lucide="check"></i>
+                    <span data-i18n="security_bullet_2">Your PDF and passwords are never transmitted to any server or
+                      third party.</span>
+                  </li>
+                  <li class="info-item">
+                    <i data-lucide="check"></i>
+                    <span data-i18n="security_bullet_3">Protected documents can be opened in Adobe Acrobat, Chrome,
+                      Apple Preview, and all standard PDF readers.</span>
+                  </li>
+                  <li class="info-item">
+                    <i data-lucide="alert-triangle" style="color: var(--accent-amber);"></i>
+                    <span data-i18n="security_bullet_4">Make sure to remember your password. Due to client-side
+                      encryption, lost passwords cannot be recovered.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Progress Bar Card (Hidden by default) -->
+          <div class="progress-card hidden" id="progress-card">
+            <div class="progress-header">
+              <span class="progress-label">
+                <div class="spinner"></div>
+                <span id="progress-status-text" data-i18n="progress_encrypting">Encrypting document with
+                  AES-256...</span>
+              </span>
+              <span class="progress-percent" id="progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="panel-footer">
+            <button id="btn-cancel" class="btn btn-ghost">
+              <i data-lucide="x"></i>
+              <span data-i18n="btn_cancel">Cancel</span>
+            </button>
+            <button id="btn-encrypt-pdf" class="btn btn-primary btn-lg">
+              <i data-lucide="lock"></i>
+              <span id="btn-encrypt-text" data-i18n="btn_encrypt_pdf">Encrypt & Download PDF</span>
+              <div class="spinner hidden" id="btn-spinner"></div>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification message</span>
+    </div>
+
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="protect.js"></script>
+</body>
+
+</html>

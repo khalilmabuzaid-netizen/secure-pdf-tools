@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - AnnotatePDF Pro</title>
+    <meta name="description"
+        content="Privacy Policy for AnnotatePDF Pro. Learn about our 100% client-side zero-upload file processing, cookie usage, and Google AdSense compliance.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-main: #09090b;
+            --bg-surface: rgba(21, 30, 50, 0.75);
+            --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --text-main: #ffffff;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --nav-height: 64px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at top center, #1a1a2e 0%, var(--bg-main) 60%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.7;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: var(--bg-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: #ffffff;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .brand-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-left: 8px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            outline: none;
+            text-decoration: none;
+            user-select: none;
+            font-family: inherit;
+        }
+
+        .btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+            border-color: var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 4rem 2rem 2.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: #60a5fa;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .page-badge i {
+            width: 15px;
+            height: 15px;
+            color: #3b82f6;
+        }
+
+        .page-title {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .date-badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .privacy-lead {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 680px;
+            margin: 0.5rem auto 0;
+            line-height: 1.6;
+        }
+
+        /* Content Container */
+        .content-container {
+            max-width: 920px;
+            margin: 0 auto 4rem;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        /* Highlights Summary Grid */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            backdrop-filter: blur(10px);
+            transition: transform var(--transition-fast), border-color var(--transition-fast);
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .highlight-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+            flex-shrink: 0;
+        }
+
+        .highlight-icon i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .highlight-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: #ffffff;
+        }
+
+        .highlight-text p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Main Legal Document Card */
+        .legal-card {
+            background: var(--bg-surface-elevated);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .legal-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .section-header i {
+            width: 22px;
+            height: 22px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .legal-paragraph {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Callout Box */
+        .callout-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .callout-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #34d399;
+            font-size: 0.95rem;
+        }
+
+        .callout-title i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .callout-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .callout-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+
+        .callout-item i {
+            width: 16px;
+            height: 16px;
+            color: #34d399;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        /* Links */
+        .legal-link {
+            color: #60a5fa;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        .legal-link:hover {
+            color: #93c5fd;
+        }
+
+        .links-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        /* Contact Action Box */
+        .contact-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .contact-info h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .contact-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Universal Footer */
+        .site-footer {
+            margin-top: auto;
+            width: 100%;
+            background: var(--bg-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+            padding: 2.5rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .footer-link:hover,
+        .footer-link.active {
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+        }
+
+        .footer-legal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        .footer-legal-badge i {
+            width: 13px;
+            height: 13px;
+            color: #10b981;
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 48px);
+            max-width: 860px;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 16px 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .cookie-banner.hidden {
+            display: none !important;
+        }
+
+        @keyframes cookieSlideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        .cookie-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .cookie-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            flex-shrink: 0;
+        }
+
+        .cookie-icon-wrapper i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .cookie-text {
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: #60a5fa;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            margin-left: 4px;
+            transition: color var(--transition-fast);
+        }
+
+        .cookie-text a:hover {
+            color: #93c5fd;
+        }
+
+        .cookie-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-cookie-accept:hover {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
+        }
+
+        /* RTL Layout Support */
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
+        [dir="rtl"],
+        [dir="rtl"] body {
+            font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        [dir="rtl"] .page-title,
+        [dir="rtl"] .brand-title,
+        [dir="rtl"] .footer-brand-title,
+        [dir="rtl"] .section-header {
+            font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Outfit', sans-serif;
+        }
+
+        [dir="rtl"] .brand-badge {
+            margin-left: 0;
+            margin-right: 8px;
+        }
+
+        [dir="rtl"] .cookie-banner {
+            left: 50%;
+            transform: translateX(50%);
+        }
+
+        [dir="rtl"] .footer-top,
+        [dir="rtl"] .footer-bottom {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .cookie-text a {
+            margin-left: 0;
+            margin-right: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 0 16px;
+            }
+
+            .page-header {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .content-container {
+                padding: 0 1rem;
+            }
+
+            .legal-card {
+                padding: 2rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .section-header {
+                font-size: 1.2rem;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.25rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .cookie-banner {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: start;
+                padding: 16px;
+                bottom: 12px;
+                width: calc(100% - 24px);
+                gap: 14px;
+            }
+
+            .cookie-actions {
+                justify-content: flex-end;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+        <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+            <div class="brand-icon-wrapper">
+                <i data-lucide="layers" class="brand-icon"></i>
+            </div>
+            <div class="brand-text">
+                <h1 class="brand-title">Annotate<span class="gradient-text">PDF</span></h1>
+                <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+                <i data-lucide="home"></i>
+                <span data-i18n="nav_home">Home</span>
+            </a>
+
+            <!-- Language Toggle Button -->
+            <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+                aria-label="Toggle language">
+                <i data-lucide="globe"></i>
+                <span id="lang-toggle-text">العربية</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Header Section -->
+    <header class="page-header">
+        <div class="page-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="privacy_badge">Transparency & Security • AdSense Compliant</span>
+        </div>
+        <h1 class="page-title" data-i18n="privacy_title">Privacy <span class="gradient-text">Policy</span></h1>
+        <div class="date-badge">
+            <i data-lucide="calendar"></i>
+            <span data-i18n="privacy_effective_date">Effective Date: September 2026</span>
+        </div>
+        <p class="privacy-lead" data-i18n="privacy_lead">Your privacy is fundamental to our mission. Learn how our 100%
+            client-side platform handles your data with complete transparency.</p>
+    </header>
+
+    <!-- Main Legal Content Container -->
+    <main class="content-container">
+
+        <!-- Highlights Row -->
+        <section class="highlights-grid">
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <div class="highlight-text">
+                    <h4 data-i18n="privacy_highlight_1_title">100% In-Browser</h4>
+                    <p data-i18n="privacy_highlight_1_desc">Processing happens in client memory using WebAssembly & JS.
+                    </p>
+                </div>
+            </div>
+
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i data-lucide="hard-drive"></i>
+                </div>
+                <div class="highlight-text">
+                    <h4 data-i18n="privacy_highlight_2_title">Zero Server Uploads</h4>
+                    <p data-i18n="privacy_highlight_2_desc">No files or document contents ever leave your physical
+                        device.</p>
+                </div>
+            </div>
+
+            <div class="highlight-card">
+                <div class="highlight-icon">
+                    <i data-lucide="shield"></i>
+                </div>
+                <div class="highlight-text">
+                    <h4 data-i18n="privacy_highlight_3_title">AdSense Compliant</h4>
+                    <p data-i18n="privacy_highlight_3_desc">Clear cookie disclosures with opt-out mechanisms provided.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Card -->
+        <article class="legal-card">
+
+            <!-- Section 1: Local File Processing -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="lock"></i>
+                    <span data-i18n="privacy_s1_title">1. Local File Processing & Zero-Upload Guarantee</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s1_desc">Your privacy is our priority. All PDF processing
+                    (merging, splitting, compressing, etc.) is executed 100% locally within your web browser. We do NOT
+                    upload, store, or view your files on any server. Your data never leaves your device.</p>
+
+                <div class="callout-box">
+                    <div class="callout-title">
+                        <i data-lucide="check-circle-2"></i>
+                        <span data-i18n="privacy_s1_box_title">How Client-Side Processing Protects You</span>
+                    </div>
+                    <ul class="callout-list">
+                        <li class="callout-item">
+                            <i data-lucide="check"></i>
+                            <span data-i18n="privacy_s1_b1">PDF files are loaded directly into browser RAM and rendered
+                                on local HTML5 Canvas elements.</span>
+                        </li>
+                        <li class="callout-item">
+                            <i data-lucide="check"></i>
+                            <span data-i18n="privacy_s1_b2">No backend API endpoints, cloud file stores, or database
+                                records exist to receive your files.</span>
+                        </li>
+                        <li class="callout-item">
+                            <i data-lucide="check"></i>
+                            <span data-i18n="privacy_s1_b3">All memory structures are automatically cleared when you
+                                close or reload the browser tab.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 2: Cookies & Advertising -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="cookie"></i>
+                    <span data-i18n="privacy_s2_title">2. Cookies and Advertising</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s2_desc">We use cookies to save your UI preferences.
+                    Additionally, third-party vendors, including Google, use cookies to serve ads based on a user's
+                    prior visits to this website or other websites. Users may opt out of personalized advertising by
+                    visiting Google's Ads Settings.</p>
+
+                <p class="legal-paragraph" data-i18n="privacy_s2_p2">Google's use of advertising cookies enables it and
+                    its partners to serve ads to our users based on their visits to our site and other sites across the
+                    Internet. You can manage or opt out of personalized advertising using the following official
+                    resources:</p>
+
+                <div class="links-row">
+                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer"
+                        class="legal-link" data-i18n="privacy_ads_settings_link">Google Ads Settings ↗</a>
+                    <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer"
+                        class="legal-link" data-i18n="privacy_aboutads_link">AboutAds Consumer Choice ↗</a>
+                    <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer"
+                        class="legal-link" data-i18n="privacy_google_policy_link">How Google uses data in advertising
+                        ↗</a>
+                </div>
+            </section>
+
+            <!-- Section 3: Analytics & Usage Data -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="bar-chart-2"></i>
+                    <span data-i18n="privacy_s3_title">3. Aggregate Usage Statistics</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s3_desc">We may collect anonymous aggregate statistics
+                    such as page views, device types, and browser metrics to optimize performance and responsiveness. No
+                    personal identification information or document contents are ever recorded or associated with these
+                    statistics.</p>
+            </section>
+
+            <!-- Section 4: Data Security -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="shield-check"></i>
+                    <span data-i18n="privacy_s4_title">4. Data Security Standards</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s4_desc">We employ modern browser security sandboxing and
+                    secure HTTPS transmission for all static web assets. Because file manipulation occurs entirely in
+                    client-side WebAssembly and JavaScript, your documents are shielded from external network
+                    interception.</p>
+            </section>
+
+            <!-- Section 5: Policy Updates -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="refresh-cw"></i>
+                    <span data-i18n="privacy_s5_title">5. Policy Updates</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s5_desc">We may update this Privacy Policy from time to
+                    time. Any changes will be posted on this page with an updated effective date. We encourage users to
+                    periodically review this page for the latest information on our privacy practices.</p>
+            </section>
+
+            <!-- Section 6: Contact Us -->
+            <section class="legal-section">
+                <h2 class="section-header">
+                    <i data-lucide="mail"></i>
+                    <span data-i18n="privacy_s6_title">6. Contact Us</span>
+                </h2>
+                <p class="legal-paragraph" data-i18n="privacy_s6_desc">If you have any questions about this Privacy
+                    Policy, please contact us.</p>
+
+                <div class="contact-box">
+                    <div class="contact-info">
+                        <h4 data-i18n="privacy_contact_box_title">Have privacy questions or feedback?</h4>
+                        <p data-i18n="privacy_contact_box_desc">Our team is available to assist you with inquiries
+                            regarding our privacy standards.</p>
+                    </div>
+                    <a href="contact.html" class="btn btn-primary">
+                        <i data-lucide="send"></i>
+                        <span data-i18n="btn_contact_support">Contact Support</span>
+                    </a>
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- Universal Semantic Footer -->
+    <footer class="site-footer" id="site-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <a href="index.html" class="footer-brand" title="PDF Hub Home">
+                        <div class="brand-icon-wrapper" style="width: 30px; height: 30px;">
+                            <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <span class="footer-brand-title">Annotate<span class="gradient-text">PDF</span></span>
+                    </a>
+                    <p class="footer-tagline" data-i18n="footer_tagline">100% Client-side, private, and secure document
+                        processing directly in your browser.</p>
+                </div>
+
+                <nav class="footer-links" aria-label="Footer Navigation">
+                    <a href="privacy.html" class="footer-link active" data-i18n="footer_privacy">Privacy Policy</a>
+                    <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+                    <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+                <div class="footer-legal-badge">
+                    <i data-lucide="shield-check"></i>
+                    <span data-i18n="badge_client_side">100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+        <div class="cookie-content">
+            <div class="cookie-icon-wrapper">
+                <i data-lucide="cookie"></i>
+            </div>
+            <p class="cookie-text">
+                <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit
+                    this site you agree to our use of cookies.</span>
+                <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+            </p>
+        </div>
+        <div class="cookie-actions">
+            <button type="button" class="btn btn-cookie-accept" id="btn-accept-cookies"
+                data-i18n="cookie_accept_btn">Accept</button>
+        </div>
+    </div>
+
+    <script>
+        // Multi-language translation dictionary for Privacy Policy
+        const translations = {
+            en: {
+                badge_client_side: "100% Client-Side",
+                nav_home: "Home",
+                privacy_badge: "Transparency & Security • AdSense Compliant",
+                privacy_title: 'Privacy <span class="gradient-text">Policy</span>',
+                privacy_effective_date: "Effective Date: September 2026",
+                privacy_lead: "Your privacy is fundamental to our mission. Learn how our 100% client-side platform handles your data with complete transparency.",
+                privacy_highlight_1_title: "100% In-Browser",
+                privacy_highlight_1_desc: "Processing happens in client memory using WebAssembly & JS.",
+                privacy_highlight_2_title: "Zero Server Uploads",
+                privacy_highlight_2_desc: "No files or document contents ever leave your physical device.",
+                privacy_highlight_3_title: "AdSense Compliant",
+                privacy_highlight_3_desc: "Clear cookie disclosures with opt-out mechanisms provided.",
+                privacy_s1_title: "1. Local File Processing & Zero-Upload Guarantee",
+                privacy_s1_desc: "Your privacy is our priority. All PDF processing (merging, splitting, compressing, etc.) is executed 100% locally within your web browser. We do NOT upload, store, or view your files on any server. Your data never leaves your device.",
+                privacy_s1_box_title: "How Client-Side Processing Protects You",
+                privacy_s1_b1: "PDF files are loaded directly into browser RAM and rendered on local HTML5 Canvas elements.",
+                privacy_s1_b2: "No backend API endpoints, cloud file stores, or database records exist to receive your files.",
+                privacy_s1_b3: "All memory structures are automatically cleared when you close or reload the browser tab.",
+                privacy_s2_title: "2. Cookies and Advertising",
+                privacy_s2_desc: "We use cookies to save your UI preferences. Additionally, third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Users may opt out of personalized advertising by visiting Google's Ads Settings.",
+                privacy_s2_p2: "Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visits to our site and other sites across the Internet. You can manage or opt out of personalized advertising using the following official resources:",
+                privacy_ads_settings_link: "Google Ads Settings ↗",
+                privacy_aboutads_link: "AboutAds Consumer Choice ↗",
+                privacy_google_policy_link: "How Google uses data in advertising ↗",
+                privacy_s3_title: "3. Aggregate Usage Statistics",
+                privacy_s3_desc: "We may collect anonymous aggregate statistics such as page views, device types, and browser metrics to optimize performance and responsiveness. No personal identification information or document contents are ever recorded or associated with these statistics.",
+                privacy_s4_title: "4. Data Security Standards",
+                privacy_s4_desc: "We employ modern browser security sandboxing and secure HTTPS transmission for all static web assets. Because file manipulation occurs entirely in client-side WebAssembly and JavaScript, your documents are shielded from external network interception.",
+                privacy_s5_title: "5. Policy Updates",
+                privacy_s5_desc: "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. We encourage users to periodically review this page for the latest information on our privacy practices.",
+                privacy_s6_title: "6. Contact Us",
+                privacy_s6_desc: "If you have any questions about this Privacy Policy, please contact us.",
+                privacy_contact_box_title: "Have privacy questions or feedback?",
+                privacy_contact_box_desc: "Our team is available to assist you with inquiries regarding our privacy standards.",
+                btn_contact_support: "Contact Support",
+                footer_tagline: "100% Client-side, private, and secure document processing directly in your browser.",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_contact: "Contact Us",
+                footer_copyright: "© 2026 PDF Hub. All rights reserved.",
+                cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
+                cookie_learn_more: "Privacy Policy",
+                cookie_accept_btn: "Accept"
+            },
+            ar: {
+                badge_client_side: "محلي ١٠٠٪ في المتصفح",
+                nav_home: "الرئيسية",
+                privacy_badge: "الشفافية والأمان • متوافق مع معايير AdSense",
+                privacy_title: 'سياسة <span class="gradient-text">الخصوصية</span>',
+                privacy_effective_date: "تاريخ السريان: سبتمبر ٢٠٢٦",
+                privacy_lead: "خصوصيتك هي الركيزة الأساسية لمهمتنا. تعرف على كيفية تعامل منصتنا المحلية ١٠٠٪ مع بياناتك بشفافية وأمان كامل.",
+                privacy_highlight_1_title: "١٠٠٪ داخل المتصفح",
+                privacy_highlight_1_desc: "تتم جميع العمليات في ذاكرة المتصفح عبر WebAssembly وJavaScript.",
+                privacy_highlight_2_title: "بدون أي رفع سحابي",
+                privacy_highlight_2_desc: "لا تخرج ملفاتك أو محتويات مستنداتك من جهازك الفعلي أبداً.",
+                privacy_highlight_3_title: "متوافق مع AdSense",
+                privacy_highlight_3_desc: "إفصاح كامل عن ملفات تعريف الارتباط مع توفير خيارات إلغاء الاشتراك.",
+                privacy_s1_title: "١. معالجة الملفات محلياً وضمان عدم الرفع",
+                privacy_s1_desc: "خصوصيتك هي أولويتنا. يتم تنفيذ جميع عمليات معالجة الـ PDF (الدمج، التقسيم، الضغط، وغيرها) محلياً بنسبة ١٠٠٪ داخل متصفح الويب الخاص بك. نحن لا نقوم برفع، أو تخزين، أو عرض ملفاتك على أي خادم. بياناتك لا تغادر جهازك أبداً.",
+                privacy_s1_box_title: "كيف تحميك المعالجة المحلية داخل المتصفح",
+                privacy_s1_b1: "يتم تحميل ملفات PDF مباشرة في ذاكرة الرام للمتصفح ورسمها على عناصر Canvas محلياً.",
+                privacy_s1_b2: "لا توجد أي واجهات برمجية خلفية (APIs) أو خوادم تخزين سحابية لاستقبال ملفاتك.",
+                privacy_s1_b3: "يتم مسح جميع بيانات المعالجة من الذاكرة تلقائياً بمجرد إغلاق أو تحديث تبويب المتصفح.",
+                privacy_s2_title: "٢. ملفات تعريف الارتباط والإعلانات",
+                privacy_s2_desc: "نحن نستخدم ملفات تعريف الارتباط لحفظ تفضيلات واجهة المستخدم الخاصة بك. بالإضافة إلى ذلك، يستخدم الموردون الخارجيون، بما في ذلك Google، ملفات تعريف الارتباط لعرض الإعلانات استناداً إلى زيارات المستخدم السابقة لهذا الموقع أو المواقع الأخرى. يجوز للمستخدمين إلغاء الاشتراك في الإعلانات المخصصة عن طريق زيارة إعدادات إعلانات Google.",
+                privacy_s2_p2: "يتيح استخدام Google لملفات تعريف الارتباط الإعلانية لها ولشركائها إمكانية عرض الإعلانات للمستخدمين استناداً إلى زياراتهم لموقعنا والمواقع الأخرى على شبكة الإنترنت. يمكنك إدارة الإعلانات المخصصة أو إلغاء الاشتراك فيها عبر الروابط الرسمية التالية:",
+                privacy_ads_settings_link: "إعدادات إعلانات Google ↗",
+                privacy_aboutads_link: "خيارات المستهلكين AboutAds ↗",
+                privacy_google_policy_link: "كيفية استخدام Google للبيانات في الإعلانات ↗",
+                privacy_s3_title: "٣. إحصائيات الاستخدام الإجمالية",
+                privacy_s3_desc: "قد نقوم بجمع إحصائيات مجمعة مجهولة الهوية مثل عدد مشاهدات الصفحات وأنواع الأجهزة والمتصفحات لتحسين الأداء وسرعة الاستجابة. لا يتم تسجيل أو ربط أي معلومات تعريف شخصية أو محتويات المستندات بهذه الإحصائيات إطلاقاً.",
+                privacy_s4_title: "٤. معايير أمان البيانات",
+                privacy_s4_desc: "نحن نعتمد بيئة الحماية المعزولة (Sandboxing) للمتصفحات الحديثة وبروتوكول HTTPS المشفر لجميع ملفات الموقع الثابتة. نظراً لأن معالجة المستندات تتم بالكامل في المتصفح، فإن ملفاتك محمية تماماً من أي اعتراض خارجي عبر الشبكة.",
+                privacy_s5_title: "٥. تحديثات السياسة",
+                privacy_s5_desc: "قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. سيتم نشر أي تغييرات على هذه الصفحة مع تاريخ السريان المحدث. نشجع المستخدمين على مراجعة هذه الصفحة دورياً للبقاء على اطلاع دائم.",
+                privacy_s6_title: "٦. اتصل بنا",
+                privacy_s6_desc: "إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا.",
+                privacy_contact_box_title: "هل لديك أي استفسار حول الخصوصية؟",
+                privacy_contact_box_desc: "فريقنا متواجد دائماً لمساعدتك في أي استفسارات تتعلق بمعايير الأمان والخصوصية لدينا.",
+                btn_contact_support: "تواصل مع الدعم",
+                footer_tagline: "معالجة مستندات محلية ١٠٠٪، خاصة وآمنة تماماً مباشرة في متصفحك.",
+                footer_privacy: "سياسة الخصوصية",
+                footer_terms: "شروط الاستخدام",
+                footer_contact: "اتصل بنا",
+                footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
+                cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
+                cookie_learn_more: "سياسة الخصوصية",
+                cookie_accept_btn: "موافق"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'en') ? 'ar' : 'en';
+            applyLanguage(currentLang);
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            const isAr = (lang === 'ar');
+
+            document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+
+            const langToggleText = document.getElementById('lang-toggle-text');
+            if (langToggleText) {
+                langToggleText.textContent = isAr ? 'English' : 'العربية';
+            }
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const dict = translations[currentLang] || translations.en;
+                if (dict[key]) {
+                    if (dict[key].includes('<span')) {
+                        el.innerHTML = dict[key];
+                    } else {
+                        el.textContent = dict[key];
+                    }
+                }
+            });
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // Language button event listener
+        const btnLanguageToggle = document.getElementById('btn-language-toggle');
+        if (btnLanguageToggle) {
+            btnLanguageToggle.addEventListener('click', toggleLanguage);
+        }
+
+        // Cookie Consent Banner Logic
+        const cookieBanner = document.getElementById('cookie-banner');
+        const btnAcceptCookies = document.getElementById('btn-accept-cookies');
+
+        if (localStorage.getItem('pdf_hub_cookie_consent') === 'accepted') {
+            if (cookieBanner) cookieBanner.classList.add('hidden');
+        }
+
+        if (btnAcceptCookies && cookieBanner) {
+            btnAcceptCookies.addEventListener('click', () => {
+                localStorage.setItem('pdf_hub_cookie_consent', 'accepted');
+                cookieBanner.style.opacity = '0';
+                cookieBanner.style.transform = (document.documentElement.dir === 'rtl')
+                    ? 'translate(50%, 20px)'
+                    : 'translate(-50%, 20px)';
+                setTimeout(() => {
+                    cookieBanner.classList.add('hidden');
+                }, 300);
+            });
+        }
+    </script>
+</body>
+
+</html>

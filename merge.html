@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge PDF Pro - Combine Multiple PDF Documents Client-Side</title>
+  <meta name="description"
+    content="Merge multiple PDF files into one unified document locally in your browser. 100% private client-side processing with zero server uploads.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF-Lib CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="merge.css">
+</head>
+
+<body class="theme-dark">
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="Return to PDF Tools Hub">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="layers" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Merge<span class="gradient-text">PDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+        <a href="annotator.html" class="btn btn-secondary" title="Open PDF Annotator">
+          <i data-lucide="file-signature"></i>
+          <span data-i18n="nav_annotator">Annotator</span>
+        </a>
+        <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+          <i data-lucide="minimize-2"></i>
+          <span data-i18n="nav_compress">Compress PDF</span>
+        </a>
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+        <button id="btn-header-add" class="btn btn-primary" title="Add PDF Files">
+          <i data-lucide="plus-circle"></i>
+          <span data-i18n="nav_add_files">Add Files</span>
+        </button>
+        <button id="btn-header-clear" class="btn btn-ghost" title="Clear all queued files" disabled>
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_clear_all">Clear All</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="merge-container">
+
+        <!-- Hero Header -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="hero_badge">Local & Secure • No Files Ever Leave Your Device</span>
+          </div>
+          <h2 class="hero-title" data-i18n="hero_title">Merge Multiple <span class="gradient-text">PDF Files</span>
+            Seamlessly</h2>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">Combine multiple documents into a single organized PDF.
+            Reorder pages, organize files, and download your consolidated document in seconds.</p>
+        </section>
+
+        <!-- Hidden Multiple File Input -->
+        <input type="file" id="pdf-file-input" accept="application/pdf" multiple class="hidden-input"
+          aria-label="Upload PDF files">
+
+        <!-- Drag & Drop Zone -->
+        <section class="dropzone" id="dropzone" tabindex="0" role="region" aria-label="PDF upload dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="cloud-upload" class="dropzone-icon"></i>
+            </div>
+            <h3 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF files here</h3>
+            <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Drag and drop multiple PDF files simultaneously,
+              or browse from your computer</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-files" type="button" class="btn btn-primary btn-lg">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="btn_browse_files">Browse PDF Files</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="files"></i>
+                <span data-i18n="feature_multiple">Multiple Files Supported</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="move-vertical"></i>
+                <span data-i18n="feature_order">Custom Merge Order</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="zap"></i>
+                <span data-i18n="feature_instant">Instant Client-Side Merging</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- File Queue Section -->
+        <section class="queue-section" id="queue-section">
+          <!-- Queue Header Toolbar -->
+          <div class="queue-header">
+            <div class="queue-info">
+              <h3 class="queue-title">
+                <i data-lucide="list-ordered"></i>
+                <span data-i18n="queue_title">Files to Merge</span>
+              </h3>
+              <span class="queue-badge" id="file-count-badge">0 files</span>
+              <span class="queue-pages-badge hidden" id="total-pages-badge">0 pages</span>
+            </div>
+            <div class="queue-actions">
+              <button id="btn-add-more" class="btn btn-secondary btn-sm" title="Add more PDFs to queue">
+                <i data-lucide="plus"></i>
+                <span data-i18n="btn_add_more">Add More</span>
+              </button>
+              <button id="btn-clear-queue" class="btn btn-ghost btn-sm text-danger" title="Remove all files from queue">
+                <i data-lucide="trash-2"></i>
+                <span data-i18n="btn_clear_queue">Clear All</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty Queue Placeholder -->
+          <div class="queue-empty" id="queue-empty">
+            <div class="empty-icon-wrap">
+              <i data-lucide="file-plus-2"></i>
+            </div>
+            <p class="empty-title" data-i18n="empty_title">No PDF files selected yet</p>
+            <p class="empty-desc" data-i18n="empty_desc">Upload at least 2 PDF documents above to enable merging.</p>
+          </div>
+
+          <!-- Visual File Queue List -->
+          <div class="queue-list" id="queue-list" role="list" aria-label="Queued PDF files">
+            <!-- Dynamically populated file cards -->
+          </div>
+
+          <!-- Merge Execution Panel -->
+          <div class="merge-execution-panel" id="merge-execution-panel">
+            <div class="execution-settings">
+              <div class="setting-item">
+                <label for="output-filename" data-i18n="label_output_filename">Output File Name</label>
+                <div class="filename-input-group">
+                  <i data-lucide="file-text" class="input-icon"></i>
+                  <input type="text" id="output-filename" value="merged_document" placeholder="merged_document"
+                    data-i18n-placeholder="placeholder_output_filename" spellcheck="false">
+                  <span class="input-suffix">.pdf</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-wrapper hidden" id="progress-wrapper">
+              <div class="progress-info">
+                <span class="progress-status" id="progress-status" data-i18n="progress_preparing">Preparing
+                  documents...</span>
+                <span class="progress-percent" id="progress-percent">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Merge Action CTA -->
+            <div class="merge-cta-row">
+              <button id="btn-merge-action" class="btn btn-primary btn-merge" disabled>
+                <i data-lucide="layers"></i>
+                <span id="merge-button-text" data-i18n="btn_merge_action">Merge PDFs</span>
+              </button>
+            </div>
+
+            <p class="merge-helper-text" id="merge-helper-text">
+              <i data-lucide="info"></i>
+              <span data-i18n="merge_helper_desc">Add at least 2 PDF files to begin merging.</span>
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification message</span>
+    </div>
+
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="merge.js"></script>
+</body>
+
+</html>

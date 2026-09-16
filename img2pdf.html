@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to PDF Pro - Convert JPG & PNG to PDF Client-Side</title>
+  <meta name="description"
+    content="Convert JPG, PNG, and WebP images to a single PDF document directly in your browser. 100% private client-side processing with zero server uploads.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF-Lib CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(99, 102, 241, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #6366f1;
+      --border-active: rgba(99, 102, 241, 0.6);
+
+      /* Accents & Brand (Indigo Theme) */
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.25);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(6, 182, 212, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(244, 63, 94, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .btn i {
+      order: 0;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 28px;
+    }
+
+    [dir="rtl"] .filename-input-group {
+      flex-direction: row-reverse;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-brand:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.35);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .hidden-input {
+      display: none !important;
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      padding: 36px 24px 80px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .img2pdf-container {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #818cf8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge i {
+      width: 15px;
+      height: 15px;
+      color: #6366f1;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Styles */
+    .dropzone {
+      width: 100%;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .dropzone-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .dropzone:hover .dropzone-card,
+    .dropzone.drag-over .dropzone-card {
+      border-color: #6366f1;
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(99, 102, 241, 0.25);
+    }
+
+    .dropzone-icon-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #818cf8;
+      margin-bottom: 20px;
+      animation: pulse-ring 3s infinite ease-in-out;
+    }
+
+    .dropzone-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    @keyframes pulse-ring {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+        transform: scale(1.04);
+      }
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .feature-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    /* Queue & Image Preview Workspace */
+    .workspace-panel {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Queue Header Toolbar */
+    .queue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .queue-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .queue-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .queue-title i {
+      width: 18px;
+      height: 18px;
+      color: var(--primary);
+    }
+
+    .queue-badge {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+    }
+
+    .queue-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Thumbnail Gallery Grid */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 18px;
+      width: 100%;
+      min-height: 160px;
+    }
+
+    .image-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      transition: all var(--transition-fast);
+      animation: cardAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .image-card:hover {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .thumbnail-box {
+      width: 100%;
+      height: 140px;
+      border-radius: var(--radius-md);
+      background: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .thumbnail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-fast);
+    }
+
+    .image-card:hover .thumbnail-img {
+      transform: scale(1.04);
+    }
+
+    .page-order-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    [dir="rtl"] .page-order-tag {
+      left: auto;
+      right: 6px;
+    }
+
+    .image-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .image-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    .image-submeta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .image-card-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 6px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .card-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .icon-action-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-action-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .icon-action-btn.delete-btn:hover {
+      background: var(--accent-rose);
+      color: #ffffff;
+      border-color: var(--accent-rose);
+    }
+
+    .icon-action-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .icon-action-btn i {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Settings & Options Row */
+    .settings-row-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding-top: 8px;
+    }
+
+    .setting-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    .select-dropdown {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .select-dropdown:focus {
+      border-color: var(--border-focus);
+    }
+
+    .select-dropdown option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .filename-input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2px 14px;
+    }
+
+    .filename-input-group:focus-within {
+      border-color: var(--border-focus);
+    }
+
+    .filename-input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 8px 4px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-suffix {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Progress Card */
+    .progress-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #818cf8;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease-out;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+    }
+
+    /* Actions Footer */
+    .panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 999;
+      max-width: 440px;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastSlide {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.toast-success {
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .toast.toast-success i {
+      color: #818cf8;
+    }
+
+    .toast.toast-error {
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .toast.toast-error i {
+      color: #fb7185;
+    }
+
+    .toast.toast-warning {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .toast.toast-warning i {
+      color: #fcd34d;
+    }
+
+    @media (max-width: 768px) {
+      .settings-row-group {
+        grid-template-columns: 1fr;
+      }
+
+      .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding: 24px 16px 60px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .workspace-panel {
+        padding: 18px;
+      }
+
+      .panel-footer {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .panel-footer .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-dark">
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="image" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Image<span class="gradient-text">toPDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <a href="annotator.html" class="btn btn-secondary" title="Annotate PDF Tool">
+          <i data-lucide="file-signature"></i>
+          <span data-i18n="nav_annotator">Annotator</span>
+        </a>
+
+        <a href="merge.html" class="btn btn-secondary" title="Merge multiple PDF files">
+          <i data-lucide="layers"></i>
+          <span data-i18n="nav_merge">Merge PDF</span>
+        </a>
+
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+
+        <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+          <i data-lucide="minimize-2"></i>
+          <span data-i18n="nav_compress">Compress PDF</span>
+        </a>
+
+        <a href="watermark.html" class="btn btn-secondary" title="Watermark PDF Tool">
+          <i data-lucide="stamp"></i>
+          <span data-i18n="nav_watermark">Watermark PDF</span>
+        </a>
+
+        <button id="btn-header-reset" class="btn btn-ghost" title="Reset file queue" disabled>
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_reset">Reset</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="img2pdf-container">
+
+        <!-- Hero Header -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="hero_badge">Local & Secure • 100% Client-Side Image to PDF • Zero Server Uploads</span>
+          </div>
+          <h2 class="hero-title" data-i18n="hero_title">Convert <span class="gradient-text">Images to PDF</span>
+            Instantly</h2>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">Combine and convert your JPG, PNG, and WebP images into a
+            single, beautifully formatted PDF document right inside your browser.</p>
+        </section>
+
+        <!-- Hidden Multiple Images File Input -->
+        <input type="file" id="image-file-input" accept="image/png, image/jpeg, image/jpg, image/webp" multiple
+          class="hidden-input" aria-label="Upload image files">
+
+        <!-- Drag & Drop Zone (Default State) -->
+        <section class="dropzone" id="dropzone" tabindex="0" role="region" aria-label="Images upload dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="image-plus" class="dropzone-icon"></i>
+            </div>
+            <h3 class="dropzone-title" data-i18n="dropzone_title">Drop your image files here</h3>
+            <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Drag and drop multiple PNG or JPG photos, or
+              browse from your computer</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-images" type="button" class="btn btn-primary btn-lg">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="btn_browse_images">Browse Image Files</span>
+              </button>
+              <button id="btn-load-sample" type="button" class="btn btn-secondary btn-lg">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="btn_load_sample">Try Sample Images</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="images"></i>
+                <span data-i18n="feature_multiple">Multiple Images Supported</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="arrow-left-right"></i>
+                <span data-i18n="feature_reorder">Reorder & Organize Pages</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="zap"></i>
+                <span data-i18n="feature_client">100% Client-Side Engine</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Images Queue & Conversion Workspace Panel -->
+        <section class="workspace-panel hidden" id="workspace-panel">
+
+          <!-- Queue Header Toolbar -->
+          <div class="queue-header">
+            <div class="queue-info">
+              <h3 class="queue-title">
+                <i data-lucide="images"></i>
+                <span data-i18n="queue_title">Images to Convert</span>
+              </h3>
+              <span class="queue-badge" id="image-count-badge">0 images</span>
+            </div>
+            <div class="queue-actions">
+              <button id="btn-add-more" class="btn btn-secondary btn-sm" title="Add more images to queue">
+                <i data-lucide="plus"></i>
+                <span data-i18n="btn_add_more">Add More Images</span>
+              </button>
+              <button id="btn-clear-all" class="btn btn-ghost btn-sm" title="Clear all queued images">
+                <i data-lucide="trash-2"></i>
+                <span data-i18n="btn_clear_all">Clear All</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Image Preview Gallery Grid -->
+          <div class="image-grid" id="image-grid">
+            <!-- Dynamically populated thumbnail cards -->
+          </div>
+
+          <!-- Page Sizing & Output Options Row -->
+          <div class="settings-row-group">
+
+            <!-- Page Layout Mode -->
+            <div class="setting-card">
+              <label for="page-size-select" class="section-label">
+                <i data-lucide="layout"></i>
+                <span data-i18n="label_layout_mode">Page Sizing</span>
+              </label>
+              <select id="page-size-select" class="select-dropdown" aria-label="Select PDF page sizing mode">
+                <option value="original" selected data-i18n="opt_original">Fit to Image (Original Dimensions)</option>
+                <option value="a4" data-i18n="opt_a4">Standard A4 (Auto-Fit Page)</option>
+                <option value="letter" data-i18n="opt_letter">US Letter (Auto-Fit Page)</option>
+              </select>
+            </div>
+
+            <!-- Output Filename Setting -->
+            <div class="setting-card">
+              <label for="output-filename" class="section-label">
+                <i data-lucide="file-output"></i>
+                <span data-i18n="label_output_filename">Output File Name</span>
+              </label>
+              <div class="filename-input-group">
+                <input type="text" id="output-filename" value="converted_images" placeholder="converted_images"
+                  data-i18n-placeholder="placeholder_output_filename" spellcheck="false">
+                <span class="input-suffix">.pdf</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Progress Bar Card (Hidden by default) -->
+          <div class="progress-card hidden" id="progress-card">
+            <div class="progress-header">
+              <span class="progress-label">
+                <div class="spinner"></div>
+                <span id="progress-status-text" data-i18n="progress_converting">Converting images to PDF...</span>
+              </span>
+              <span class="progress-percent" id="progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="panel-footer">
+            <button id="btn-cancel" class="btn btn-ghost">
+              <i data-lucide="x"></i>
+              <span data-i18n="btn_cancel">Cancel</span>
+            </button>
+            <button id="btn-convert-pdf" class="btn btn-primary btn-lg">
+              <i data-lucide="file-down"></i>
+              <span id="btn-convert-text" data-i18n="btn_convert_pdf">Convert to PDF & Download</span>
+              <div class="spinner hidden" id="btn-spinner"></div>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification message</span>
+    </div>
+
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="img2pdf.js"></script>
+</body>
+
+</html>

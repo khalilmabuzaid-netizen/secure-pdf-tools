@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnotatePDF Pro - Tools Hub</title>
+    <meta name="description"
+        content="AnnotatePDF Pro Tools Hub - 100% Client-Side, Private, Fast & Secure PDF Tools for Annotating, Merging, Splitting, and Compressing PDFs.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-main: #09090b;
+            --bg-surface: rgba(21, 30, 50, 0.75);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --nav-height: 64px;
+            --radius-md: 10px;
+            --radius-full: 9999px;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at top center, #1a1a2e 0%, var(--bg-main) 60%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: var(--bg-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: #ffffff;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .brand-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-left: 8px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            outline: none;
+            text-decoration: none;
+            user-select: none;
+            font-family: inherit;
+        }
+
+        .btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+            border-color: var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            padding: 5rem 2rem 3.5rem;
+            text-align: center;
+        }
+
+        .hero-header h1 {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-header p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            margin-top: 1.2rem;
+            font-weight: 400;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Dynamic Mouse Follower Glow */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--primary-glow);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 1.2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            color: var(--primary);
+            box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .icon-wrapper.purple {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-color: rgba(139, 92, 246, 0.2);
+            color: #a855f7;
+        }
+
+        .icon-wrapper.rose {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(244, 63, 94, 0.05) 100%);
+            border-color: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+        }
+
+        .icon-wrapper.emerald {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .icon-wrapper.amber {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .icon-wrapper.cyan {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border-color: rgba(6, 182, 212, 0.2);
+            color: #22d3ee;
+        }
+
+        .icon-wrapper.indigo {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-color: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        .icon-wrapper.crimson {
+            background: linear-gradient(135deg, rgba(225, 29, 72, 0.2) 0%, rgba(225, 29, 72, 0.05) 100%);
+            border-color: rgba(225, 29, 72, 0.2);
+            color: #f43f5e;
+        }
+
+        .card h3 {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Ad Slot Placeholder */
+        .ad-container {
+            max-width: 1100px;
+            margin: 0 auto 3.5rem;
+            padding: 0 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ad-slot-horizontal {
+            width: 100%;
+            max-width: 728px;
+            min-height: 90px;
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            transition: border-color var(--transition-fast), background var(--transition-fast);
+        }
+
+        .ad-slot-horizontal:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .ad-slot-horizontal i {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+            color: var(--primary);
+        }
+
+        /* Universal Footer */
+        .site-footer {
+            margin-top: auto;
+            width: 100%;
+            background: var(--bg-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+            padding: 2.5rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .footer-link:hover {
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+        }
+
+        .footer-legal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        .footer-legal-badge i {
+            width: 13px;
+            height: 13px;
+            color: #10b981;
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 48px);
+            max-width: 860px;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 16px 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .cookie-banner.hidden {
+            display: none !important;
+        }
+
+        @keyframes cookieSlideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        .cookie-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .cookie-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            flex-shrink: 0;
+        }
+
+        .cookie-icon-wrapper i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .cookie-text {
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: #60a5fa;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            margin-left: 4px;
+            transition: color var(--transition-fast);
+        }
+
+        .cookie-text a:hover {
+            color: #93c5fd;
+        }
+
+        .cookie-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-cookie-accept:hover {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
+        }
+
+        /* RTL Layout Support */
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
+        [dir="rtl"],
+        [dir="rtl"] body {
+            font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        [dir="rtl"] .hero-header h1,
+        [dir="rtl"] .brand-title,
+        [dir="rtl"] .footer-brand-title,
+        [dir="rtl"] .card h3 {
+            font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Outfit', sans-serif;
+        }
+
+        [dir="rtl"] .brand-badge {
+            margin-left: 0;
+            margin-right: 8px;
+        }
+
+        [dir="rtl"] .card {
+            text-align: right;
+        }
+
+        [dir="rtl"] .cookie-banner {
+            left: 50%;
+            transform: translateX(50%);
+        }
+
+        [dir="rtl"] .footer-top,
+        [dir="rtl"] .footer-bottom {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .cookie-text a {
+            margin-left: 0;
+            margin-right: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 0 16px;
+            }
+
+            .hero-header {
+                padding: 3.5rem 1.5rem 2.5rem;
+            }
+
+            .hero-header h1 {
+                font-size: 2.3rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .ad-container {
+                padding: 0 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .ad-slot-horizontal {
+                min-height: 70px;
+                font-size: 0.75rem;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.25rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .cookie-banner {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: start;
+                padding: 16px;
+                bottom: 12px;
+                width: calc(100% - 24px);
+                gap: 14px;
+            }
+
+            .cookie-actions {
+                justify-content: flex-end;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+        <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+            <div class="brand-icon-wrapper">
+                <i data-lucide="layers" class="brand-icon"></i>
+            </div>
+            <div class="brand-text">
+                <h1 class="brand-title">Annotate<span class="gradient-text">PDF</span></h1>
+                <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <!-- Language Toggle Button -->
+            <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+                aria-label="Toggle language">
+                <i data-lucide="globe"></i>
+                <span id="lang-toggle-text">العربية</span>
+            </button>
+        </div>
+    </header>
+
+    <header class="hero-header">
+        <h1 data-i18n="hub_title">Every tool you need to work with PDFs</h1>
+        <p data-i18n="hub_subtitle">100% Client-Side. Private. Fast. Secure.</p>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Annotate Tool -->
+            <a href="annotator.html" class="card">
+                <div class="icon-wrapper">
+                    <i data-lucide="pen-tool"></i>
+                </div>
+                <h3 data-i18n="tool_annotator_title">Annotate PDF</h3>
+                <p data-i18n="tool_annotator_desc">Draw, highlight, and add text or math formulas interactively on your
+                    documents.</p>
+            </a>
+
+            <!-- Merge Tool -->
+            <a href="merge.html" class="card">
+                <div class="icon-wrapper purple">
+                    <i data-lucide="layers"></i>
+                </div>
+                <h3 data-i18n="tool_merge_title">Merge PDF</h3>
+                <p data-i18n="tool_merge_desc">Combine multiple PDFs in the exact order you want with a simple drag and
+                    drop.</p>
+            </a>
+
+            <!-- Split Tool -->
+            <a href="split.html" class="card">
+                <div class="icon-wrapper rose">
+                    <i data-lucide="scissors"></i>
+                </div>
+                <h3 data-i18n="tool_split_title">Split PDF</h3>
+                <p data-i18n="tool_split_desc">Separate one page or a whole set for easy extraction and conversion.</p>
+            </a>
+
+            <!-- Compress Tool -->
+            <a href="compress.html" class="card">
+                <div class="icon-wrapper emerald">
+                    <i data-lucide="minimize-2"></i>
+                </div>
+                <h3 data-i18n="tool_compress_title">Compress PDF</h3>
+                <p data-i18n="tool_compress_desc">Reduce file size while optimizing for maximal PDF quality and
+                    readability.</p>
+            </a>
+
+            <!-- Watermark Tool -->
+            <a href="watermark.html" class="card">
+                <div class="icon-wrapper amber">
+                    <i data-lucide="stamp"></i>
+                </div>
+                <h3 data-i18n="tool_watermark_title">Watermark PDF</h3>
+                <p data-i18n="tool_watermark_desc">Add text or image watermarks to protect your documents.</p>
+            </a>
+
+            <!-- OCR Text Extractor Tool -->
+            <a href="ocr.html" class="card">
+                <div class="icon-wrapper cyan">
+                    <i data-lucide="scan-text"></i>
+                </div>
+                <h3 data-i18n="tool_ocr_title">OCR Text Extractor</h3>
+                <p data-i18n="tool_ocr_desc">Extract editable text from scanned documents, images, and PDFs.</p>
+            </a>
+
+            <!-- Image to PDF Tool -->
+            <a href="img2pdf.html" class="card">
+                <div class="icon-wrapper indigo">
+                    <i data-lucide="image"></i>
+                </div>
+                <h3 data-i18n="tool_img2pdf_title">Image to PDF</h3>
+                <p data-i18n="tool_img2pdf_desc">Convert JPG or PNG images into a single PDF file.</p>
+            </a>
+
+            <!-- Protect Tool -->
+            <a href="protect.html" class="card">
+                <div class="icon-wrapper crimson">
+                    <i data-lucide="lock"></i>
+                </div>
+                <h3 data-i18n="tool_protect_title">Protect PDF</h3>
+                <p data-i18n="tool_protect_desc">Encrypt your PDF files with a secure password.</p>
+            </a>
+
+            <!-- Sign PDF Tool -->
+            <a href="sign.html" class="card">
+                <div class="icon-wrapper emerald">
+                    <i data-lucide="pen-tool"></i>
+                </div>
+                <h3 data-i18n="tool_sign_title">Sign PDF</h3>
+                <p data-i18n="tool_sign_desc">Draw electronic signatures and stamp them onto any page of your PDF.</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Ad Slot Placeholder Section (728x90) -->
+    <div class="ad-container">
+        <div class="ad-slot-horizontal" id="ad-slot-horizontal" role="complementary" aria-label="Advertisement">
+            <i data-lucide="layout"></i>
+            <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
+        </div>
+    </div>
+
+    <!-- Universal Semantic Footer -->
+    <footer class="site-footer" id="site-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <a href="index.html" class="footer-brand" title="PDF Hub Home">
+                        <div class="brand-icon-wrapper" style="width: 30px; height: 30px;">
+                            <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <span class="footer-brand-title">Annotate<span class="gradient-text">PDF</span></span>
+                    </a>
+                    <p class="footer-tagline" data-i18n="footer_tagline">100% Client-side, private, and secure document
+                        processing directly in your browser.</p>
+                </div>
+
+                <nav class="footer-links" aria-label="Footer Navigation">
+                    <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+                    <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+                    <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+                <div class="footer-legal-badge">
+                    <i data-lucide="shield-check"></i>
+                    <span data-i18n="badge_client_side">100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+        <div class="cookie-content">
+            <div class="cookie-icon-wrapper">
+                <i data-lucide="cookie"></i>
+            </div>
+            <p class="cookie-text">
+                <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit
+                    this site you agree to our use of cookies.</span>
+                <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+            </p>
+        </div>
+        <div class="cookie-actions">
+            <button type="button" class="btn btn-cookie-accept" id="btn-accept-cookies"
+                data-i18n="cookie_accept_btn">Accept</button>
+        </div>
+    </div>
+
+    <script>
+        // Multi-language translation dictionary for the Hub
+        const translations = {
+            en: {
+                badge_client_side: "100% Client-Side",
+                hub_title: "Every tool you need to work with PDFs",
+                hub_subtitle: "100% Client-Side. Private. Fast. Secure.",
+                tool_annotator_title: "Annotate PDF",
+                tool_annotator_desc: "Draw, highlight, and add text or math formulas interactively on your documents.",
+                tool_merge_title: "Merge PDF",
+                tool_merge_desc: "Combine multiple PDFs in the exact order you want with a simple drag and drop.",
+                tool_split_title: "Split PDF",
+                tool_split_desc: "Separate one page or a whole set for easy extraction and conversion.",
+                tool_compress_title: "Compress PDF",
+                tool_compress_desc: "Reduce file size while optimizing for maximal PDF quality and readability.",
+                tool_watermark_title: "Watermark PDF",
+                tool_watermark_desc: "Add text or image watermarks to protect your documents.",
+                tool_ocr_title: "OCR Text Extractor",
+                tool_ocr_desc: "Extract editable text from scanned documents, images, and PDFs.",
+                tool_img2pdf_title: "Image to PDF",
+                tool_img2pdf_desc: "Convert JPG or PNG images into a single PDF file.",
+                tool_protect_title: "Protect PDF",
+                tool_protect_desc: "Encrypt your PDF files with a secure password.",
+                tool_sign_title: "Sign PDF",
+                tool_sign_desc: "Draw electronic signatures and stamp them onto any page of your PDF.",
+                ad_space_label: "Advertisement Space (728x90)",
+                footer_tagline: "100% Client-side, private, and secure document processing directly in your browser.",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_contact: "Contact Us",
+                footer_copyright: "© 2026 PDF Hub. All rights reserved.",
+                cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
+                cookie_learn_more: "Privacy Policy",
+                cookie_accept_btn: "Accept"
+            },
+            ar: {
+                badge_client_side: "محلي ١٠٠٪ في المتصفح",
+                hub_title: "كل الأدوات التي تحتاجها للتعامل مع ملفات PDF",
+                hub_subtitle: "معالجة محلية ١٠٠٪. خصوصية تامة. سرعة فائقة. أمان مطلق.",
+                tool_annotator_title: "تعديل وملاحظات PDF",
+                tool_annotator_desc: "ارسم، ظلل، وأضف نصوصاً ومعادلات رياضية تفاعلية على مستنداتك مباشرة.",
+                tool_merge_title: "دمج ملفات PDF",
+                tool_merge_desc: "اجمع عدة ملفات PDF بالترتيب الذي تريده بكل سهولة بالسحب والإفلات.",
+                tool_split_title: "تقسيم واستخراج PDF",
+                tool_split_desc: "استخرج صفحة واحدة أو نطاقاً من الصفحات لإنشاء مستند جديد ومنظم.",
+                tool_compress_title: "ضغط ملفات PDF",
+                tool_compress_desc: "قلل حجم المستند مع الحفاظ على وضوح الخطوط وجودة القراءة.",
+                tool_watermark_title: "العلامة المائية لـ PDF",
+                tool_watermark_desc: "أضف علامات مائية نصية أو صور لحماية مستنداتك وتوثيقها.",
+                tool_ocr_title: "استخراج النصوص (OCR)",
+                tool_ocr_desc: "استخرج نصوصاً قابلة للنسخ والتعديل من المستندات الممسوحة والصور والـ PDF.",
+                tool_img2pdf_title: "تحويل الصور إلى PDF",
+                tool_img2pdf_desc: "حوّل صور JPG أو PNG إلى ملف PDF مدمج وعالي الجودة.",
+                tool_protect_title: "حماية وتشفير PDF",
+                tool_protect_desc: "قم بتشفير ملفات PDF بكلمة مرور قوية لحمايتها من الوصول غير المصرح به.",
+                tool_sign_title: "توقيع ملفات PDF",
+                tool_sign_desc: "ارسم توقيعك الإلكتروني وثبته في أي صفحة داخل مستند PDF بأمان.",
+                ad_space_label: "مساحة إعلانية (728×90)",
+                footer_tagline: "معالجة مستندات محلية ١٠٠٪، خاصة وآمنة تماماً مباشرة في متصفحك.",
+                footer_privacy: "سياسة الخصوصية",
+                footer_terms: "شروط الاستخدام",
+                footer_contact: "اتصل بنا",
+                footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
+                cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
+                cookie_learn_more: "سياسة الخصوصية",
+                cookie_accept_btn: "موافق"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'en') ? 'ar' : 'en';
+            applyLanguage(currentLang);
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            const isAr = (lang === 'ar');
+
+            document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+
+            const langToggleText = document.getElementById('lang-toggle-text');
+            if (langToggleText) {
+                langToggleText.textContent = isAr ? 'English' : 'العربية';
+            }
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const dict = translations[currentLang] || translations.en;
+                if (dict[key]) {
+                    el.textContent = dict[key];
+                }
+            });
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // Language button event listener
+        const btnLanguageToggle = document.getElementById('btn-language-toggle');
+        if (btnLanguageToggle) {
+            btnLanguageToggle.addEventListener('click', toggleLanguage);
+        }
+
+        // Card mouse-follow glow effect
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Cookie Consent Banner Logic
+        const cookieBanner = document.getElementById('cookie-banner');
+        const btnAcceptCookies = document.getElementById('btn-accept-cookies');
+
+        if (localStorage.getItem('pdf_hub_cookie_consent') === 'accepted') {
+            if (cookieBanner) cookieBanner.classList.add('hidden');
+        }
+
+        if (btnAcceptCookies && cookieBanner) {
+            btnAcceptCookies.addEventListener('click', () => {
+                localStorage.setItem('pdf_hub_cookie_consent', 'accepted');
+                cookieBanner.style.opacity = '0';
+                cookieBanner.style.transform = (document.documentElement.dir === 'rtl')
+                    ? 'translate(50%, 20px)'
+                    : 'translate(-50%, 20px)';
+                setTimeout(() => {
+                    cookieBanner.classList.add('hidden');
+                }, 300);
+            });
+        }
+    </script>
+</body>
+
+</html>

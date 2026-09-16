@@ -1,0 +1,928 @@
+/**
+ * CompressPDF Pro - Client-Side PDF Compression Tool
+ * Built with Mozilla PDF.js (page rasterization) and jsPDF (compressed document synthesis)
+ * 100% Client-Side Processing • Strict Memory Protection (25MB Limit) • Zero Server Uploads
+ * Full Bilingual English / Arabic (RTL) Support
+ */
+
+// Configure PDF.js Worker
+if (window.pdfjsLib) {
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+// Memory Protection Limit: 25MB in bytes
+const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+const MEMORY_WARNING_TEXT = "For optimal browser performance and 100% privacy, please select a PDF under 25MB.";
+
+// Multi-language translation dictionary
+const translations = {
+  en: {
+    badge_client_side: "100% Client-Side",
+    nav_home: "Home",
+    nav_annotator: "Annotator",
+    nav_merge: "Merge PDF",
+    nav_split: "Split PDF",
+    nav_reset: "Reset",
+    hero_badge: "Local & Secure • 100% Client-Side Compression • No Cloud Uploads",
+    hero_title: 'Compress & Optimize <span class="gradient-text">PDF Files</span> Instantly',
+    hero_subtitle: "Reduce document file size with smart quality presets right inside your browser without sacrificing legibility.",
+    alert_title: "Memory Protection Alert",
+    alert_message: "For optimal browser performance and 100% privacy, please select a PDF under 25MB.",
+    dropzone_title: "Drop your PDF file here",
+    dropzone_subtitle: "Drag and drop any PDF file under 25MB to reduce its size, or browse from your computer",
+    btn_browse_file: "Browse PDF File",
+    btn_load_sample: "Try Sample PDF",
+    feature_quality: "High, Medium & Low Quality",
+    feature_memory: "Memory Protected (Max 25MB)",
+    feature_client: "100% Client-Side Engine",
+    btn_change_file: "Change File",
+    label_quality: "Compression Quality",
+    opt_extreme: "Low Quality (Maximum Compression ~80%)",
+    opt_balanced: "Medium Quality (Balanced ~60%)",
+    opt_light: "High Quality (Light Compression ~30%)",
+    preset_low_title: "Low Quality",
+    preset_low_desc: "Maximum size reduction (~75-90%). Ideal for email limits and fast sharing.",
+    preset_low_savings: "Max Reduction",
+    preset_recommended: "Recommended",
+    preset_med_title: "Medium Quality",
+    preset_med_desc: "Balanced compression maintaining great readability with ~50-70% size reduction.",
+    preset_med_savings: "~65% Smaller",
+    preset_high_title: "High Quality",
+    preset_high_desc: "Crisp text and sharp images with mild compression (~25-40% reduction).",
+    preset_high_savings: "Preserve Quality",
+    label_finetune: "Fine-Tune Quality Level",
+    label_output_filename: "Output File Name",
+    placeholder_output_filename: "compressed_document",
+    progress_compressing: "Compressing pages...",
+    stat_original_size: "Original Size",
+    stat_compressed_size: "Compressed Size",
+    btn_cancel: "Cancel",
+    btn_compress_download: "Compress & Download PDF",
+    btn_compressing: "Compressing PDF...",
+    page_singular: "Page",
+    pages_plural: "Pages",
+    total_suffix: "Total",
+    savings_smaller: "{n}% Smaller ({saved} saved)",
+    savings_optimized: "Optimized",
+    rendering_page: "Rendering page {current} of {total}...",
+    compressing_page: "Compressing page {current} ({quality}% quality)...",
+    processed_page: "Processed page {current} of {total}",
+    generating_pdf: "Generating optimized PDF file...",
+    downloading_doc: "Done! Downloading compressed document...",
+    toast_valid_pdf: "Please select a valid PDF file (.pdf)",
+    toast_invalid_type: "Please upload a valid PDF document.",
+    toast_read_fail: "Failed to read the selected file.",
+    toast_pdf_loaded: "PDF loaded: {pages} ready for compression.",
+    toast_compress_success: "PDF compressed successfully! ({n}% size reduction)",
+    toast_upload_first: "Please upload a PDF document first.",
+    toast_sample_generating: "Generating sample multi-page document...",
+    toast_sample_error: "Error creating sample: "
+  },
+  ar: {
+    badge_client_side: "محلي ١٠٠٪ في المتصفح",
+    nav_home: "الرئيسية",
+    nav_annotator: "محرر PDF",
+    nav_merge: "دمج PDF",
+    nav_split: "تقسيم PDF",
+    nav_reset: "إعادة ضبط",
+    hero_badge: "محلي وآمن • ضغط ١٠٠٪ في المتصفح • بدون رفع سحابي",
+    hero_title: 'ضغط وتحسين <span class="gradient-text">ملفات PDF</span> فوراً',
+    hero_subtitle: "قلل حجم ملفات PDF باستخدام إعدادات جودة ذكية مباشرة في متصفحك دون التأثير على وضوح القراءة.",
+    alert_title: "تنبيه حماية الذاكرة",
+    alert_message: "للحفاظ على أفضل أداء للمتصفح وخصوصية تامة ١٠٠٪، يرجى اختيار ملف PDF أقل من 25 ميجابايت.",
+    dropzone_title: "اسحب ملف PDF هنا",
+    dropzone_subtitle: "اسحب وأفلت أي ملف PDF أقل من 25 ميجابايت لتقليل حجمه، أو تصفح من جهازك",
+    btn_browse_file: "استعراض ملف PDF",
+    btn_load_sample: "تجربة نموذج جاهز",
+    feature_quality: "جودة عالية، متوسطة، ومنخفضة",
+    feature_memory: "حماية الذاكرة (حد أقصى 25 ميجابايت)",
+    feature_client: "محرك محلي ١٠٠٪ في المتصفح",
+    btn_change_file: "تغيير الملف",
+    label_quality: "جودة الضغط",
+    opt_extreme: "جودة منخفضة (أقصى ضغط ~80%)",
+    opt_balanced: "جودة متوسطة (متوازنة ~60%)",
+    opt_light: "جودة عالية (ضغط خفيف ~30%)",
+    preset_low_title: "جودة منخفضة",
+    preset_low_desc: "أقصى تقليل للحجم (~75-90%). مثالي لحدود البريد الإلكتروني والمشاركة السريعة.",
+    preset_low_savings: "أقصى تقليل للحجم",
+    preset_recommended: "موصى به",
+    preset_med_title: "جودة متوسطة",
+    preset_med_desc: "ضغط متوازن يحافظ على وضوح ممتاز مع تقليل الحجم بنسبة ~50-70%.",
+    preset_med_savings: "أصغر بنسبة ~65%",
+    preset_high_title: "جودة عالية",
+    preset_high_desc: "نصوص وصور حادة وواضحة مع ضغط خفيف (تقليل ~25-40%).",
+    preset_high_savings: "الحفاظ على الجودة",
+    label_finetune: "ضبط دقيق لمستوى الجودة",
+    label_output_filename: "اسم الملف الناتج",
+    placeholder_output_filename: "compressed_document",
+    progress_compressing: "جاري ضغط الصفحات...",
+    stat_original_size: "الحجم الأصلي",
+    stat_compressed_size: "الحجم بعد الضغط",
+    btn_cancel: "إلغاء",
+    btn_compress_download: "ضغط وتنزيل PDF",
+    btn_compressing: "جاري ضغط المستند...",
+    page_singular: "صفحة",
+    pages_plural: "صفحات",
+    total_suffix: "إجمالي",
+    savings_smaller: "أصغر بنسبة {n}٪ (تم توفير {saved})",
+    savings_optimized: "تم التحسين بنجاح",
+    rendering_page: "جاري تصيير الصفحة {current} من {total}...",
+    compressing_page: "جاري ضغط الصفحة {current} (جودة {quality}%)...",
+    processed_page: "تمت معالجة الصفحة {current} من {total}",
+    generating_pdf: "جاري توليد ملف PDF المحسّن...",
+    downloading_doc: "اكتمل! جاري تنزيل المستند المضغوط...",
+    toast_valid_pdf: "يرجى اختيار ملف PDF صالح (.pdf)",
+    toast_invalid_type: "يرجى رفع مستند PDF صالح.",
+    toast_read_fail: "فشل في قراءة الملف المحدد.",
+    toast_pdf_loaded: "تم تحميل PDF: {pages} جاهزة للضغط.",
+    toast_compress_success: "تم ضغط ملف PDF بنجاح! (تقليل الحجم بنسبة {n}٪)",
+    toast_upload_first: "يرجى رفع مستند PDF أولاً.",
+    toast_sample_generating: "جاري توليد نموذج مستند متعدد الصفحات...",
+    toast_sample_error: "حدث خطأ أثناء إنشاء النموذج: "
+  }
+};
+
+// Compression Presets Configuration
+const COMPRESSION_PRESETS = {
+  extreme: {
+    name: "Low Quality (Max Compression)",
+    renderScale: 0.9,
+    jpegQuality: 0.40,
+    sliderValue: 40
+  },
+  balanced: {
+    name: "Medium Quality (Balanced)",
+    renderScale: 1.25,
+    jpegQuality: 0.65,
+    sliderValue: 65
+  },
+  light: {
+    name: "High Quality (Mild Compression)",
+    renderScale: 1.6,
+    jpegQuality: 0.85,
+    sliderValue: 85
+  }
+};
+
+// Application State
+let currentPdfBytes = null;
+let currentFileName = "document.pdf";
+let currentTotalPages = 0;
+let currentFileSize = 0;
+let selectedPreset = "balanced";
+let currentQualityValue = 65; // percentage (20 - 95)
+let isCompressing = false;
+let currentLang = 'en';
+
+// Cached DOM Elements
+let dropzone = null;
+let fileInput = null;
+let configPanel = null;
+let memoryAlertBox = null;
+let alertTitleEl = null;
+let alertMessageEl = null;
+let btnCloseAlert = null;
+let qualityDropdown = null;
+let qualitySlider = null;
+let sliderQualityVal = null;
+let outputFilenameInput = null;
+let btnExecuteCompress = null;
+let btnExecuteText = null;
+let btnSpinner = null;
+let btnBrowseFile = null;
+let btnLoadSample = null;
+let btnChangeFile = null;
+let btnCancelCompress = null;
+let btnHeaderReset = null;
+let btnLanguageToggle = null;
+let langToggleText = null;
+let fileNameDisplay = null;
+let fileSizeDisplay = null;
+let filePagesDisplay = null;
+let progressCard = null;
+let progressStatusText = null;
+let progressPercent = null;
+let progressFill = null;
+let progressSubtext = null;
+let resultCard = null;
+let statOriginalSize = null;
+let statCompressedSize = null;
+let savingsPercent = null;
+let toastEl = null;
+let toastMsgEl = null;
+let toastIconEl = null;
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  cacheDOMElements();
+  bindEventListeners();
+  applyLanguage(currentLang);
+
+  // Initialize Lucide Icons
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+});
+
+function cacheDOMElements() {
+  dropzone = document.getElementById('dropzone');
+  fileInput = document.getElementById('pdf-file-input');
+  configPanel = document.getElementById('config-panel');
+  memoryAlertBox = document.getElementById('memory-alert-box');
+  alertTitleEl = document.getElementById('alert-title');
+  alertMessageEl = document.getElementById('alert-message');
+  btnCloseAlert = document.getElementById('btn-close-alert');
+  qualityDropdown = document.getElementById('quality-select-dropdown');
+  qualitySlider = document.getElementById('quality-slider');
+  sliderQualityVal = document.getElementById('slider-quality-val');
+  outputFilenameInput = document.getElementById('output-filename');
+  btnExecuteCompress = document.getElementById('btn-execute-compress');
+  btnExecuteText = document.getElementById('btn-execute-text');
+  btnSpinner = document.getElementById('btn-spinner');
+  btnBrowseFile = document.getElementById('btn-browse-file');
+  btnLoadSample = document.getElementById('btn-load-sample');
+  btnChangeFile = document.getElementById('btn-change-file');
+  btnCancelCompress = document.getElementById('btn-cancel-compress');
+  btnHeaderReset = document.getElementById('btn-header-reset');
+  btnLanguageToggle = document.getElementById('btn-language-toggle');
+  langToggleText = document.getElementById('lang-toggle-text');
+  fileNameDisplay = document.getElementById('file-name-display');
+  fileSizeDisplay = document.getElementById('file-size-display');
+  filePagesDisplay = document.getElementById('file-pages-display');
+  progressCard = document.getElementById('progress-card');
+  progressStatusText = document.getElementById('progress-status-text');
+  progressPercent = document.getElementById('progress-percent');
+  progressFill = document.getElementById('progress-fill');
+  progressSubtext = document.getElementById('progress-subtext');
+  resultCard = document.getElementById('result-card');
+  statOriginalSize = document.getElementById('stat-original-size');
+  statCompressedSize = document.getElementById('stat-compressed-size');
+  savingsPercent = document.getElementById('savings-percent');
+  toastEl = document.getElementById('toast');
+  toastMsgEl = document.getElementById('toast-message');
+  toastIconEl = document.getElementById('toast-icon');
+}
+
+// Translation helper
+function t(key, replacements = {}) {
+  const dict = translations[currentLang] || translations.en;
+  let text = dict[key] || translations.en[key] || key;
+  for (const [k, v] of Object.entries(replacements)) {
+    text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
+  }
+  return text;
+}
+
+function toggleLanguage() {
+  currentLang = (currentLang === 'en') ? 'ar' : 'en';
+  applyLanguage(currentLang);
+}
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  const isAr = (lang === 'ar');
+
+  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+
+  if (langToggleText) {
+    langToggleText.textContent = isAr ? 'English' : 'العربية';
+  }
+
+  // Update static text elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const translation = t(key);
+    if (translation) {
+      if (translation.includes('<span')) {
+        el.innerHTML = translation;
+      } else {
+        el.textContent = translation;
+      }
+    }
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const translation = t(key);
+    if (translation) {
+      el.placeholder = translation;
+    }
+  });
+
+  // Update active file pages display if file is loaded
+  if (currentTotalPages > 0 && filePagesDisplay) {
+    const pageLabel = currentTotalPages === 1 ? t('page_singular') : t('pages_plural');
+    filePagesDisplay.textContent = `${currentTotalPages} ${pageLabel} ${t('total_suffix')}`;
+  }
+
+  // Update button text state if not compressing
+  if (btnExecuteText && !isCompressing) {
+    btnExecuteText.textContent = t('btn_compress_download');
+  }
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+}
+
+function bindEventListeners() {
+  // Alert Dismissal
+  if (btnCloseAlert) {
+    btnCloseAlert.addEventListener('click', () => hideMemoryAlert());
+  }
+
+  // Language Toggle Button
+  if (btnLanguageToggle) {
+    btnLanguageToggle.addEventListener('click', toggleLanguage);
+  }
+
+  // File Upload Trigger via Button
+  if (btnBrowseFile && fileInput) {
+    btnBrowseFile.addEventListener('click', () => fileInput.click());
+  }
+
+  // Dropzone Drag & Drop Handlers
+  if (dropzone && fileInput) {
+    dropzone.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      fileInput.click();
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          handleFileSelected(file);
+        }
+      }
+    });
+  }
+
+  // File Input Change Listener
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFileSelected(e.target.files[0]);
+      }
+    });
+  }
+
+  // Sample PDF Loader
+  if (btnLoadSample) {
+    btnLoadSample.addEventListener('click', () => loadSamplePDF());
+  }
+
+  // File Change and Workspace Reset
+  if (btnChangeFile) {
+    btnChangeFile.addEventListener('click', () => {
+      if (fileInput) fileInput.click();
+    });
+  }
+
+  if (btnCancelCompress) {
+    btnCancelCompress.addEventListener('click', resetWorkspace);
+  }
+
+  if (btnHeaderReset) {
+    btnHeaderReset.addEventListener('click', resetWorkspace);
+  }
+
+  // Quality Dropdown Selector
+  if (qualityDropdown) {
+    qualityDropdown.addEventListener('change', (e) => {
+      const level = e.target.value;
+      selectPreset(level);
+    });
+  }
+
+  // Preset Cards Selection
+  document.querySelectorAll('.preset-card[data-level]').forEach(card => {
+    card.addEventListener('click', () => {
+      const level = card.getAttribute('data-level');
+      selectPreset(level);
+    });
+  });
+
+  // Fine-Tune Quality Slider
+  if (qualitySlider) {
+    qualitySlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      currentQualityValue = val;
+      if (sliderQualityVal) sliderQualityVal.textContent = `${val}%`;
+
+      // Update preset highlights based on slider value
+      updatePresetHighlightForSlider(val);
+    });
+  }
+
+  // Execute Compression & Download Action
+  if (btnExecuteCompress) {
+    btnExecuteCompress.addEventListener('click', executeCompressionAndDownload);
+  }
+}
+
+/* ==========================================================================
+   Memory Protection & Alert Handling
+   ========================================================================== */
+function showMemoryAlert(isError = true, message = null, title = null) {
+  if (!memoryAlertBox) return;
+
+  const resolvedTitle = title || t('alert_title');
+  const resolvedMessage = message || t('alert_message');
+
+  if (alertTitleEl) alertTitleEl.textContent = resolvedTitle;
+  if (alertMessageEl) alertMessageEl.textContent = resolvedMessage;
+
+  memoryAlertBox.className = `alert-box ${isError ? 'alert-danger' : ''}`;
+  memoryAlertBox.classList.remove('hidden');
+
+  // Scroll to alert for instant user feedback
+  memoryAlertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function hideMemoryAlert() {
+  if (memoryAlertBox) {
+    memoryAlertBox.classList.add('hidden');
+  }
+}
+
+/* ==========================================================================
+   File Ingestion & Validation
+   ========================================================================== */
+function handleFileSelected(file) {
+  if (!file) return;
+
+  // 1. Strict File Type Check
+  if (file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    showToast(t('toast_valid_pdf'), "warning");
+    showMemoryAlert(true, t('toast_invalid_type'), t('alert_title'));
+    if (fileInput) fileInput.value = '';
+    return;
+  }
+
+  // 2. CRITICAL MEMORY PROTECTION CHECK
+  // Immediately halt execution if file exceeds 25MB ceiling
+  if (file.size > MAX_FILE_SIZE_BYTES) {
+    if (fileInput) fileInput.value = '';
+    showMemoryAlert(true, t('alert_message'), t('alert_title'));
+    showToast(t('alert_message'), "error");
+    return;
+  }
+
+  // Hide any previous memory alerts on valid file upload
+  hideMemoryAlert();
+
+  // Read ArrayBuffer for client-side processing
+  const reader = new FileReader();
+  reader.onload = async function (e) {
+    const rawBuffer = e.target.result;
+    currentPdfBytes = new Uint8Array(rawBuffer);
+    currentFileName = file.name || "document.pdf";
+    currentFileSize = file.size || currentPdfBytes.byteLength;
+    await processLoadedPdfBytes(currentPdfBytes, currentFileName, currentFileSize);
+  };
+  reader.onerror = function () {
+    showToast(t('toast_read_fail'), "error");
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function processLoadedPdfBytes(bytes, filename, sizeBytes) {
+  try {
+    if (!window.pdfjsLib) {
+      throw new Error("PDF.js library is not loaded. Please check your internet connection.");
+    }
+
+    // Inspect page count and structure via PDF.js
+    const loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
+    const pdfDoc = await loadingTask.promise;
+    currentTotalPages = pdfDoc.numPages;
+
+    if (currentTotalPages === 0) {
+      throw new Error("The selected document contains no pages.");
+    }
+
+    // Update Overview Card UI
+    const pageLabel = currentTotalPages === 1 ? t('page_singular') : t('pages_plural');
+    if (fileNameDisplay) fileNameDisplay.textContent = filename;
+    if (filePagesDisplay) filePagesDisplay.textContent = `${currentTotalPages} ${pageLabel} ${t('total_suffix')}`;
+    if (fileSizeDisplay) fileSizeDisplay.textContent = formatBytes(sizeBytes || bytes.byteLength);
+
+    // Populate default output filename
+    if (outputFilenameInput) {
+      const base = filename.replace(/\.pdf$/i, '');
+      outputFilenameInput.value = `${base}_compressed`;
+    }
+
+    // Switch Views
+    if (dropzone) dropzone.classList.add('hidden');
+    if (configPanel) configPanel.classList.remove('hidden');
+    if (resultCard) resultCard.classList.add('hidden');
+    if (progressCard) progressCard.classList.add('hidden');
+    if (btnHeaderReset) btnHeaderReset.disabled = false;
+
+    // Set Recommended Balanced Preset
+    selectPreset('balanced');
+
+    showToast(t('toast_pdf_loaded', { pages: `${currentTotalPages} ${pageLabel}` }), "success");
+  } catch (err) {
+    console.error("PDF Parsing Error:", err);
+    showMemoryAlert(true, `Could not parse PDF: ${err.message}`, t('alert_title'));
+    showToast(`Failed to parse PDF: ${err.message}`, "error");
+    resetWorkspace();
+  }
+}
+
+/* ==========================================================================
+   Preset & Quality Controls Synchronization
+   ========================================================================== */
+function selectPreset(level) {
+  selectedPreset = level;
+  const config = COMPRESSION_PRESETS[level];
+  if (!config) return;
+
+  // 1. Sync Dropdown Selection
+  if (qualityDropdown && qualityDropdown.value !== level) {
+    qualityDropdown.value = level;
+  }
+
+  // 2. Sync Preset Cards Highlighting
+  document.querySelectorAll('.preset-card').forEach(card => {
+    card.classList.toggle('selected', card.getAttribute('data-level') === level);
+  });
+
+  // 3. Sync Quality Slider
+  currentQualityValue = config.sliderValue;
+  if (qualitySlider) qualitySlider.value = config.sliderValue;
+  if (sliderQualityVal) sliderQualityVal.textContent = `${config.sliderValue}%`;
+}
+
+function updatePresetHighlightForSlider(sliderVal) {
+  if (sliderVal <= 45) {
+    selectedPreset = "extreme";
+  } else if (sliderVal <= 75) {
+    selectedPreset = "balanced";
+  } else {
+    selectedPreset = "light";
+  }
+
+  if (qualityDropdown) {
+    qualityDropdown.value = selectedPreset;
+  }
+
+  document.querySelectorAll('.preset-card').forEach(card => {
+    card.classList.toggle('selected', card.getAttribute('data-level') === selectedPreset);
+  });
+}
+
+function getActiveCompressionSettings() {
+  const customJpegQuality = currentQualityValue / 100;
+  let renderScale = 1.25;
+
+  if (selectedPreset === "extreme") {
+    renderScale = 0.9;
+  } else if (selectedPreset === "light") {
+    renderScale = 1.6;
+  } else if (selectedPreset === "balanced") {
+    renderScale = 1.25;
+  } else {
+    // Dynamic scale interpolation based on quality percentage
+    renderScale = 0.8 + (customJpegQuality * 0.8);
+  }
+
+  return {
+    renderScale,
+    jpegQuality: customJpegQuality
+  };
+}
+
+/* ==========================================================================
+   Client-Side Compression Core (PDF.js Rasterization + jsPDF Assembly)
+   ========================================================================== */
+async function executeCompressionAndDownload() {
+  if (isCompressing) return;
+
+  if (!currentPdfBytes || currentTotalPages === 0) {
+    showToast(t('toast_upload_first'), "warning");
+    return;
+  }
+
+  // Verify jsPDF availability
+  const jsPDFConstructor = window.jspdf ? window.jspdf.jsPDF : window.jsPDF;
+  if (!jsPDFConstructor) {
+    showToast("jsPDF library not available. Please check your connection.", "error");
+    return;
+  }
+
+  setCompressingState(true);
+  hideMemoryAlert();
+
+  if (progressCard) progressCard.classList.remove('hidden');
+  if (resultCard) resultCard.classList.add('hidden');
+
+  try {
+    const { renderScale, jpegQuality } = getActiveCompressionSettings();
+
+    // 1. Load source document in PDF.js for rendering
+    const loadingTask = pdfjsLib.getDocument({ data: currentPdfBytes.slice(0) });
+    const pdfDoc = await loadingTask.promise;
+    const totalPages = pdfDoc.numPages;
+
+    let targetDoc = null;
+
+    // 2. Loop through each page: Render to Canvas -> Convert to JPEG -> Append to jsPDF
+    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+      const percentBase = Math.round(((pageNum - 1) / totalPages) * 92);
+      updateProgress(percentBase, t('rendering_page', { current: pageNum, total: totalPages }));
+
+      const page = await pdfDoc.getPage(pageNum);
+      const baseViewport = page.getViewport({ scale: 1.0 });
+      const scaledViewport = page.getViewport({ scale: renderScale });
+
+      // Create an offscreen canvas with explicit dimensions
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.floor(scaledViewport.width);
+      canvas.height = Math.floor(scaledViewport.height);
+      const ctx = canvas.getContext('2d', { alpha: false });
+
+      // Ensure crisp white background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Render original page to canvas
+      await page.render({
+        canvasContext: ctx,
+        viewport: scaledViewport
+      }).promise;
+
+      updateProgress(
+        Math.round(percentBase + (40 / totalPages)),
+        t('compressing_page', { current: pageNum, quality: Math.round(jpegQuality * 100) })
+      );
+
+      // Convert canvas to compressed JPEG data URL
+      const jpegDataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
+
+      const pageWidthPt = baseViewport.width;
+      const pageHeightPt = baseViewport.height;
+      const orientation = pageWidthPt > pageHeightPt ? 'landscape' : 'portrait';
+
+      // Initialize jsPDF with exact dimensions of page 1, or add subsequent page
+      if (pageNum === 1) {
+        targetDoc = new jsPDFConstructor({
+          orientation: orientation,
+          unit: 'pt',
+          format: [pageWidthPt, pageHeightPt]
+        });
+        targetDoc.addImage(jpegDataUrl, 'JPEG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
+      } else {
+        targetDoc.addPage([pageWidthPt, pageHeightPt], orientation);
+        targetDoc.addImage(jpegDataUrl, 'JPEG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
+      }
+
+      // Explicit canvas cleanup to prevent memory accumulation in browser heap
+      canvas.width = 0;
+      canvas.height = 0;
+
+      const pageDonePercent = Math.round((pageNum / totalPages) * 92);
+      updateProgress(pageDonePercent, t('processed_page', { current: pageNum, total: totalPages }));
+    }
+
+    updateProgress(96, t('generating_pdf'));
+
+    // 3. Output binary blob and measure compressed size
+    const compressedPdfBlob = targetDoc.output('blob');
+    const finalSize = compressedPdfBlob.size;
+    const originalSize = currentFileSize || currentPdfBytes.byteLength;
+    const bytesSaved = Math.max(0, originalSize - finalSize);
+    const reductionPercent = originalSize > 0
+      ? Math.round((bytesSaved / originalSize) * 100)
+      : 0;
+
+    updateProgress(100, t('downloading_doc'));
+
+    // 4. Update Stats & Summary UI
+    if (statOriginalSize) statOriginalSize.textContent = formatBytes(originalSize);
+    if (statCompressedSize) statCompressedSize.textContent = formatBytes(finalSize);
+    if (savingsPercent) {
+      if (reductionPercent > 0) {
+        savingsPercent.textContent = t('savings_smaller', { n: reductionPercent, saved: formatBytes(bytesSaved) });
+      } else {
+        savingsPercent.textContent = t('savings_optimized');
+      }
+    }
+    if (resultCard) resultCard.classList.remove('hidden');
+
+    // 5. Trigger Browser Download
+    let outName = outputFilenameInput?.value?.trim() || "compressed_document";
+    if (!outName.toLowerCase().endsWith('.pdf')) {
+      outName += '.pdf';
+    }
+
+    targetDoc.save(outName);
+
+    showToast(t('toast_compress_success', { n: reductionPercent }), "success");
+  } catch (err) {
+    console.error("Compression Execution Error:", err);
+    showMemoryAlert(true, `Compression halted: ${err.message}`, t('alert_title'));
+    showToast(`Compression error: ${err.message}`, "error");
+  } finally {
+    setCompressingState(false);
+  }
+}
+
+function updateProgress(percent, message) {
+  if (progressPercent) progressPercent.textContent = `${percent}%`;
+  if (progressFill) progressFill.style.width = `${percent}%`;
+  if (progressSubtext && message) progressSubtext.textContent = message;
+}
+
+function setCompressingState(active) {
+  isCompressing = active;
+  if (!btnExecuteCompress) return;
+
+  btnExecuteCompress.disabled = active;
+  if (btnSpinner) btnSpinner.classList.toggle('hidden', !active);
+  if (btnExecuteText) {
+    btnExecuteText.textContent = active ? t('btn_compressing') : t('btn_compress_download');
+  }
+}
+
+/* ==========================================================================
+   Interactive Sample Document Generator
+   ========================================================================== */
+async function loadSamplePDF() {
+  try {
+    showToast(t('toast_sample_generating'), "info");
+
+    const jsPDFConstructor = window.jspdf ? window.jspdf.jsPDF : window.jsPDF;
+    if (!jsPDFConstructor) {
+      throw new Error("jsPDF library is not loaded.");
+    }
+
+    // Build a clean 3-page sample PDF using jsPDF
+    const sampleDoc = new jsPDFConstructor({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const pageWidth = 595.28;
+    const pageHeight = 841.89;
+
+    const sections = [
+      { title: "Compression Benchmark Report", subtitle: "Sample Section 1: Overview & Graphics", color: [16, 185, 129] },
+      { title: "Client-Side Processing Specs", subtitle: "Sample Section 2: Architecture & Performance", color: [6, 182, 212] },
+      { title: "Memory Protection & Security", subtitle: "Sample Section 3: Privacy & Zero Uploads", color: [99, 102, 241] }
+    ];
+
+    for (let i = 0; i < sections.length; i++) {
+      if (i > 0) sampleDoc.addPage('a4', 'portrait');
+
+      const sec = sections[i];
+
+      // Top Accent Banner
+      sampleDoc.setFillColor(sec.color[0], sec.color[1], sec.color[2]);
+      sampleDoc.rect(0, 0, pageWidth, 12, 'F');
+
+      // Title & Subtitles
+      sampleDoc.setFont('helvetica', 'bold');
+      sampleDoc.setFontSize(22);
+      sampleDoc.setTextColor(30, 41, 59);
+      sampleDoc.text(sec.title, 50, 60);
+
+      sampleDoc.setFont('helvetica', 'normal');
+      sampleDoc.setFontSize(14);
+      sampleDoc.setTextColor(100, 116, 139);
+      sampleDoc.text(sec.subtitle, 50, 85);
+
+      // Decorative Graphic Cards (Simulate visual content)
+      for (let c = 0; c < 3; c++) {
+        const cardX = 50 + (c * 170);
+        const cardY = 120;
+        sampleDoc.setFillColor(245, 247, 250);
+        sampleDoc.roundedRect(cardX, cardY, 155, 130, 6, 6, 'F');
+
+        sampleDoc.setFillColor(sec.color[0], sec.color[1], sec.color[2]);
+        sampleDoc.circle(cardX + 25, cardY + 30, 12, 'F');
+
+        sampleDoc.setFont('helvetica', 'bold');
+        sampleDoc.setFontSize(12);
+        sampleDoc.setTextColor(30, 41, 59);
+        sampleDoc.text(`Metric Card 0${c + 1}`, cardX + 45, cardY + 34);
+
+        sampleDoc.setFont('helvetica', 'normal');
+        sampleDoc.setFontSize(10);
+        sampleDoc.setTextColor(100, 116, 139);
+        sampleDoc.text(`Density Rating: ${(c + 1) * 33}%`, cardX + 15, cardY + 65);
+        sampleDoc.text(`Vector Complexity: High`, cardX + 15, cardY + 85);
+        sampleDoc.text(`Client Tested: Yes`, cardX + 15, cardY + 105);
+      }
+
+      // Content Box with simulated paragraphs
+      sampleDoc.setFillColor(248, 250, 252);
+      sampleDoc.roundedRect(50, 280, pageWidth - 100, 220, 8, 8, 'F');
+
+      sampleDoc.setFont('helvetica', 'bold');
+      sampleDoc.setFontSize(14);
+      sampleDoc.setTextColor(sec.color[0], sec.color[1], sec.color[2]);
+      sampleDoc.text("Client-Side Rasterization & Synthesis", 70, 315);
+
+      sampleDoc.setFont('helvetica', 'normal');
+      sampleDoc.setFontSize(11);
+      sampleDoc.setTextColor(71, 85, 105);
+      sampleDoc.text("This multi-page test PDF evaluates local browser JPEG compression.", 70, 345);
+      sampleDoc.text("Mozilla PDF.js decodes pages at high fidelity, while jsPDF re-assembles them.", 70, 370);
+      sampleDoc.text("Strict memory protection guards your browser from exceeding 25MB.", 70, 395);
+      sampleDoc.text("Choose 'Medium Quality' or 'Low Quality' to observe substantial size reduction.", 70, 420);
+
+      // Footer
+      sampleDoc.setFontSize(9);
+      sampleDoc.setTextColor(148, 163, 184);
+      sampleDoc.text(`Page ${i + 1} of ${sections.length} • 100% Client-Side Compression`, 50, pageHeight - 30);
+    }
+
+    const sampleBlob = sampleDoc.output('blob');
+    const sampleBytes = new Uint8Array(await sampleBlob.arrayBuffer());
+
+    currentPdfBytes = sampleBytes;
+    currentFileName = "sample_compression_benchmark.pdf";
+    currentFileSize = sampleBytes.byteLength;
+    await processLoadedPdfBytes(sampleBytes, currentFileName, currentFileSize);
+  } catch (err) {
+    console.error("Error creating sample PDF:", err);
+    showToast(`${t('toast_sample_error')}${err.message}`, "error");
+  }
+}
+
+/* ==========================================================================
+   Reset & Helper Functions
+   ========================================================================== */
+function resetWorkspace() {
+  currentPdfBytes = null;
+  currentFileName = "document.pdf";
+  currentTotalPages = 0;
+  currentFileSize = 0;
+  isCompressing = false;
+
+  hideMemoryAlert();
+
+  if (fileInput) fileInput.value = '';
+  if (configPanel) configPanel.classList.add('hidden');
+  if (dropzone) dropzone.classList.remove('hidden');
+  if (progressCard) progressCard.classList.add('hidden');
+  if (resultCard) resultCard.classList.add('hidden');
+  if (btnHeaderReset) btnHeaderReset.disabled = true;
+}
+
+function formatBytes(bytes, decimals = 1) {
+  if (!bytes || bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function showToast(message, type = "info") {
+  if (!toastEl || !toastMsgEl) return;
+
+  toastMsgEl.textContent = message;
+  toastEl.className = `toast toast-${type}`;
+
+  if (toastIconEl) {
+    let iconName = 'info';
+    if (type === 'success') iconName = 'check-circle-2';
+    if (type === 'error') iconName = 'alert-triangle';
+    if (type === 'warning') iconName = 'alert-circle';
+    toastIconEl.setAttribute('data-lucide', iconName);
+  }
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+
+  toastEl.classList.remove('hidden');
+  clearTimeout(toastEl._timer);
+  toastEl._timer = setTimeout(() => {
+    toastEl.classList.add('hidden');
+  }, 4000);
+}

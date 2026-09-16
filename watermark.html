@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watermark PDF Pro - Add Custom Text Watermarks Client-Side</title>
+  <meta name="description"
+    content="Add text watermarks to your PDF documents directly in your browser. 100% private client-side processing with zero server uploads.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF-Lib CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(245, 158, 11, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #f59e0b;
+      --border-active: rgba(245, 158, 11, 0.6);
+
+      /* Accents & Brand (Amber Theme) */
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --primary-glow: rgba(245, 158, 11, 0.35);
+      --accent-emerald: #10b981;
+      --accent-indigo: #6366f1;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(245, 158, 11, 0.25);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(244, 63, 94, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(99, 102, 241, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .btn i {
+      order: 0;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 28px;
+    }
+
+    [dir="rtl"] .filename-input-group {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .preset-chip i {
+      order: 1;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-brand:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #090d16;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #090d16;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+
+    .hidden-input {
+      display: none !important;
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      padding: 36px 24px 80px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .watermark-container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge i {
+      width: 15px;
+      height: 15px;
+      color: #f59e0b;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Styles */
+    .dropzone {
+      width: 100%;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .dropzone-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .dropzone:hover .dropzone-card,
+    .dropzone.drag-over .dropzone-card {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.25);
+    }
+
+    .dropzone-icon-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+      margin-bottom: 20px;
+      animation: pulse-ring 3s infinite ease-in-out;
+    }
+
+    .dropzone-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    @keyframes pulse-ring {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+        transform: scale(1.04);
+      }
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .feature-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    /* Active Watermark Configuration Panel */
+    .config-panel {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* File Overview Card */
+    .file-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-info-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .file-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(244, 63, 94, 0.2));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fbbf24;
+      flex-shrink: 0;
+    }
+
+    .file-icon-box i {
+      width: 24px;
+      height: 24px;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 400px;
+    }
+
+    .file-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-badge.highlight {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    /* 2-Column Controls & Preview Layout */
+    .watermark-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .controls-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .preview-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: sticky;
+      top: 84px;
+    }
+
+    .section-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-label i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    .text-input-wrap {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 4px 14px;
+      transition: border-color var(--transition-fast);
+    }
+
+    .text-input-wrap:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .text-input-wrap input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 4px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      outline: none;
+      font-family: inherit;
+    }
+
+    /* Preset Chips */
+    .presets-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .preset-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .preset-chip:hover {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--primary);
+      color: #fbbf24;
+      transform: translateY(-1px);
+    }
+
+    /* Style Rows & Sliders */
+    .controls-row-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .control-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .control-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .slider {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .select-dropdown {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .select-dropdown:focus {
+      border-color: var(--border-focus);
+    }
+
+    .select-dropdown option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    /* Color Picker Row */
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .color-input-wrapper {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-subtle);
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .native-color-picker {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 60px;
+      height: 60px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .color-swatches {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .swatch-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+
+    .swatch-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .swatch-btn.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Output Filename */
+    .filename-input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2px 14px;
+    }
+
+    .filename-input-group:focus-within {
+      border-color: var(--border-focus);
+    }
+
+    .filename-input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-suffix {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Live Preview Box */
+    .preview-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .preview-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .preview-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .preview-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .preview-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .simulated-page-canvas {
+      width: 100%;
+      max-width: 320px;
+      height: 380px;
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Simulated document lines in background */
+    .page-dummy-content {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .dummy-header {
+      height: 14px;
+      width: 60%;
+      background: #334155;
+      border-radius: 3px;
+      margin-bottom: 12px;
+    }
+
+    .dummy-line {
+      height: 7px;
+      width: 100%;
+      background: #64748b;
+      border-radius: 2px;
+    }
+
+    .dummy-line.short {
+      width: 75%;
+    }
+
+    .dummy-block {
+      height: 50px;
+      width: 100%;
+      background: #e2e8f0;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+
+    .live-watermark-overlay {
+      position: absolute;
+      font-weight: 800;
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      transition: transform 0.1s ease-out, opacity 0.1s ease-out, color 0.1s ease-out;
+    }
+
+    /* Progress Card */
+    .progress-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease-out;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+    }
+
+    /* Actions Footer */
+    .panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(9, 13, 22, 0.3);
+      border-top-color: #090d16;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 999;
+      max-width: 440px;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastSlide {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.toast-success {
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    .toast.toast-success i {
+      color: #fbbf24;
+    }
+
+    .toast.toast-error {
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .toast.toast-error i {
+      color: #fb7185;
+    }
+
+    .toast.toast-warning {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .toast.toast-warning i {
+      color: #fcd34d;
+    }
+
+    @media (max-width: 768px) {
+      .watermark-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls-row-group {
+        grid-template-columns: 1fr;
+      }
+
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding: 24px 16px 60px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .config-panel {
+        padding: 20px;
+      }
+
+      .file-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .panel-footer {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .panel-footer .btn {
+        width: 100%;
+      }
+
+      .preview-column {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-dark">
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="AnnotatePDF Platform">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="stamp" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Watermark<span class="gradient-text">PDF</span></h1>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <a href="annotator.html" class="btn btn-secondary" title="Annotate PDF Tool">
+          <i data-lucide="file-signature"></i>
+          <span data-i18n="nav_annotator">Annotator</span>
+        </a>
+
+        <a href="merge.html" class="btn btn-secondary" title="Merge multiple PDF files">
+          <i data-lucide="layers"></i>
+          <span data-i18n="nav_merge">Merge PDF</span>
+        </a>
+
+        <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+          <i data-lucide="scissors"></i>
+          <span data-i18n="nav_split">Split PDF</span>
+        </a>
+
+        <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+          <i data-lucide="minimize-2"></i>
+          <span data-i18n="nav_compress">Compress PDF</span>
+        </a>
+
+        <button id="btn-header-reset" class="btn btn-ghost" title="Reset file selection" disabled>
+          <i data-lucide="rotate-ccw"></i>
+          <span data-i18n="nav_reset">Reset</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="watermark-container">
+
+        <!-- Hero Header -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="hero_badge">Local & Secure • 100% Client-Side Watermarking • Zero Server Uploads</span>
+          </div>
+          <h2 class="hero-title" data-i18n="hero_title">Add Custom <span class="gradient-text">Watermarks</span> to PDFs
+          </h2>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">Protect and brand your PDF documents with customizable text
+            watermarks, custom opacity, color, and angle.</p>
+        </section>
+
+        <!-- Hidden File Input -->
+        <input type="file" id="pdf-file-input" accept="application/pdf" class="hidden-input"
+          aria-label="Upload PDF file">
+
+        <!-- Drag & Drop Zone (Default State) -->
+        <section class="dropzone" id="dropzone" tabindex="0" role="region" aria-label="PDF upload dropzone">
+          <div class="dropzone-card">
+            <div class="dropzone-icon-ring">
+              <i data-lucide="stamp" class="dropzone-icon"></i>
+            </div>
+            <h3 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF file here</h3>
+            <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Drag and drop any PDF file to apply a watermark,
+              or browse from your device</p>
+
+            <div class="dropzone-actions">
+              <button id="btn-browse-file" type="button" class="btn btn-primary btn-lg">
+                <i data-lucide="folder-open"></i>
+                <span data-i18n="btn_browse_file">Browse PDF File</span>
+              </button>
+              <button id="btn-load-sample" type="button" class="btn btn-secondary btn-lg">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="btn_load_sample">Try Sample PDF</span>
+              </button>
+            </div>
+
+            <div class="dropzone-features">
+              <div class="feature-item">
+                <i data-lucide="type"></i>
+                <span data-i18n="feature_presets">Custom Text & Quick Presets</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="sliders"></i>
+                <span data-i18n="feature_opacity">Adjustable Opacity & Angle</span>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="zap"></i>
+                <span data-i18n="feature_client">100% Client-Side Processing</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Watermark Configuration Panel -->
+        <section class="config-panel hidden" id="config-panel">
+
+          <!-- File Overview Card -->
+          <div class="file-card">
+            <div class="file-info-group">
+              <div class="file-icon-box">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div class="file-details">
+                <span class="file-name" id="file-name-display">document.pdf</span>
+                <div class="file-badges">
+                  <span class="meta-badge highlight" id="file-size-display">0 KB</span>
+                  <span class="meta-badge" id="file-pages-display">0 Pages Total</span>
+                </div>
+              </div>
+            </div>
+            <button id="btn-change-file" class="btn btn-secondary btn-sm" title="Choose a different PDF file">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="btn_change_file">Change File</span>
+            </button>
+          </div>
+
+          <!-- Main 2-Column Controls & Live Preview -->
+          <div class="watermark-grid">
+
+            <!-- Left Controls Column -->
+            <div class="controls-column">
+
+              <!-- Watermark Text Input -->
+              <div class="control-group">
+                <label for="watermark-text-input" class="section-label">
+                  <i data-lucide="type"></i>
+                  <span data-i18n="label_watermark_text">Watermark Text</span>
+                </label>
+                <div class="text-input-wrap">
+                  <input type="text" id="watermark-text-input" value="CONFIDENTIAL"
+                    placeholder="e.g. CONFIDENTIAL, DRAFT, DO NOT COPY"
+                    data-i18n-placeholder="placeholder_watermark_text" spellcheck="false">
+                </div>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-wrap">
+                <span class="section-label" style="font-size: 0.8rem; margin-bottom: 2px;">
+                  <i data-lucide="sparkles"></i>
+                  <span data-i18n="presets_label">Presets:</span>
+                </span>
+                <div class="preset-chips-row" id="preset-chips-row">
+                  <button type="button" class="preset-chip" data-preset="CONFIDENTIAL"
+                    data-i18n="preset_confidential">CONFIDENTIAL</button>
+                  <button type="button" class="preset-chip" data-preset="DRAFT" data-i18n="preset_draft">DRAFT</button>
+                  <button type="button" class="preset-chip" data-preset="DO NOT COPY" data-i18n="preset_do_not_copy">DO
+                    NOT COPY</button>
+                  <button type="button" class="preset-chip" data-preset="TOP SECRET" data-i18n="preset_top_secret">TOP
+                    SECRET</button>
+                  <button type="button" class="preset-chip" data-preset="SAMPLE"
+                    data-i18n="preset_sample">SAMPLE</button>
+                  <button type="button" class="preset-chip" data-preset="APPROVED"
+                    data-i18n="preset_approved">APPROVED</button>
+                </div>
+              </div>
+
+              <!-- Color & Swatches -->
+              <div class="control-group">
+                <label class="section-label">
+                  <i data-lucide="palette"></i>
+                  <span data-i18n="label_color">Watermark Color</span>
+                </label>
+                <div class="color-picker-row">
+                  <div class="color-input-wrapper" id="color-wrapper" style="background-color: #dc2626;">
+                    <input type="color" id="watermark-color-input" value="#dc2626" class="native-color-picker"
+                      aria-label="Choose watermark color">
+                  </div>
+                  <div class="color-swatches">
+                    <button type="button" class="swatch-btn active" style="background-color: #dc2626;"
+                      data-color="#dc2626" title="Red"></button>
+                    <button type="button" class="swatch-btn" style="background-color: #f59e0b;" data-color="#f59e0b"
+                      title="Amber"></button>
+                    <button type="button" class="swatch-btn" style="background-color: #3b82f6;" data-color="#3b82f6"
+                      title="Blue"></button>
+                    <button type="button" class="swatch-btn" style="background-color: #10b981;" data-color="#10b981"
+                      title="Emerald"></button>
+                    <button type="button" class="swatch-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6"
+                      title="Purple"></button>
+                    <button type="button" class="swatch-btn" style="background-color: #64748b;" data-color="#64748b"
+                      title="Slate Gray"></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2x2 Slider Grid (Opacity & Font Size) -->
+              <div class="controls-row-group">
+
+                <!-- Opacity Slider -->
+                <div class="control-card">
+                  <div class="control-header">
+                    <span class="section-label" style="margin-bottom: 0;">
+                      <i data-lucide="sun"></i>
+                      <span data-i18n="label_opacity">Opacity</span>
+                    </span>
+                    <span class="control-val" id="opacity-val">30%</span>
+                  </div>
+                  <input type="range" id="watermark-opacity-slider" min="5" max="100" value="30" class="slider"
+                    aria-label="Watermark opacity slider">
+                </div>
+
+                <!-- Font Size Slider -->
+                <div class="control-card">
+                  <div class="control-header">
+                    <span class="section-label" style="margin-bottom: 0;">
+                      <i data-lucide="maximize-2"></i>
+                      <span data-i18n="label_fontsize">Font Size</span>
+                    </span>
+                    <span class="control-val" id="fontsize-val">52px</span>
+                  </div>
+                  <input type="range" id="watermark-fontsize-slider" min="18" max="100" value="52" class="slider"
+                    aria-label="Watermark font size slider">
+                </div>
+
+              </div>
+
+              <!-- Rotation Angle & Output Filename -->
+              <div class="controls-row-group">
+
+                <!-- Rotation Angle -->
+                <div class="control-card">
+                  <label for="watermark-rotation-select" class="section-label" style="margin-bottom: 4px;">
+                    <i data-lucide="rotate-cw"></i>
+                    <span data-i18n="label_rotation">Rotation Angle</span>
+                  </label>
+                  <select id="watermark-rotation-select" class="select-dropdown"
+                    aria-label="Select watermark rotation angle">
+                    <option value="45" selected data-i18n="opt_diagonal">45° (Diagonal)</option>
+                    <option value="0" data-i18n="opt_horizontal">0° (Horizontal)</option>
+                    <option value="-45" data-i18n="opt_reverse_diagonal">-45° (Reverse Diagonal)</option>
+                    <option value="90" data-i18n="opt_vertical">90° (Vertical)</option>
+                  </select>
+                </div>
+
+                <!-- Output Filename Setting -->
+                <div class="control-card">
+                  <label for="output-filename" class="section-label" style="margin-bottom: 4px;">
+                    <i data-lucide="file-output"></i>
+                    <span data-i18n="label_output_filename">Output File Name</span>
+                  </label>
+                  <div class="filename-input-group">
+                    <input type="text" id="output-filename" value="watermarked_document"
+                      placeholder="watermarked_document" data-i18n-placeholder="placeholder_output_filename"
+                      spellcheck="false">
+                    <span class="input-suffix">.pdf</span>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Right Column: Live Interactive Visual Preview -->
+            <div class="preview-column">
+              <div class="preview-card">
+                <div class="preview-header">
+                  <div class="preview-title-wrap">
+                    <span class="preview-title" data-i18n="preview_title">Live Watermark Preview</span>
+                    <span class="preview-subtitle" data-i18n="preview_subtitle">Visual representation of how the
+                      watermark will appear across pages</span>
+                  </div>
+                  <i data-lucide="eye" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                </div>
+
+                <!-- Simulated PDF Document Page -->
+                <div class="simulated-page-canvas" id="preview-page-canvas">
+
+                  <!-- Dummy Text Lines in Document Background -->
+                  <div class="page-dummy-content">
+                    <div class="dummy-header"></div>
+                    <div class="dummy-line"></div>
+                    <div class="dummy-line"></div>
+                    <div class="dummy-line short"></div>
+                    <div class="dummy-block"></div>
+                    <div class="dummy-line"></div>
+                    <div class="dummy-line short"></div>
+                    <div class="dummy-line"></div>
+                    <div class="dummy-line"></div>
+                  </div>
+
+                  <!-- Live Watermark Text Element -->
+                  <div class="live-watermark-overlay" id="live-watermark-overlay">
+                    CONFIDENTIAL
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Progress Bar Card (Hidden by default) -->
+          <div class="progress-card hidden" id="progress-card">
+            <div class="progress-header">
+              <span class="progress-label">
+                <div class="spinner"></div>
+                <span id="progress-status-text" data-i18n="progress_applying">Applying watermark to pages...</span>
+              </span>
+              <span class="progress-percent" id="progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="panel-footer">
+            <button id="btn-cancel" class="btn btn-ghost">
+              <i data-lucide="x"></i>
+              <span data-i18n="btn_cancel">Cancel</span>
+            </button>
+            <button id="btn-apply-watermark" class="btn btn-primary btn-lg">
+              <i data-lucide="stamp"></i>
+              <span id="btn-apply-text" data-i18n="btn_apply_watermark">Apply Watermark & Download</span>
+              <div class="spinner hidden" id="btn-spinner"></div>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification message</span>
+    </div>
+
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="watermark.js"></script>
+</body>
+
+</html>
