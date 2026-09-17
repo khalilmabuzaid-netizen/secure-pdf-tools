@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Converter Pro - Convert PNG, JPG, WebP Online Free</title>
+  <meta name="description"
+    content="Convert images between PNG, JPG/JPEG, and WebP formats directly in your browser with 100% privacy and zero server uploads. Fast, secure image converter with Arabic RTL support.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(6, 182, 212, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #06b6d4;
+      --border-active: rgba(6, 182, 212, 0.6);
+
+      /* Accents & Brand (Cyan / Electric Blue Conversion Theme) */
+      --primary: #06b6d4;
+      --primary-hover: #0891b2;
+      --primary-glow: rgba(6, 182, 212, 0.35);
+      --primary-light: #22d3ee;
+      --accent-emerald: #10b981;
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(6, 182, 212, 0.3);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(99, 102, 241, 0.06), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .nav-back-link i {
+      transform: scaleX(-1);
+    }
+
+    [dir="rtl"] .hero-title,
+    [dir="rtl"] .brand-title,
+    [dir="rtl"] .footer-brand-title,
+    [dir="rtl"] .panel-title,
+    [dir="rtl"] .seo-guide-title,
+    [dir="rtl"] .faq-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: #ffffff;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #22d3ee, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(6, 182, 212, 0.15);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      margin-left: 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #ffffff;
+      box-shadow: 0 2px 10px var(--primary-glow);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      box-shadow: 0 4px 18px rgba(6, 182, 212, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: var(--radius-lg);
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 24px 0 10px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      border-radius: var(--radius-full);
+      color: #22d3ee;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 660px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Upload Section */
+    .dropzone-container {
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(6, 182, 212, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 56px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dropzone-container:hover,
+    .dropzone-container.drag-over {
+      border-color: var(--primary-light);
+      background: rgba(21, 30, 50, 0.95);
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .dropzone-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--primary-light);
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+    }
+
+    .dropzone-icon-wrapper i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .dropzone-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 24px;
+      line-height: 1.5;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .format-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .format-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .format-pill.active {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: rgba(6, 182, 212, 0.4);
+      color: #22d3ee;
+    }
+
+    /* Conversion Workspace Panel */
+    .workspace-panel {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .workspace-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .file-meta-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .meta-thumbnail {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .meta-filename {
+      font-weight: 600;
+      font-size: 1rem;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .meta-tag-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Target Format Selection Grid */
+    .format-selection-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .format-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .format-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      user-select: none;
+    }
+
+    .format-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(6, 182, 212, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .format-card.selected {
+      background: rgba(6, 182, 212, 0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+    }
+
+    .format-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .format-card-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .format-card.selected .format-card-name {
+      color: #22d3ee;
+    }
+
+    .format-card-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .format-card.selected .format-card-badge {
+      background: rgba(6, 182, 212, 0.25);
+      color: #22d3ee;
+    }
+
+    .format-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Optional Settings Accordion/Grid */
+    .conversion-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .control-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #22d3ee;
+      font-weight: 600;
+    }
+
+    .range-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .preset-pills {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .preset-btn {
+      flex: 1;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+
+    .preset-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .preset-btn.active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--primary);
+      color: #22d3ee;
+      font-weight: 600;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-option {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .color-option.white {
+      background: #ffffff;
+    }
+
+    .color-option.black {
+      background: #090d16;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .color-option.transparent {
+      background: repeating-conic-gradient(#334155 0% 25%, #1e293b 0% 50%) 50% / 10px 10px;
+    }
+
+    .color-option.selected {
+      border-color: var(--primary-light);
+      transform: scale(1.15);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    /* Visual Comparison Preview Section */
+    .preview-comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .preview-comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preview-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .preview-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .preview-badge.accent {
+      background: rgba(6, 182, 212, 0.2);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+    }
+
+    .preview-img-container {
+      width: 100%;
+      height: 220px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
+      position: relative;
+    }
+
+    .preview-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .preview-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Savings & Status Banner */
+    .status-savings-banner {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(16, 185, 129, 0.1));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .savings-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .savings-icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(6, 182, 212, 0.2);
+      color: #22d3ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .savings-icon-circle i {
+      width: 18px;
+      height: 18px;
+    }
+
+    .savings-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .savings-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .savings-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Bottom Actions */
+    .workspace-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+    }
+
+    /* Ad Placeholder Banner */
+    .ad-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .ad-slot-horizontal {
+      width: 100%;
+      max-width: 728px;
+      min-height: 90px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ad-slot-horizontal i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    /* SEO & Features Guide */
+    .seo-guide-section {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .seo-guide-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #22d3ee;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      margin-bottom: 12px;
+    }
+
+    .seo-guide-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .seo-guide-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .step-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(6, 182, 212, 0.3);
+    }
+
+    .step-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22d3ee;
+    }
+
+    .step-icon-wrapper i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Matrix Table for Supported Formats */
+    .format-matrix-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .format-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    [dir="rtl"] .format-table {
+      text-align: right;
+    }
+
+    .format-table th,
+    .format-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .format-table th {
+      color: var(--text-primary);
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .format-table td {
+      color: var(--text-secondary);
+    }
+
+    /* FAQ Accordion Section */
+    .faq-section {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .faq-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      transition: background var(--transition-fast);
+    }
+
+    .faq-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .faq-question i {
+      width: 18px;
+      height: 18px;
+      color: #22d3ee;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 28px;
+    }
+
+    [dir="rtl"] .faq-answer {
+      padding-left: 0;
+      padding-right: 28px;
+    }
+
+    /* Universal Semantic Footer */
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .footer-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge i {
+      width: 13px;
+      height: 13px;
+      color: #10b981;
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 16px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(6, 182, 212, 0.15);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .cookie-banner.hidden {
+      display: none !important;
+    }
+
+    @keyframes cookieSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .cookie-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .cookie-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #22d3ee;
+      flex-shrink: 0;
+    }
+
+    .cookie-icon-wrapper i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cookie-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .cookie-text a {
+      color: #22d3ee;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-left: 4px;
+    }
+
+    .cookie-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      z-index: 10000;
+      backdrop-filter: blur(12px);
+      animation: toastIn 0.3s ease-out;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+    }
+
+    .toast.success {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(6, 78, 59, 0.9);
+    }
+
+    .toast.error {
+      border-color: rgba(244, 63, 94, 0.4);
+      background: rgba(136, 19, 55, 0.9);
+    }
+
+    .toast.info {
+      border-color: rgba(6, 182, 212, 0.4);
+      background: rgba(12, 74, 110, 0.9);
+    }
+
+    .toast.hidden {
+      display: none !important;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Utility */
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .dropzone-container {
+        padding: 36px 16px;
+      }
+
+      .workspace-panel {
+        padding: 18px;
+      }
+
+      .cookie-banner {
+        flex-direction: column;
+        align-items: stretch;
+        bottom: 12px;
+        width: calc(100% - 24px);
+        padding: 14px;
+      }
+
+      .cookie-actions {
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="PDF Netizen Hub">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="repeat" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">PDF <span class="gradient-text">Netizen</span></h1>
+          <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Back to Hub Link -->
+        <a href="index.html" class="btn btn-secondary nav-back-link" title="Back to All Tools">
+          <i data-lucide="arrow-left"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Hero Header -->
+      <section class="hero-section">
+        <div class="hero-badge">
+          <i data-lucide="repeat"></i>
+          <span data-i18n="imgconv_hero_badge">100% Client-Side Image Converter • Zero Server Uploads</span>
+        </div>
+        <h1 class="hero-title" data-i18n="imgconv_hero_title">Convert <span class="gradient-text">Image Formats</span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="imgconv_hero_subtitle">
+          Transform PNG, JPG/JPEG, and WebP images instantly inside your browser. Fast, private, and 100% client-side
+          with custom quality control and transparency options.
+        </p>
+      </section>
+
+      <!-- Upload Dropzone (Visible initially) -->
+      <section id="dropzone-section">
+        <div class="dropzone-container" id="dropzone" role="region" aria-label="Image dropzone">
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/svg+xml"
+            class="hidden">
+          <div class="dropzone-icon-wrapper">
+            <i data-lucide="file-image"></i>
+          </div>
+          <h2 class="dropzone-title" data-i18n="imgconv_dropzone_title">Drop your image here to convert</h2>
+          <p class="dropzone-subtitle" data-i18n="imgconv_dropzone_subtitle">
+            Supports PNG, JPG/JPEG, WebP, GIF, BMP, and SVG files. Conversion executes locally in your browser memory.
+          </p>
+
+          <div class="dropzone-actions">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-browse">
+              <i data-lucide="folder-open"></i>
+              <span data-i18n="imgconv_btn_browse">Browse Image File</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" id="btn-load-sample">
+              <i data-lucide="sparkles"></i>
+              <span data-i18n="imgconv_btn_sample">Try Sample Image</span>
+            </button>
+          </div>
+
+          <div class="format-pills">
+            <span class="format-pill active"><i data-lucide="check"></i> PNG</span>
+            <span class="format-pill active"><i data-lucide="check"></i> JPG / JPEG</span>
+            <span class="format-pill active"><i data-lucide="check"></i> WebP</span>
+            <span class="format-pill"><i data-lucide="check"></i> GIF &amp; BMP</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Conversion Workspace (Hidden until image loaded) -->
+      <section id="workspace-panel" class="workspace-panel hidden" aria-live="polite">
+
+        <!-- File Meta Header -->
+        <div class="workspace-header">
+          <div class="file-meta-badge">
+            <img id="meta-thumbnail" class="meta-thumbnail" alt="Uploaded Image Preview">
+            <div class="meta-details">
+              <span id="file-name-display" class="meta-filename">image.png</span>
+              <div class="meta-tags">
+                <span class="meta-tag-item"><i data-lucide="file-type"></i> <span
+                    id="orig-format-badge">PNG</span></span>
+                <span class="meta-tag-item"><i data-lucide="hard-drive"></i> <span id="orig-size-badge">0
+                    KB</span></span>
+                <span class="meta-tag-item"><i data-lucide="maximize-2"></i> <span
+                    id="orig-dimensions-badge">0×0</span></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-change-file">
+            <i data-lucide="refresh-cw"></i>
+            <span data-i18n="imgconv_btn_change">Change Image</span>
+          </button>
+        </div>
+
+        <!-- Target Format Selection Cards -->
+        <div class="format-selection-section">
+          <label class="section-label">
+            <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--primary);"></i>
+            <span data-i18n="imgconv_target_format_label">Select Target Output Format</span>
+          </label>
+
+          <div class="format-cards-grid">
+            <!-- PNG Card -->
+            <div class="format-card selected" data-target-fmt="image/png" id="card-fmt-png">
+              <div class="format-card-header">
+                <span class="format-card-name">PNG</span>
+                <span class="format-card-badge" data-i18n="imgconv_badge_lossless">Lossless</span>
+              </div>
+              <p class="format-card-desc" data-i18n="imgconv_desc_png">
+                Crystal-clear clarity with alpha channel transparency. Best for graphics, logos, and icons.
+              </p>
+            </div>
+
+            <!-- JPG/JPEG Card -->
+            <div class="format-card" data-target-fmt="image/jpeg" id="card-fmt-jpeg">
+              <div class="format-card-header">
+                <span class="format-card-name">JPG / JPEG</span>
+                <span class="format-card-badge" data-i18n="imgconv_badge_universal">Universal</span>
+              </div>
+              <p class="format-card-desc" data-i18n="imgconv_desc_jpeg">
+                High compression and small file sizes. Universal compatibility across all web and mobile apps.
+              </p>
+            </div>
+
+            <!-- WebP Card -->
+            <div class="format-card" data-target-fmt="image/webp" id="card-fmt-webp">
+              <div class="format-card-header">
+                <span class="format-card-name">WebP</span>
+                <span class="format-card-badge" data-i18n="imgconv_badge_modern">Modern Web</span>
+              </div>
+              <p class="format-card-desc" data-i18n="imgconv_desc_webp">
+                Next-gen Google format offering up to 35% smaller sizes than JPG while retaining transparency.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Conversion Controls -->
+        <div class="conversion-controls">
+
+          <!-- Quality Slider (Enabled for JPEG and WebP) -->
+          <div class="control-group" id="quality-control-group">
+            <div class="control-label-wrapper">
+              <label for="quality-slider" class="control-label" data-i18n="imgconv_quality_label">Output Quality</label>
+              <span id="quality-val-display" class="control-value">90%</span>
+            </div>
+            <input type="range" id="quality-slider" class="range-slider" min="10" max="100" value="90" step="1">
+            <div class="preset-pills">
+              <button type="button" class="preset-btn" data-quality="50" data-i18n="imgconv_q_low">50% (Small)</button>
+              <button type="button" class="preset-btn" data-quality="75" data-i18n="imgconv_q_med">75%
+                (Balanced)</button>
+              <button type="button" class="preset-btn active" data-quality="90" data-i18n="imgconv_q_high">90%
+                (High)</button>
+              <button type="button" class="preset-btn" data-quality="100" data-i18n="imgconv_q_max">100% (Max)</button>
+            </div>
+          </div>
+
+          <!-- JPEG Background Fill Color (When converting transparent image to JPG) -->
+          <div class="control-group" id="bg-color-control-group">
+            <div class="control-label-wrapper">
+              <label class="control-label" data-i18n="imgconv_bg_color_label">JPEG Background Fill</label>
+              <span id="bg-color-val" class="control-value">#FFFFFF</span>
+            </div>
+            <div class="color-picker-row">
+              <div class="color-option white selected" data-color="#ffffff" title="White Background"></div>
+              <div class="color-option black" data-color="#000000" title="Black Background"></div>
+              <input type="color" id="custom-color-picker" value="#ffffff"
+                style="width: 28px; height: 28px; border: none; cursor: pointer; border-radius: 6px; background: none;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);" data-i18n="imgconv_bg_color_hint">Used when
+                converting transparency to JPG</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Visual Side-by-Side Comparison Preview -->
+        <div class="preview-comparison-grid">
+
+          <!-- Original Preview -->
+          <div class="preview-card">
+            <div class="preview-header">
+              <span data-i18n="imgconv_orig_preview_title">Original Image</span>
+              <span id="preview-orig-format-tag" class="preview-badge">PNG</span>
+            </div>
+            <div class="preview-img-container">
+              <img id="orig-preview-img" class="preview-img" alt="Original Image">
+            </div>
+            <div class="preview-footer">
+              <span id="preview-orig-size">0 KB</span>
+              <span id="preview-orig-dimensions">0 × 0 px</span>
+            </div>
+          </div>
+
+          <!-- Converted Preview -->
+          <div class="preview-card">
+            <div class="preview-header">
+              <span data-i18n="imgconv_conv_preview_title">Converted Result</span>
+              <span id="preview-conv-format-tag" class="preview-badge accent">WEBP</span>
+            </div>
+            <div class="preview-img-container">
+              <img id="conv-preview-img" class="preview-img" alt="Converted Image Result">
+            </div>
+            <div class="preview-footer">
+              <span id="preview-conv-size">0 KB</span>
+              <span id="preview-conv-dimensions">0 × 0 px</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Savings / Status Banner -->
+        <div class="status-savings-banner" id="savings-banner">
+          <div class="savings-info">
+            <div class="savings-icon-circle">
+              <i data-lucide="arrow-right-left"></i>
+            </div>
+            <div class="savings-text-group">
+              <span id="savings-headline" class="savings-title">Ready for instant download</span>
+              <span id="savings-details" class="savings-desc">Converted locally with zero quality loss</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-lg" id="btn-download-image">
+            <i data-lucide="download"></i>
+            <span id="btn-download-text" data-i18n="imgconv_btn_download">Download Converted Image</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- Horizontal Advertisement Space (728x90) -->
+      <div class="ad-container">
+        <div class="ad-slot-horizontal" role="complementary" aria-label="Advertisement">
+          <i data-lucide="layout"></i>
+          <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
+        </div>
+      </div>
+
+      <!-- SEO Educational Guide Section -->
+      <section class="seo-guide-section">
+        <div class="seo-guide-header">
+          <div class="seo-badge">
+            <i data-lucide="sparkles"></i>
+            <span data-i18n="imgconv_seo_badge">Fast, Private &amp; High-Fidelity Conversion</span>
+          </div>
+          <h2 class="seo-guide-title" data-i18n="imgconv_seo_title">How to Convert Images Online for Free</h2>
+          <p class="seo-guide-subtitle" data-i18n="imgconv_seo_subtitle">
+            Effortlessly switch image formats between PNG, JPG, and WebP using client-side HTML5 canvas technology
+            without uploading your sensitive pictures to remote servers.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="upload-cloud"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgconv_step1_title">1. Upload Any Image</h3>
+            <p class="step-desc" data-i18n="imgconv_step1_desc">
+              Drop any PNG, JPG, JPEG, WebP, GIF, or BMP image directly into the browser workspace to load it instantly.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="repeat"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgconv_step2_title">2. Choose Target Format</h3>
+            <p class="step-desc" data-i18n="imgconv_step2_desc">
+              Select your desired output format (PNG, JPEG, WebP) and fine-tune quality settings and background fills.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="download-cloud"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgconv_step3_title">3. Instant Download</h3>
+            <p class="step-desc" data-i18n="imgconv_step3_desc">
+              Preview the converted result side-by-side with the original and download the optimized file locally in 1
+              click.
+            </p>
+          </div>
+        </div>
+
+        <!-- Supported Conversions Table -->
+        <div class="format-matrix-card">
+          <table class="format-table">
+            <thead>
+              <tr>
+                <th data-i18n="imgconv_matrix_from">Source Format</th>
+                <th data-i18n="imgconv_matrix_to">Target Formats</th>
+                <th data-i18n="imgconv_matrix_features">Key Advantage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PNG</strong></td>
+                <td>JPG, WebP</td>
+                <td data-i18n="imgconv_matrix_png_desc">Massive file size reduction, transparent background to color
+                  fill or WebP alpha preservation.</td>
+              </tr>
+              <tr>
+                <td><strong>JPG / JPEG</strong></td>
+                <td>PNG, WebP</td>
+                <td data-i18n="imgconv_matrix_jpg_desc">Lossless re-encoding or next-gen WebP compression for faster
+                  web page loading.</td>
+              </tr>
+              <tr>
+                <td><strong>WebP</strong></td>
+                <td>PNG, JPG</td>
+                <td data-i18n="imgconv_matrix_webp_desc">Convert modern WebP graphics to universal formats compatible
+                  with legacy software and printers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ Accordion Section -->
+      <section class="faq-section">
+        <h3 class="faq-title" data-i18n="imgconv_faq_title">Frequently Asked Questions</h3>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgconv_faq_q1">Are my images uploaded to any cloud server during conversion?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgconv_faq_a1">
+              No, never. All image format conversions are processed 100% locally inside your browser using HTML5 Canvas
+              and client-side JavaScript. Your files never leave your computer or phone.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgconv_faq_q2">What happens to transparent backgrounds when converting PNG to JPG?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgconv_faq_a2">
+              Since the JPEG standard does not support alpha transparency channels, any transparent pixels are cleanly
+              filled with your chosen background color (pure white by default or customizable to black or any custom
+              color).
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgconv_faq_q3">Why should I convert my images to WebP?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgconv_faq_a3">
+              WebP is a modern image format developed by Google that provides superior lossless and lossy compression.
+              WebP images are typically 25% to 35% smaller than comparable JPEGs and PNGs while maintaining the exact
+              same visual quality and supporting transparency.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgconv_faq_q4">Is there any limit on how many images I can convert?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgconv_faq_a4">
+              There are zero limits! You can convert as many images as you need with zero registrations, zero
+              watermarks,
+              and completely free of charge.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Universal Semantic Footer -->
+    <footer class="site-footer" id="site-footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <div class="footer-info">
+            <a href="index.html" class="footer-brand" title="PDF Netizen Home">
+              <div class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+                <i data-lucide="repeat" style="width: 18px; height: 18px;"></i>
+              </div>
+              <span class="footer-brand-title">PDF <span class="gradient-text">Netizen</span></span>
+            </a>
+            <p class="footer-tagline" data-i18n="footer_tagline">
+              100% Client-side, private, and secure document processing directly in your browser.
+            </p>
+          </div>
+
+          <nav class="footer-links" aria-label="Footer Navigation">
+            <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+            <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+            <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+          </nav>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+          <div class="footer-legal-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="badge_client_side">100% Client-Side</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+      <div class="cookie-content">
+        <div class="cookie-icon-wrapper">
+          <i data-lucide="cookie"></i>
+        </div>
+        <p class="cookie-text">
+          <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit this
+            site you agree to our use of cookies.</span>
+          <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-accept-cookies"
+          data-i18n="cookie_accept_btn">Accept</button>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification</span>
+    </div>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script src="image-converter.js"></script>
+</body>
+
+</html>
