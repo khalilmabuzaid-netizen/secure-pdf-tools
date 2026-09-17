@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word to PDF Converter - Convert DOCX to PDF Free & Client-Side</title>
+  <meta name="description"
+    content="Convert Microsoft Word (.docx) documents into high-quality PDF files directly in your browser. 100% private client-side processing with zero server uploads and full Arabic RTL support.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Mammoth.js CDN (DOCX Parser) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+  <!-- html2pdf.js Bundle CDN (Includes jsPDF & html2canvas) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- docx CDN (For Sample DOCX Generation) -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(14, 165, 233, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #0ea5e9;
+      --border-active: rgba(14, 165, 233, 0.6);
+
+      /* Accents & Brand (Sky / Azure Word to PDF Theme) */
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(14, 165, 233, 0.35);
+      --primary-light: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(14, 165, 233, 0.3);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.14), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(99, 102, 241, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .btn i {
+      order: 0;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 28px;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-brand:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(14, 165, 233, 0.4);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    [dir="rtl"] .brand-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(14, 165, 233, 0.15);
+      color: #7dd3fc;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      margin-left: 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(14, 165, 233, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 4px 20px rgba(14, 165, 233, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    /* Main Container Layout */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 36px;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      color: #38bdf8;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .hero-badge i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    [dir="rtl"] .hero-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Dropzone Upload Section */
+    .dropzone-container {
+      width: 100%;
+      margin-bottom: 32px;
+    }
+
+    .dropzone {
+      position: relative;
+      background: var(--bg-surface);
+      border: 2px dashed rgba(14, 165, 233, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 48px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropzone:hover,
+    .dropzone.drag-over {
+      border-color: var(--primary-light);
+      background: var(--bg-surface-elevated);
+      box-shadow: 0 0 32px rgba(14, 165, 233, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .dropzone-icon-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.1));
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--primary-light);
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+    }
+
+    .dropzone-icon-box i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    [dir="rtl"] .dropzone-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+      max-width: 650px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-item i {
+      width: 15px;
+      height: 15px;
+      color: #34d399;
+    }
+
+    /* Active Conversion Panel */
+    .workspace-panel {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* File Metadata Card */
+    .file-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-sm);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-info-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .file-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      flex-shrink: 0;
+    }
+
+    .file-icon-box i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .file-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      max-width: 420px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .meta-badge.highlight {
+      background: rgba(14, 165, 233, 0.15);
+      border-color: rgba(14, 165, 233, 0.3);
+      color: #7dd3fc;
+    }
+
+    /* Grid Layout: Settings & Preview */
+    .conversion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .conversion-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+    }
+
+    [dir="rtl"] .panel-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .panel-title i {
+      width: 18px;
+      height: 18px;
+      color: var(--primary-light);
+    }
+
+    /* Form Controls */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .control-label i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .form-select,
+    .form-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-select:focus,
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .form-select option {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    /* Checkbox / Toggle Switch */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .toggle-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .toggle-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .toggle-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .3s;
+      border-radius: var(--radius-full);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--primary);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Progress & Status Card */
+    .progress-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .progress-status {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: var(--radius-full);
+      transition: width 0.25s ease-out;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.5);
+    }
+
+    /* Results Card */
+    .results-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.15);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .results-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Paper-like HTML Preview Container */
+    .paper-preview-box {
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: var(--radius-md);
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 24px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+
+    .paper-preview-box h1,
+    .paper-preview-box h2,
+    .paper-preview-box h3 {
+      color: #0f172a;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .paper-preview-box p {
+      margin-bottom: 8px;
+    }
+
+    .paper-preview-box table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .paper-preview-box table,
+    .paper-preview-box th,
+    .paper-preview-box td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+    }
+
+    .paper-preview-box th {
+      background: #f1f5f9;
+    }
+
+    .paper-preview-box ul,
+    .paper-preview-box ol {
+      padding-left: 20px;
+      margin-bottom: 8px;
+    }
+
+    [dir="rtl"] .paper-preview-box {
+      font-family: 'Cairo', 'Segoe UI Arabic', sans-serif;
+      text-align: right;
+    }
+
+    [dir="rtl"] .paper-preview-box ul,
+    [dir="rtl"] .paper-preview-box ol {
+      padding-left: 0;
+      padding-right: 20px;
+    }
+
+    .results-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Ad Slot Placeholder */
+    .ad-container {
+      width: 100%;
+      margin: 40px auto 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ad-slot-horizontal {
+      width: 100%;
+      max-width: 728px;
+      min-height: 90px;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .ad-slot-horizontal:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .ad-slot-horizontal i {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      color: var(--primary-light);
+    }
+
+    /* SEO & FAQ Section */
+    .seo-section {
+      width: 100%;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .seo-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      color: #38bdf8;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .seo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    [dir="rtl"] .seo-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .seo-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .step-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(14, 165, 233, 0.4);
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
+    }
+
+    .step-card h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    [dir="rtl"] .step-card h4 {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .faq-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .faq-item {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .faq-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    .faq-question h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    [dir="rtl"] .faq-question h4 {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .faq-answer {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 32px;
+    }
+
+    [dir="rtl"] .faq-answer {
+      padding-left: 0;
+      padding-right: 32px;
+    }
+
+    /* Universal Footer */
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .footer-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    [dir="rtl"] .footer-brand-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge i {
+      width: 13px;
+      height: 13px;
+      color: #10b981;
+    }
+
+    /* Cookie Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 16px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(14, 165, 233, 0.15);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    [dir="rtl"] .cookie-banner {
+      left: 50%;
+      transform: translateX(50%);
+    }
+
+    .cookie-banner.hidden {
+      display: none !important;
+    }
+
+    @keyframes cookieSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .cookie-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .cookie-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: #38bdf8;
+      flex-shrink: 0;
+    }
+
+    .cookie-icon-wrapper i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cookie-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .cookie-text a {
+      color: #38bdf8;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-left: 4px;
+    }
+
+    [dir="rtl"] .cookie-text a {
+      margin-left: 0;
+      margin-right: 4px;
+    }
+
+    .cookie-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      padding: 12px 20px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      color: #f8fafc;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(14, 165, 233, 0.2);
+      z-index: 1100;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 400px;
+    }
+
+    .toast.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+
+    .toast i {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .toast.info i {
+      color: #38bdf8;
+    }
+
+    .toast.success i {
+      color: #34d399;
+    }
+
+    .toast.warning i {
+      color: #fbbf24;
+    }
+
+    .toast.error i {
+      color: #f87171;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Spinner Animation */
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding: 24px 16px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+      }
+
+      .dropzone {
+        padding: 32px 16px;
+      }
+
+      .footer-top,
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cookie-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+        bottom: 12px;
+        width: calc(100% - 24px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="PDF Netizen Platform">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="file-check-2"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">PDF <span class="gradient-text">Netizen</span></span>
+          <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+          <i data-lucide="home"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Hero Header -->
+      <section class="hero-section">
+        <div class="hero-badge">
+          <i data-lucide="file-text"></i>
+          <span data-i18n="word2pdf_hero_badge">100% Client-Side Word to PDF • Fast & Private</span>
+        </div>
+        <h1 class="hero-title" data-i18n="word2pdf_hero_title">Convert Word (.docx) to <span class="gradient-text">PDF
+            Document</span></h1>
+        <p class="hero-subtitle" data-i18n="word2pdf_hero_subtitle">
+          Transform Microsoft Word documents into beautiful, print-ready PDF files directly in your browser. 100%
+          private with zero server uploads and full Arabic RTL support.
+        </p>
+      </section>
+
+      <!-- Dropzone Upload Section -->
+      <section id="dropzone-section" class="dropzone-container">
+        <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Dropzone for Word documents">
+          <div class="dropzone-icon-box">
+            <i data-lucide="file-up"></i>
+          </div>
+          <h2 class="dropzone-title" data-i18n="word2pdf_dropzone_title">Drop your Word (.docx) file here</h2>
+          <p class="dropzone-subtitle" data-i18n="word2pdf_dropzone_subtitle">
+            Select or drag and drop any Microsoft Word (.docx) document to convert into an elegant PDF file instantly.
+          </p>
+
+          <input type="file" id="file-input" class="hidden"
+            accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+
+          <div class="dropzone-actions">
+            <button type="button" id="btn-browse" class="btn btn-primary btn-lg">
+              <i data-lucide="upload"></i>
+              <span data-i18n="word2pdf_btn_browse">Browse Word File</span>
+            </button>
+            <button type="button" id="btn-load-sample" class="btn btn-secondary btn-lg">
+              <i data-lucide="sparkles"></i>
+              <span data-i18n="word2pdf_btn_sample">Try Sample Word Doc</span>
+            </button>
+          </div>
+
+          <div class="dropzone-features">
+            <div class="feature-item">
+              <i data-lucide="check-circle-2"></i>
+              <span data-i18n="word2pdf_feature_pdf">High-Fidelity PDF Output</span>
+            </div>
+            <div class="feature-item">
+              <i data-lucide="check-circle-2"></i>
+              <span data-i18n="word2pdf_feature_arabic">Arabic & RTL Support</span>
+            </div>
+            <div class="feature-item">
+              <i data-lucide="check-circle-2"></i>
+              <span data-i18n="word2pdf_feature_privacy">100% Client-Side Privacy</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Conversion Workspace (Revealed after DOCX upload) -->
+      <section id="workspace-panel" class="workspace-panel hidden">
+
+        <!-- File Metadata Card -->
+        <div class="file-card">
+          <div class="file-info-group">
+            <div class="file-icon-box">
+              <i data-lucide="file-text"></i>
+            </div>
+            <div class="file-details">
+              <span class="file-name" id="file-name-display">document.docx</span>
+              <div class="file-badges">
+                <span class="meta-badge highlight" id="file-size-display">0 KB</span>
+                <span class="meta-badge" id="file-status-badge" data-i18n="word2pdf_status_ready">Ready to
+                  Convert</span>
+              </div>
+            </div>
+          </div>
+          <button id="btn-change-file" type="button" class="btn btn-secondary btn-sm"
+            title="Choose a different Word file">
+            <i data-lucide="refresh-cw"></i>
+            <span data-i18n="word2pdf_btn_change">Change File</span>
+          </button>
+        </div>
+
+        <!-- Conversion Settings & Output Controls Grid -->
+        <div class="conversion-grid">
+
+          <!-- Left Column: PDF Formatting Options -->
+          <div class="card-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <i data-lucide="settings-2"></i>
+                <span data-i18n="word2pdf_settings_title">PDF Page & Layout Settings</span>
+              </h3>
+            </div>
+
+            <!-- Page Format & Orientation -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="control-group">
+                <label for="page-format-select" class="control-label">
+                  <i data-lucide="layout"></i>
+                  <span data-i18n="word2pdf_label_format">Page Size</span>
+                </label>
+                <select id="page-format-select" class="form-select">
+                  <option value="a4" selected>A4 (Standard)</option>
+                  <option value="letter">US Letter</option>
+                  <option value="legal">Legal</option>
+                  <option value="a3">A3</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label for="page-orientation-select" class="control-label">
+                  <i data-lucide="rotate-cw"></i>
+                  <span data-i18n="word2pdf_label_orientation">Orientation</span>
+                </label>
+                <select id="page-orientation-select" class="form-select">
+                  <option value="portrait" selected data-i18n="word2pdf_orient_portrait">Portrait (Vertical)</option>
+                  <option value="landscape" data-i18n="word2pdf_orient_landscape">Landscape (Horizontal)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Margins -->
+            <div class="control-group">
+              <label for="margins-select" class="control-label">
+                <i data-lucide="maximize-2"></i>
+                <span data-i18n="word2pdf_label_margins">Page Margins</span>
+              </label>
+              <select id="margins-select" class="form-select">
+                <option value="12" selected data-i18n="word2pdf_margin_normal">Normal (12 mm)</option>
+                <option value="6" data-i18n="word2pdf_margin_narrow">Narrow (6 mm)</option>
+                <option value="20" data-i18n="word2pdf_margin_wide">Wide (20 mm)</option>
+                <option value="0" data-i18n="word2pdf_margin_none">No Margins (0 mm)</option>
+              </select>
+            </div>
+
+            <!-- Text Direction (RTL / Arabic / LTR) -->
+            <div class="control-group">
+              <label for="direction-select" class="control-label">
+                <i data-lucide="type"></i>
+                <span data-i18n="word2pdf_label_direction">Text Direction & Font</span>
+              </label>
+              <select id="direction-select" class="form-select">
+                <option value="auto" selected data-i18n="word2pdf_dir_auto">Auto-Detect (Arabic RTL & English LTR)
+                </option>
+                <option value="rtl" data-i18n="word2pdf_dir_rtl">Force Right-to-Left (Arabic / RTL)</option>
+                <option value="ltr" data-i18n="word2pdf_dir_ltr">Force Left-to-Right (English / LTR)</option>
+              </select>
+            </div>
+
+            <!-- Visual Enhancements Toggles -->
+            <div class="control-group">
+              <label class="control-label">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="word2pdf_label_options">Enhancements</span>
+              </label>
+
+              <!-- Image Quality Toggle -->
+              <div class="toggle-row">
+                <div class="toggle-text">
+                  <span class="toggle-title" data-i18n="word2pdf_toggle_crisp">Crisp Vector Rendering</span>
+                  <span class="toggle-desc" data-i18n="word2pdf_toggle_crisp_desc">Optimize canvas clarity for fonts and
+                    tables</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-crisp" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Start Conversion Button -->
+            <button id="btn-start-convert" type="button" class="btn btn-primary btn-lg" style="margin-top: 8px;">
+              <i data-lucide="file-output" id="convert-btn-icon"></i>
+              <span id="convert-btn-text" data-i18n="word2pdf_btn_convert">Convert to PDF Document</span>
+            </button>
+          </div>
+
+          <!-- Right Column: Live Document Preview & Results -->
+          <div class="card-panel" style="justify-content: flex-start;">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <i data-lucide="eye"></i>
+                <span data-i18n="word2pdf_preview_title">Live Document Preview</span>
+              </h3>
+              <div class="file-badges">
+                <span class="meta-badge highlight" id="preview-format-badge">A4</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar (Visible while converting) -->
+            <div id="progress-card" class="progress-card hidden">
+              <div class="progress-header">
+                <span class="progress-status" id="progress-status-text">
+                  <i data-lucide="loader-2" class="spinner"></i>
+                  <span data-i18n="word2pdf_status_parsing">Parsing Word document...</span>
+                </span>
+                <span class="progress-percent" id="progress-percent">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+              </div>
+            </div>
+
+            <!-- Rendered Document Preview Container -->
+            <div class="control-group" style="flex: 1; display: flex; flex-direction: column;">
+              <div id="doc-render-container" class="paper-preview-box" style="flex: 1; min-height: 240px;">
+                <span style="color: #94a3b8; font-style: italic;" data-i18n="word2pdf_preview_placeholder">
+                  Word document preview will appear here...
+                </span>
+              </div>
+            </div>
+
+            <!-- Hidden container for html2pdf offscreen rendering -->
+            <div id="pdf-export-container"
+              style="position: absolute; left: -9999px; top: -9999px; width: 800px; background: #ffffff; color: #000000; padding: 20px;">
+            </div>
+
+            <!-- Results Download Section (Revealed after successful conversion) -->
+            <div id="results-card" class="results-card hidden">
+              <div class="results-header">
+                <span class="results-badge">
+                  <i data-lucide="check-circle-2"></i>
+                  <span data-i18n="word2pdf_success_badge">PDF Generated Successfully!</span>
+                </span>
+              </div>
+
+              <!-- Conversion Stats -->
+              <div class="stats-row">
+                <div class="stat-box">
+                  <span class="stat-val" id="stat-words-count">0</span>
+                  <span class="stat-lbl" data-i18n="word2pdf_stat_words">Words</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-val" id="stat-chars-count">0</span>
+                  <span class="stat-lbl" data-i18n="word2pdf_stat_chars">Characters</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-val" id="stat-pdf-size">0 KB</span>
+                  <span class="stat-lbl" data-i18n="word2pdf_stat_size">PDF Size</span>
+                </div>
+              </div>
+
+              <!-- Download & Action Buttons -->
+              <div class="results-actions">
+                <button id="btn-download-pdf" type="button" class="btn btn-primary btn-lg" style="flex: 1;">
+                  <i data-lucide="download"></i>
+                  <span data-i18n="word2pdf_btn_download_pdf">Download PDF Document</span>
+                </button>
+                <button id="btn-copy-text" type="button" class="btn btn-secondary" title="Copy text to clipboard">
+                  <i data-lucide="copy"></i>
+                  <span data-i18n="word2pdf_btn_copy">Copy Text</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Ad Slot Placeholder Section (728x90) -->
+      <div class="ad-container">
+        <div class="ad-slot-horizontal" id="ad-slot-horizontal" role="complementary" aria-label="Advertisement">
+          <i data-lucide="layout"></i>
+          <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
+        </div>
+      </div>
+
+      <!-- SEO How-To Steps & In-Depth FAQ Section -->
+      <section class="seo-section" aria-label="How to convert Word to PDF and FAQ">
+        <div class="seo-header">
+          <div class="seo-badge">
+            <i data-lucide="zap"></i>
+            <span data-i18n="word2pdf_seo_badge">Fast & Private Word to PDF Conversion</span>
+          </div>
+          <h2 class="seo-title" data-i18n="word2pdf_seo_title">How to Convert Microsoft Word (.docx) to PDF Online</h2>
+          <p class="seo-subtitle" data-i18n="word2pdf_seo_subtitle">
+            Convert Word documents into polished, standardized PDF files directly inside your browser with 100%
+            client-side privacy, accurate table and font rendering, and full Arabic RTL text support.
+          </p>
+        </div>
+
+        <!-- 3 Steps Grid -->
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-number">1</div>
+            <h4 data-i18n="word2pdf_step1_title">1. Upload Word Document</h4>
+            <p data-i18n="word2pdf_step1_desc">Select or drag and drop your Microsoft Word (.docx) file into the
+              secure browser dropzone.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">2</div>
+            <h4 data-i18n="word2pdf_step2_title">2. Choose Page & Margin Options</h4>
+            <p data-i18n="word2pdf_step2_desc">Customize page size (A4, Letter), orientation (Portrait, Landscape),
+              margins, and Arabic RTL alignment.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">3</div>
+            <h4 data-i18n="word2pdf_step3_title">3. Convert & Download PDF</h4>
+            <p data-i18n="word2pdf_step3_desc">Click Convert to render your document into a standard, crisp PDF file
+              instantly saved directly to your device.</p>
+          </article>
+        </div>
+
+        <!-- FAQ Accordion / Cards -->
+        <div class="faq-grid">
+          <h3
+            style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);"
+            data-i18n="word2pdf_faq_title">Frequently Asked Questions</h3>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle" class="faq-icon"></i>
+              <h4 data-i18n="word2pdf_faq_q1">Are my Word files uploaded to any external server?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="word2pdf_faq_a1">
+              No, never. The conversion runs 100% client-side directly within your browser session using Mammoth.js and
+              html2pdf.js. Your confidential documents, contracts, and private letters never leave your computer.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle" class="faq-icon"></i>
+              <h4 data-i18n="word2pdf_faq_q2">Does this tool support Arabic right-to-left (RTL) Word documents?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="word2pdf_faq_a2">
+              Yes! Our engine automatically detects Arabic script, applying proper right-to-left layout and embedding
+              clean Arabic typography (such as Cairo and Tahoma) so your Arabic documents look sharp and readable.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle" class="faq-icon"></i>
+              <h4 data-i18n="word2pdf_faq_q3">Does it preserve tables, headings, and bullet points?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="word2pdf_faq_a3">
+              Yes. Headings, bold/italic text styles, numbered and bulleted lists, and structured data tables are parsed
+              and converted cleanly into the resulting PDF.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle" class="faq-icon"></i>
+              <h4 data-i18n="word2pdf_faq_q4">What Word file formats are supported?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="word2pdf_faq_a4">
+              The converter supports all standard Microsoft Word (.docx) files created in Word 2007 through Word 2024,
+              Office 365, Google Docs, and LibreOffice.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Universal Semantic Footer -->
+    <footer class="site-footer" id="site-footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <div class="footer-info">
+            <a href="index.html" class="footer-brand" title="PDF Netizen Home">
+              <div class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+                <i data-lucide="file-check-2" style="width: 18px; height: 18px;"></i>
+              </div>
+              <span class="footer-brand-title">PDF <span class="gradient-text">Netizen</span></span>
+            </a>
+            <p class="footer-tagline" data-i18n="footer_tagline">
+              100% Client-side, private, and secure document processing directly in your browser.
+            </p>
+          </div>
+
+          <nav class="footer-links" aria-label="Footer Navigation">
+            <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+            <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+            <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+          </nav>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+          <div class="footer-legal-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="badge_client_side">100% Client-Side</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+      <div class="cookie-content">
+        <div class="cookie-icon-wrapper">
+          <i data-lucide="cookie"></i>
+        </div>
+        <p class="cookie-text">
+          <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit this
+            site you agree to our use of cookies.</span>
+          <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-accept-cookies"
+          data-i18n="cookie_accept_btn">Accept</button>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification</span>
+    </div>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script src="word2pdf.js"></script>
+</body>
+
+</html>
