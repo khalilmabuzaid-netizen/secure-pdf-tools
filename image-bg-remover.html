@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Background Remover - Remove Image Background Online Free</title>
+  <meta name="description"
+    content="Remove image backgrounds automatically in your browser with AI. 100% private, instant transparent PNG download with zero server uploads and full Arabic RTL support.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      /* Core Color Palette */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --bg-hover: rgba(255, 255, 255, 0.08);
+      --bg-active: rgba(139, 92, 246, 0.18);
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #8b5cf6;
+      --border-active: rgba(139, 92, 246, 0.6);
+
+      /* Accents & Brand (Purple / Violet Magic AI Theme) */
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-glow: rgba(139, 92, 246, 0.35);
+      --primary-light: #a78bfa;
+      --accent-emerald: #10b981;
+      --accent-indigo: #6366f1;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+
+      /* Typography Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 24px rgba(139, 92, 246, 0.3);
+
+      /* Dimensions & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.15), transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(244, 63, 94, 0.05), transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.05), transparent 40%),
+        var(--bg-primary);
+      background-attachment: fixed;
+    }
+
+    /* RTL & Arabic Typography Support */
+    html[dir="rtl"],
+    body[dir="rtl"] {
+      font-family: 'Cairo', 'Segoe UI Arabic', 'Tahoma', 'Inter', sans-serif;
+    }
+
+    [dir="rtl"] .nav-brand {
+      flex-direction: row;
+    }
+
+    [dir="rtl"] .badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .nav-back-link i {
+      transform: scaleX(-1);
+    }
+
+    [dir="rtl"] .hero-title,
+    [dir="rtl"] .brand-title,
+    [dir="rtl"] .footer-brand-title,
+    [dir="rtl"] .panel-title,
+    [dir="rtl"] .seo-guide-title,
+    [dir="rtl"] .faq-title {
+      font-family: 'Cairo', 'Outfit', sans-serif;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #8b5cf6, #c084fc);
+      color: #ffffff;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #c084fc, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(139, 92, 246, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      margin-left: 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #6d28d9);
+      color: #ffffff;
+      box-shadow: 0 2px 10px var(--primary-glow);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      box-shadow: 0 4px 18px rgba(139, 92, 246, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: var(--radius-lg);
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 24px 0 10px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: var(--radius-full);
+      color: #c084fc;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 660px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Upload Section */
+    .dropzone-container {
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px dashed rgba(139, 92, 246, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 56px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dropzone-container:hover,
+    .dropzone-container.drag-over {
+      border-color: var(--primary-light);
+      background: rgba(21, 30, 50, 0.95);
+      box-shadow: 0 0 35px rgba(139, 92, 246, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .dropzone-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(244, 63, 94, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--primary-light);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+    }
+
+    .dropzone-icon-wrapper i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .dropzone-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 24px;
+      line-height: 1.5;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Workspace Panel */
+    .workspace-panel {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .workspace-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .file-meta-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .meta-thumbnail {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .meta-filename {
+      font-weight: 600;
+      font-size: 1rem;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .meta-tag-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Mode Selection Pills */
+    .mode-selection-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .mode-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .mode-btn.active {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: var(--primary);
+      color: #c084fc;
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.25);
+    }
+
+    /* Settings & Sliders Panel */
+    .settings-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .control-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #c084fc;
+      font-weight: 600;
+    }
+
+    .range-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+      cursor: pointer;
+    }
+
+    /* Background Fill Color & Options */
+    .bg-replacement-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bg-opt-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+      position: relative;
+    }
+
+    .bg-opt-btn.checkerboard {
+      background: repeating-conic-gradient(#334155 0% 25%, #1e293b 0% 50%) 50% / 10px 10px;
+    }
+
+    .bg-opt-btn.white {
+      background: #ffffff;
+    }
+
+    .bg-opt-btn.black {
+      background: #090d16;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .bg-opt-btn.blue {
+      background: #3b82f6;
+    }
+
+    .bg-opt-btn.gradient-sunset {
+      background: linear-gradient(135deg, #f43f5e, #fbbf24);
+    }
+
+    .bg-opt-btn.gradient-cyber {
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    }
+
+    .bg-opt-btn.selected {
+      border-color: var(--primary-light);
+      transform: scale(1.15);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* Comparison & Interactive Canvas Area */
+    .comparison-stage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-stage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stage-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .stage-badge.accent {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .stage-canvas-container {
+      width: 100%;
+      height: 320px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
+      position: relative;
+    }
+
+    .stage-img,
+    .stage-canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .stage-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Progress & Status Banner */
+    .status-download-banner {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .status-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .status-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.2);
+      color: #c084fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-icon-circle i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .status-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .status-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .status-desc {
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+    }
+
+    .action-buttons-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Ad Slot Placeholder */
+    .ad-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .ad-slot-horizontal {
+      width: 100%;
+      max-width: 728px;
+      min-height: 90px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ad-slot-horizontal i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    /* SEO Guide Section */
+    .seo-guide-section {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .seo-guide-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #c084fc;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      margin-bottom: 12px;
+    }
+
+    .seo-guide-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .seo-guide-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .step-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .step-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(244, 63, 94, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c084fc;
+    }
+
+    .step-icon-wrapper i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .faq-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      transition: background var(--transition-fast);
+    }
+
+    .faq-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .faq-question i {
+      width: 18px;
+      height: 18px;
+      color: #c084fc;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 28px;
+    }
+
+    [dir="rtl"] .faq-answer {
+      padding-left: 0;
+      padding-right: 28px;
+    }
+
+    /* Universal Semantic Footer */
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .footer-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge i {
+      width: 13px;
+      height: 13px;
+      color: #10b981;
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 16px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.15);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .cookie-banner.hidden {
+      display: none !important;
+    }
+
+    @keyframes cookieSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .cookie-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .cookie-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: #c084fc;
+      flex-shrink: 0;
+    }
+
+    .cookie-icon-wrapper i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cookie-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .cookie-text a {
+      color: #c084fc;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-left: 4px;
+    }
+
+    .cookie-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      z-index: 10000;
+      backdrop-filter: blur(12px);
+      animation: toastIn 0.3s ease-out;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+    }
+
+    .toast.success {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(6, 78, 59, 0.9);
+    }
+
+    .toast.error {
+      border-color: rgba(244, 63, 94, 0.4);
+      background: rgba(136, 19, 55, 0.9);
+    }
+
+    .toast.info {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: rgba(76, 29, 149, 0.9);
+    }
+
+    .toast.hidden {
+      display: none !important;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Utility */
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .dropzone-container {
+        padding: 36px 16px;
+      }
+
+      .workspace-panel {
+        padding: 18px;
+      }
+
+      .stage-canvas-container {
+        height: 240px;
+      }
+
+      .cookie-banner {
+        flex-direction: column;
+        align-items: stretch;
+        bottom: 12px;
+        width: calc(100% - 24px);
+        padding: 14px;
+      }
+
+      .cookie-actions {
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+      <a href="index.html" class="nav-brand" title="PDF Netizen Hub">
+        <div class="brand-icon-wrapper">
+          <i data-lucide="wand-2" class="brand-icon"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">PDF <span class="gradient-text">Netizen</span></h1>
+          <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Back to Hub Link -->
+        <a href="index.html" class="btn btn-secondary nav-back-link" title="Back to All Tools">
+          <i data-lucide="arrow-left"></i>
+          <span data-i18n="nav_home">Home</span>
+        </a>
+
+        <!-- Language Toggle Button -->
+        <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+          aria-label="Toggle language">
+          <i data-lucide="globe"></i>
+          <span id="lang-toggle-text">العربية</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Hero Header -->
+      <section class="hero-section">
+        <div class="hero-badge">
+          <i data-lucide="sparkles"></i>
+          <span data-i18n="imgbg_hero_badge">100% Client-Side AI Background Remover • Zero Server Uploads</span>
+        </div>
+        <h1 class="hero-title" data-i18n="imgbg_hero_title">AI Background <span class="gradient-text">Remover</span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="imgbg_hero_subtitle">
+          Erase photo backgrounds automatically in seconds. Replace with pure transparency, solid colors, or gradients.
+          100% private in-browser processing.
+        </p>
+      </section>
+
+      <!-- Upload Dropzone (Visible initially) -->
+      <section id="dropzone-section">
+        <div class="dropzone-container" id="dropzone" role="region" aria-label="Image dropzone">
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp,image/bmp" class="hidden">
+          <div class="dropzone-icon-wrapper">
+            <i data-lucide="wand-2"></i>
+          </div>
+          <h2 class="dropzone-title" data-i18n="imgbg_dropzone_title">Drop your image here to remove background</h2>
+          <p class="dropzone-subtitle" data-i18n="imgbg_dropzone_subtitle">
+            Supports PNG, JPG/JPEG, WebP, and BMP photos. Background extraction executes locally in your browser memory.
+          </p>
+
+          <div class="dropzone-actions">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-browse">
+              <i data-lucide="folder-open"></i>
+              <span data-i18n="imgbg_btn_browse">Browse Image File</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" id="btn-load-sample">
+              <i data-lucide="sparkles"></i>
+              <span data-i18n="imgbg_btn_sample">Try Sample Portrait</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Background Removal Workspace (Hidden until image loaded) -->
+      <section id="workspace-panel" class="workspace-panel hidden" aria-live="polite">
+
+        <!-- File Meta Header -->
+        <div class="workspace-header">
+          <div class="file-meta-badge">
+            <img id="meta-thumbnail" class="meta-thumbnail" alt="Uploaded Thumbnail">
+            <div class="meta-details">
+              <span id="file-name-display" class="meta-filename">image.png</span>
+              <div class="meta-tags">
+                <span class="meta-tag-item"><i data-lucide="maximize-2"></i> <span
+                    id="orig-dimensions-badge">0×0</span></span>
+                <span class="meta-tag-item"><i data-lucide="hard-drive"></i> <span id="orig-size-badge">0
+                    KB</span></span>
+                <span class="meta-tag-item"><i data-lucide="check-circle-2"></i> <span
+                    id="processing-status-badge">Ready</span></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-change-file">
+            <i data-lucide="refresh-cw"></i>
+            <span data-i18n="imgbg_btn_change">Change Image</span>
+          </button>
+        </div>
+
+        <!-- Removal Mode Selector -->
+        <div class="mode-selection-section">
+          <label class="section-label">
+            <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--primary);"></i>
+            <span data-i18n="imgbg_mode_label">Removal Method</span>
+          </label>
+
+          <div class="mode-pills-row">
+            <button type="button" class="mode-btn active" data-mode="ai" id="btn-mode-ai">
+              <i data-lucide="sparkles"></i>
+              <span data-i18n="imgbg_mode_ai">Smart AI Auto-Detect</span>
+            </button>
+            <button type="button" class="mode-btn" data-mode="chroma" id="btn-mode-chroma">
+              <i data-lucide="pipette"></i>
+              <span data-i18n="imgbg_mode_chroma">Color / Chroma Key</span>
+            </button>
+            <button type="button" class="mode-btn" data-mode="manual" id="btn-mode-manual">
+              <i data-lucide="brush"></i>
+              <span data-i18n="imgbg_mode_manual">Manual Touch-Up Brush</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Fine-Tuning Controls Grid -->
+        <div class="settings-controls-grid">
+
+          <!-- Tolerance Slider (Chroma Mode) / Threshold -->
+          <div class="control-group" id="tolerance-control-group">
+            <div class="control-label-wrapper">
+              <label for="tolerance-slider" class="control-label" data-i18n="imgbg_tolerance_label">Detection
+                Tolerance</label>
+              <span id="tolerance-val-display" class="control-value">32%</span>
+            </div>
+            <input type="range" id="tolerance-slider" class="range-slider" min="5" max="95" value="32" step="1">
+          </div>
+
+          <!-- Feather / Edge Softness Slider -->
+          <div class="control-group" id="feather-control-group">
+            <div class="control-label-wrapper">
+              <label for="feather-slider" class="control-label" data-i18n="imgbg_feather_label">Edge Smoothness</label>
+              <span id="feather-val-display" class="control-value">3 px</span>
+            </div>
+            <input type="range" id="feather-slider" class="range-slider" min="0" max="15" value="3" step="1">
+          </div>
+
+          <!-- Background Fill Selector -->
+          <div class="control-group">
+            <div class="control-label-wrapper">
+              <label class="control-label" data-i18n="imgbg_bg_label">Background Fill</label>
+              <span id="bg-fill-val" class="control-value">Transparent</span>
+            </div>
+            <div class="bg-replacement-row">
+              <div class="bg-opt-btn checkerboard selected" data-bg="transparent" title="Transparent PNG"></div>
+              <div class="bg-opt-btn white" data-bg="#ffffff" title="Solid White"></div>
+              <div class="bg-opt-btn black" data-bg="#090d16" title="Solid Black"></div>
+              <div class="bg-opt-btn blue" data-bg="#3b82f6" title="Vibrant Blue"></div>
+              <div class="bg-opt-btn gradient-sunset" data-bg="gradient-sunset" title="Sunset Gradient"></div>
+              <div class="bg-opt-btn gradient-cyber" data-bg="gradient-cyber" title="Cyber Glow Gradient"></div>
+              <input type="color" id="custom-bg-color-picker" value="#ffffff"
+                style="width: 32px; height: 32px; border: none; cursor: pointer; border-radius: 6px; background: none;">
+            </div>
+          </div>
+
+          <!-- Manual Brush Controls (Only visible in Manual mode) -->
+          <div class="control-group hidden" id="brush-controls-group">
+            <div class="control-label-wrapper">
+              <label class="control-label" data-i18n="imgbg_brush_tool_label">Brush Tool</label>
+              <span id="brush-size-display" class="control-value">25 px</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary btn-sm active" id="btn-brush-erase"
+                data-i18n="imgbg_brush_erase">Erase</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-brush-restore"
+                data-i18n="imgbg_brush_restore">Restore</button>
+            </div>
+            <input type="range" id="brush-size-slider" class="range-slider" min="5" max="80" value="25" step="1"
+              style="margin-top: 6px;">
+          </div>
+
+        </div>
+
+        <!-- Side-by-Side Visual Stage Comparison -->
+        <div class="comparison-stage-grid">
+
+          <!-- Original Image Card -->
+          <div class="stage-card">
+            <div class="stage-header">
+              <span data-i18n="imgbg_orig_title">Original Photo</span>
+              <span class="stage-badge">Source</span>
+            </div>
+            <div class="stage-canvas-container">
+              <img id="orig-stage-img" class="stage-img" alt="Original Image">
+            </div>
+            <div class="stage-footer">
+              <span id="orig-card-dimensions">0 × 0 px</span>
+              <span id="orig-card-size">0 KB</span>
+            </div>
+          </div>
+
+          <!-- Processed Transparent Card -->
+          <div class="stage-card">
+            <div class="stage-header">
+              <span data-i18n="imgbg_result_title">Background Removed Result</span>
+              <span class="stage-badge accent">Transparent PNG</span>
+            </div>
+            <div class="stage-canvas-container" id="result-stage-container">
+              <canvas id="result-canvas" class="stage-canvas"></canvas>
+            </div>
+            <div class="stage-footer">
+              <span id="result-card-dimensions">0 × 0 px</span>
+              <span id="result-card-size">0 KB</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Download & Status Action Banner -->
+        <div class="status-download-banner">
+          <div class="status-info">
+            <div class="status-icon-circle">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <div class="status-text-group">
+              <span id="status-headline" class="status-title">Background erased successfully</span>
+              <span id="status-details" class="status-desc">Ready for high-resolution transparent download</span>
+            </div>
+          </div>
+
+          <div class="action-buttons-row">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-download-png">
+              <i data-lucide="download"></i>
+              <span data-i18n="imgbg_btn_download_png">Download Transparent PNG</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" id="btn-reprocess">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="imgbg_btn_reprocess">Re-Process</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Horizontal Advertisement Space (728x90) -->
+      <div class="ad-container">
+        <div class="ad-slot-horizontal" role="complementary" aria-label="Advertisement">
+          <i data-lucide="layout"></i>
+          <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
+        </div>
+      </div>
+
+      <!-- SEO Educational Guide Section -->
+      <section class="seo-guide-section">
+        <div class="seo-guide-header">
+          <div class="seo-badge">
+            <i data-lucide="sparkles"></i>
+            <span data-i18n="imgbg_seo_badge">Fast, Private &amp; Accurate Background Eraser</span>
+          </div>
+          <h2 class="seo-guide-title" data-i18n="imgbg_seo_title">How to Remove Background from Image Free with AI</h2>
+          <p class="seo-guide-subtitle" data-i18n="imgbg_seo_subtitle">
+            Instantly isolate subjects, eliminate unwanted photo backgrounds, and create clean transparent graphics for
+            online stores, YouTube thumbnails, resumes, and graphic design without uploading files to third-party
+            servers.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="upload-cloud"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgbg_step1_title">1. Upload Any Picture</h3>
+            <p class="step-desc" data-i18n="imgbg_step1_desc">
+              Select or drop any JPG, PNG, WebP, or BMP picture containing people, products, animals, or objects.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="wand-2"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgbg_step2_title">2. AI Isolates Subject</h3>
+            <p class="step-desc" data-i18n="imgbg_step2_desc">
+              Our client-side AI automatically detects the main subject, smoothly feathers edge transitions, and
+              extracts
+              the background.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-icon-wrapper">
+              <i data-lucide="download-cloud"></i>
+            </div>
+            <h3 class="step-title" data-i18n="imgbg_step3_title">3. Export Transparent PNG</h3>
+            <p class="step-desc" data-i18n="imgbg_step3_desc">
+              Choose a transparent alpha background or replace with a vibrant solid color or gradient, then download in
+              1
+              click.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Accordion Section -->
+      <section class="faq-section">
+        <h3 class="faq-title" data-i18n="imgbg_faq_title">Frequently Asked Questions</h3>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgbg_faq_q1">Are my confidential pictures uploaded to any remote server?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgbg_faq_a1">
+              No, absolutely not. All background removal and image processing take place 100% locally inside your
+              browser
+              memory using HTML5 Canvas and client-side algorithms. Your photos never leave your device.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgbg_faq_q2">Can I replace the erased background with a solid color or gradient?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgbg_faq_a2">
+              Yes! You can choose between transparent alpha (checkerboard), solid colors (white, black, blue, or custom
+              hex code), and modern gradients before downloading your image.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgbg_faq_q3">What kinds of photos work best with this tool?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgbg_faq_a3">
+              Portraits, e-commerce product photos, logos, animals, and car pictures with clear contrast between the
+              subject and background produce the crispest cutouts. You can also use the manual touch-up brush for
+              fine-tuning.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h4 data-i18n="imgbg_faq_q4">Is there any watermark or subscription required?</h4>
+            </div>
+            <p class="faq-answer" data-i18n="imgbg_faq_a4">
+              None at all. Background Remover Pro is completely free, does not add any watermarks to your downloads, and
+              requires no account creation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Universal Semantic Footer -->
+    <footer class="site-footer" id="site-footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <div class="footer-info">
+            <a href="index.html" class="footer-brand" title="PDF Netizen Home">
+              <div class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+                <i data-lucide="wand-2" style="width: 18px; height: 18px;"></i>
+              </div>
+              <span class="footer-brand-title">PDF <span class="gradient-text">Netizen</span></span>
+            </a>
+            <p class="footer-tagline" data-i18n="footer_tagline">
+              100% Client-side, private, and secure document processing directly in your browser.
+            </p>
+          </div>
+
+          <nav class="footer-links" aria-label="Footer Navigation">
+            <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+            <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+            <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+          </nav>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+          <div class="footer-legal-badge">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="badge_client_side">100% Client-Side</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+      <div class="cookie-content">
+        <div class="cookie-icon-wrapper">
+          <i data-lucide="cookie"></i>
+        </div>
+        <p class="cookie-text">
+          <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit this
+            site you agree to our use of cookies.</span>
+          <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-accept-cookies"
+          data-i18n="cookie_accept_btn">Accept</button>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+      <i id="toast-icon" data-lucide="info"></i>
+      <span id="toast-message">Notification</span>
+    </div>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script src="image-bg-remover.js"></script>
+</body>
+
+</html>
