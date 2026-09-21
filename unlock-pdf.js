@@ -474,7 +474,7 @@
     }
   }
 
-  // File Selection Handler
+  // File Selection Handler (Immediate File Acceptance - Zero Pre-Parsing Crash)
   async function handleFileSelection(file) {
     if (!file) return;
 
@@ -485,74 +485,25 @@
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const uint8 = new Uint8Array(arrayBuffer);
-
+      window.rawPdfBytes = arrayBuffer;
+      window.originalPdfBytes = arrayBuffer;
+      window.currentFileName = file.name;
+      originalPdfBytes = new Uint8Array(arrayBuffer);
       currentFile = file;
-      originalPdfBytes = uint8;
-      originalBaseName = file.name.replace(/\.[^/.]+$/, '');
+      originalBaseName = file.name.replace(/\.[^/.]+$/, '') || 'document';
+      isEncryptedDoc = true;
 
-      // Check encryption status with PDF.js
-      let needsPassword = false;
-      let totalPages = null;
-
-      try {
-        if (window.pdfjsLib) {
-          const loadingTask = window.pdfjsLib.getDocument({ data: uint8.slice(0) });
-          loadingTask.onPassword = function () {
-            needsPassword = true;
-          };
-          const pdfDoc = await loadingTask.promise;
-          totalPages = pdfDoc.numPages;
-          needsPassword = false;
-        }
-      } catch (err) {
-        if (err.name === 'PasswordException' || (err.message && err.message.toLowerCase().includes('password'))) {
-          needsPassword = true;
-        } else {
-          console.warn('PDF.js initial check note:', err);
-        }
-      }
-
-      // Check if PDF-Lib detects encryption
-      if (!needsPassword && window.PDFLib) {
-        try {
-          const testDoc = await window.PDFLib.PDFDocument.load(uint8, { ignoreEncryption: true });
-          if (testDoc.isEncrypted) {
-            needsPassword = true;
-          }
-          if (!totalPages) {
-            totalPages = testDoc.getPageCount();
-          }
-        } catch (e) {
-          needsPassword = true;
-        }
-      }
-
-      isEncryptedDoc = needsPassword;
-
-      // Update Workspace UI displays
+      // Update Workspace UI displays immediately
       if (fileNameDisplay) fileNameDisplay.textContent = file.name;
       if (fileSizeDisplay) fileSizeDisplay.textContent = formatBytes(file.size);
 
       if (fileStatusTag && fileStatusText) {
-        if (isEncryptedDoc) {
-          fileStatusTag.className = 'file-tag locked';
-          fileStatusText.textContent = t('status_password_protected');
-        } else {
-          fileStatusTag.className = 'file-tag unlocked';
-          fileStatusText.textContent = t('status_unprotected');
-        }
+        fileStatusTag.className = 'file-tag locked';
+        fileStatusText.textContent = t('status_password_protected');
       }
 
       if (filePagesDisplay) {
-        if (totalPages && totalPages > 0) {
-          filePagesDisplay.textContent = (totalPages === 1)
-            ? t('pages_single')
-            : t('pages_total', { n: totalPages });
-          filePagesDisplay.classList.remove('hidden');
-        } else {
-          filePagesDisplay.classList.add('hidden');
-        }
+        filePagesDisplay.classList.add('hidden');
       }
 
       // Set default output filename: [filename]-unlocked
@@ -560,13 +511,9 @@
         outputFilenameInput.value = `${originalBaseName}-unlocked`;
       }
 
-      // Show/Hide prompt elements
+      // Transition UI immediately to Password Input Card without pre-parsing
       hideInlineAlert();
-      if (nonEncryptedNotice) {
-        if (!isEncryptedDoc) nonEncryptedNotice.classList.remove('hidden');
-        else nonEncryptedNotice.classList.add('hidden');
-      }
-
+      if (nonEncryptedNotice) nonEncryptedNotice.classList.add('hidden');
       if (passwordFormCard) passwordFormCard.classList.remove('hidden');
       if (successDownloadCard) successDownloadCard.classList.add('hidden');
       if (decryptionProgress) decryptionProgress.classList.add('hidden');
@@ -574,13 +521,12 @@
       if (dropzone) dropzone.classList.add('hidden');
       if (workspacePanel) workspacePanel.classList.remove('hidden');
       if (btnHeaderReset) btnHeaderReset.disabled = false;
+      if (btnUnlockPdf) btnUnlockPdf.disabled = false;
 
-      // Focus password input if encrypted
+      // Automatically focus the password input field
       if (pdfPasswordInput) {
         pdfPasswordInput.value = '';
-        if (isEncryptedDoc) {
-          setTimeout(() => pdfPasswordInput.focus(), 150);
-        }
+        setTimeout(() => pdfPasswordInput.focus(), 150);
       }
 
       if (window.lucide) {
@@ -588,7 +534,7 @@
       }
 
     } catch (err) {
-      console.error('Failed to load PDF file:', err);
+      console.error('Failed to read PDF file:', err);
       showToast(t('error_invalid_pdf') + ' (' + err.message + ')', 'error');
     }
   }
@@ -681,12 +627,16 @@
 
       // Encrypt sample if PDFEncrypt is available
       if (window.PDFEncrypt && typeof window.PDFEncrypt.encryptPDF === 'function') {
-        sampleBytes = await window.PDFEncrypt.encryptPDF(unencryptedBytes, 'secret123', {
-          algorithm: 'AES-256',
-          ownerPassword: 'secret123',
-          allowPrinting: true,
-          allowCopying: true
-        });
+        try {
+          sampleBytes = await window.PDFEncrypt.encryptPDF(unencryptedBytes, 'secret123', {
+            algorithm: 'AES-256',
+            ownerPassword: 'secret123',
+            allowPrinting: true,
+            allowCopying: true
+          });
+        } catch (encErr) {
+          console.warn('PDFEncrypt note:', encErr);
+        }
       }
 
       const sampleBlob = new Blob([sampleBytes], { type: 'application/pdf' });
@@ -710,18 +660,13 @@
   async function executeUnlock() {
     if (isProcessing) return;
 
-    if (!originalPdfBytes) {
+    const rawBytes = window.rawPdfBytes || window.originalPdfBytes || originalPdfBytes;
+    if (!rawBytes) {
       showToast(t('error_invalid_pdf'), 'error');
       return;
     }
 
-    const enteredPassword = pdfPasswordInput ? pdfPasswordInput.value : '';
-
-    if (isEncryptedDoc && (!enteredPassword || enteredPassword.trim().length === 0)) {
-      showInlineAlert(t('error_pwd_empty'), 'error');
-      if (pdfPasswordInput) pdfPasswordInput.focus();
-      return;
-    }
+    const password = pdfPasswordInput ? pdfPasswordInput.value.trim() : '';
 
     hideInlineAlert();
     isProcessing = true;
@@ -729,28 +674,30 @@
     updateProgress(15, t('progress_decrypting'));
 
     try {
+      let finalDecryptedBytes = null;
+      const cleanBytes = (rawBytes instanceof Uint8Array ? rawBytes : new Uint8Array(rawBytes)).slice(0);
+
       if (!window.pdfjsLib) {
         throw new Error('PDF.js rendering engine is not loaded');
       }
 
-      // Step 1: Attempt to open and verify password with PDF.js
       let pdfDoc = null;
       try {
         const loadingTask = window.pdfjsLib.getDocument({
-          data: originalPdfBytes.slice(0),
-          password: enteredPassword
+          data: cleanBytes.slice(0),
+          password: password
         });
         pdfDoc = await loadingTask.promise;
-      } catch (authErr) {
-        const isAuthFailure = (
-          authErr.name === 'PasswordException' ||
-          authErr.code === 1 ||
-          authErr.code === 2 ||
-          (authErr.message && authErr.message.toLowerCase().includes('password'))
-        );
-
-        if (isAuthFailure) {
+      } catch (err) {
+        if (
+          err.name === 'PasswordException' ||
+          err.code === 1 ||
+          err.code === 2 ||
+          (err.message && err.message.toLowerCase().includes('password')) ||
+          (err.message && err.message.toLowerCase().includes('incorrect'))
+        ) {
           showInlineAlert(t('error_pwd_incorrect'), 'error');
+          showToast(t('error_pwd_incorrect'), 'error');
           if (pdfPasswordInput) {
             pdfPasswordInput.focus();
             pdfPasswordInput.select();
@@ -759,48 +706,55 @@
           isProcessing = false;
           return;
         } else {
-          throw authErr;
+          // If it only had owner restrictions, try direct pdf-lib bypass:
+          try {
+            if (window.PDFLib) {
+              const directDoc = await window.PDFLib.PDFDocument.load(cleanBytes.slice(0), { ignoreEncryption: true });
+              finalDecryptedBytes = await directDoc.save();
+            } else {
+              throw err;
+            }
+          } catch (e2) {
+            console.error("Direct PDF-Lib fallback failed:", e2);
+            throw err;
+          }
         }
       }
 
-      const totalPages = pdfDoc.numPages;
-      updateProgress(35, t('progress_decrypting'));
+      // Rebuild clean, unencrypted PDF using canvas + pdf-lib if decrypted via PDF.js
+      if (!finalDecryptedBytes && pdfDoc) {
+        const numPages = pdfDoc.numPages;
+        if (!window.PDFLib) {
+          throw new Error('PDF-Lib serialization engine unavailable');
+        }
 
-      let finalDecryptedBytes = null;
+        const unlockedDoc = await window.PDFLib.PDFDocument.create();
 
-      // Step 2: High-Fidelity Decrypted PDF Reconstruction
-      if (window.PDFLib) {
-        const { PDFDocument } = window.PDFLib;
-        const newPdfDoc = await PDFDocument.create();
-
-        // Render each decrypted page to canvas and embed as pristine unencrypted page
-        for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+        for (let i = 1; i <= numPages; i++) {
           updateProgress(
-            35 + Math.round((pageNum / totalPages) * 50),
-            t('progress_rendering', { p: pageNum, total: totalPages })
+            20 + Math.round((i / numPages) * 70),
+            t('progress_rendering', { p: i, total: numPages })
           );
 
-          const page = await pdfDoc.getPage(pageNum);
-          const viewport = page.getViewport({ scale: 2.0 }); // 2.0x scale for crisp 144 DPI resolution
+          const page = await pdfDoc.getPage(i);
+          const viewport = page.getViewport({ scale: 2.0 }); // High quality 2.0x
 
           const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          canvas.width = Math.floor(viewport.width);
+          canvas.height = Math.floor(viewport.height);
 
-          await page.render({
-            canvasContext: context,
-            viewport: viewport
-          }).promise;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Convert page render to JPG data
-          const imgDataUrl = canvas.toDataURL('image/jpeg', 0.95);
-          const imgBytes = await fetch(imgDataUrl).then(res => res.arrayBuffer());
-          const embeddedImg = await newPdfDoc.embedJpg(imgBytes);
+          await page.render({ canvasContext: ctx, viewport }).promise;
 
-          // Create matching page dimensions
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          const imgBytes = await fetch(imgData).then(res => res.arrayBuffer());
+          const embeddedImg = await unlockedDoc.embedJpg(imgBytes);
+
           const originalViewport = page.getViewport({ scale: 1.0 });
-          const newPage = newPdfDoc.addPage([originalViewport.width, originalViewport.height]);
+          const newPage = unlockedDoc.addPage([originalViewport.width, originalViewport.height]);
           newPage.drawImage(embeddedImg, {
             x: 0,
             y: 0,
@@ -809,23 +763,27 @@
           });
         }
 
-        updateProgress(90, t('progress_finalizing'));
-        finalDecryptedBytes = await newPdfDoc.save();
-      } else {
-        throw new Error('PDF-Lib serialization engine unavailable');
+        updateProgress(95, t('progress_finalizing'));
+        finalDecryptedBytes = await unlockedDoc.save();
       }
 
       updateProgress(100, 'Complete!');
 
       // Step 3: Success Download Area Setup
       const outputCustomName = outputFilenameInput ? outputFilenameInput.value.trim() : '';
-      const finalFileName = (outputCustomName ? outputCustomName : `${originalBaseName}-unlocked`) + '.pdf';
+      let finalFileName = outputCustomName ? outputCustomName : `${originalBaseName}-unlocked`;
+      if (!finalFileName.toLowerCase().endsWith('.pdf')) {
+        finalFileName += '.pdf';
+      }
 
       decryptedPdfBlob = new Blob([finalDecryptedBytes], { type: 'application/pdf' });
       decryptedPdfName = finalFileName;
 
       if (unlockedFilenameDisplay) unlockedFilenameDisplay.textContent = finalFileName;
       if (unlockedFilesizeDisplay) unlockedFilesizeDisplay.textContent = formatBytes(decryptedPdfBlob.size);
+
+      // Auto trigger download
+      triggerUnlockedDownload();
 
       setTimeout(() => {
         setLoadingState(false);
@@ -837,6 +795,7 @@
     } catch (err) {
       console.error('Decryption execution error:', err);
       showInlineAlert(t('error_decryption_failed') + (err.message || err.toString()), 'error');
+      showToast(t('error_decryption_failed') + (err.message || err.toString()), 'error');
       setLoadingState(false);
     } finally {
       isProcessing = false;
@@ -893,6 +852,7 @@
   function resetWorkspace() {
     currentFile = null;
     originalPdfBytes = null;
+    window.originalPdfBytes = null;
     originalBaseName = '';
     isEncryptedDoc = true;
     isProcessing = false;
