@@ -380,7 +380,8 @@
     try {
       const arrayBuffer = await file.arrayBuffer();
       rawPdfBytes = arrayBuffer;
-      await processLoadedPdf(arrayBuffer, file.name, formatBytes(file.size));
+      window.uploadedPdfBytes = arrayBuffer;
+      await processLoadedPdf(arrayBuffer.slice(0), file.name, formatBytes(file.size));
     } catch (err) {
       console.error("Error reading PDF file:", err);
       const dict = translations[currentLang] || translations.en;
@@ -585,8 +586,9 @@
       }
 
       const sampleBytes = await samplePdfDoc.save();
-      rawPdfBytes = sampleBytes.buffer;
-      await processLoadedPdf(sampleBytes.buffer, "sample_report.pdf", formatBytes(sampleBytes.byteLength));
+      rawPdfBytes = sampleBytes.buffer.slice(0);
+      window.uploadedPdfBytes = sampleBytes.buffer.slice(0);
+      await processLoadedPdf(sampleBytes.buffer.slice(0), "sample_report.pdf", formatBytes(sampleBytes.byteLength));
 
       const dict = translations[currentLang] || translations.en;
       showToast(dict.toast_sample, 'sparkles');
@@ -626,8 +628,8 @@
       const dict = translations[currentLang] || translations.en;
       progressStatusText.textContent = dict.progress_rendering;
 
-      // Load document with PDF.js
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      // Load document with PDF.js - pass sliced clone to prevent buffer detachment
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
       pdfJsDoc = await loadingTask.promise;
       totalOriginalPages = pdfJsDoc.numPages;
 
@@ -639,9 +641,10 @@
         const origIndex = p - 1;
 
         const card = document.createElement('div');
-        card.className = 'page-card';
+        card.className = 'page-card thumbnail-card';
         card.id = `page-card-${origIndex}`;
         card.dataset.origIndex = origIndex;
+        card.setAttribute('data-original-index', origIndex);
 
         card.innerHTML = `
           <div class="page-card-header">
@@ -769,7 +772,7 @@
     if (!item) return;
 
     item.deleted = true;
-    item.cardEl.classList.add('hidden');
+    item.cardEl.classList.add('hidden', 'deleted');
 
     updateSequenceAndCounters();
 
@@ -779,7 +782,7 @@
 
   // Update Sequence Badges, Counters, and Toolbar Action states
   function updateSequenceAndCounters() {
-    const activeCards = Array.from(pagesGrid.querySelectorAll('.page-card:not(.hidden)'));
+    const activeCards = Array.from(new Set(pagesGrid.querySelectorAll('.page-card:not(.hidden):not(.deleted), .thumbnail-card:not(.hidden):not(.deleted)')));
     const visibleCount = activeCards.length;
     const deletedCount = totalOriginalPages - visibleCount;
 
@@ -811,7 +814,7 @@
 
   // Localized Text Updates for Counters
   function updateCountersAndBadges(visible, deleted) {
-    const activeCards = Array.from(pagesGrid.querySelectorAll('.page-card:not(.hidden)'));
+    const activeCards = Array.from(new Set(pagesGrid.querySelectorAll('.page-card:not(.hidden):not(.deleted), .thumbnail-card:not(.hidden):not(.deleted)')));
     const visibleCount = (typeof visible === 'number') ? visible : activeCards.length;
     const deletedCount = (typeof deleted === 'number') ? deleted : (totalOriginalPages - visibleCount);
 
@@ -841,7 +844,7 @@
     btnRestoreDeleted.addEventListener('click', () => {
       pageItems.forEach(item => {
         item.deleted = false;
-        item.cardEl.classList.remove('hidden');
+        item.cardEl.classList.remove('hidden', 'deleted');
       });
 
       updateSequenceAndCounters();
@@ -859,7 +862,7 @@
 
       pageItems.forEach(item => {
         item.deleted = false;
-        item.cardEl.classList.remove('hidden');
+        item.cardEl.classList.remove('hidden', 'deleted');
         pagesGrid.appendChild(item.cardEl);
       });
 
@@ -873,7 +876,7 @@
   // Reverse Current Active Sequence
   if (btnReverseOrder) {
     btnReverseOrder.addEventListener('click', () => {
-      const activeCards = Array.from(pagesGrid.querySelectorAll('.page-card:not(.hidden)'));
+      const activeCards = Array.from(new Set(pagesGrid.querySelectorAll('.page-card:not(.hidden):not(.deleted), .thumbnail-card:not(.hidden):not(.deleted)')));
       if (activeCards.length <= 1) return;
 
       activeCards.reverse().forEach(card => {
@@ -890,20 +893,22 @@
   // Save & Download Lossless Reordered PDF via PDF-Lib
   if (btnSavePdf) {
     btnSavePdf.addEventListener('click', async () => {
-      if (!rawPdfBytes || isProcessing) return;
+      const bytesToUse = rawPdfBytes || window.uploadedPdfBytes;
+      if (!bytesToUse || isProcessing) return;
 
-      const activeCards = Array.from(pagesGrid.querySelectorAll('.page-card:not(.hidden)'));
-      const activeIndices = activeCards.map(c => parseInt(c.dataset.origIndex, 10));
-
-      const dict = translations[currentLang] || translations.en;
-
-      if (activeIndices.length === 0) {
-        showToast(dict.toast_error_no_pages, 'alert-triangle');
+      const pdfLib = window.PDFLib || (typeof PDFLib !== 'undefined' ? PDFLib : null);
+      if (!pdfLib) {
+        showToast("PDF-Lib engine loading, please try again in a moment.", 'alert-circle');
         return;
       }
 
-      if (!window.PDFLib) {
-        showToast("PDF-Lib engine loading, please try again in a moment.", 'alert-circle');
+      const dict = translations[currentLang] || translations.en;
+
+      // Extract remaining non-deleted thumbnail cards in their current DOM order
+      const cards = Array.from(new Set(pagesGrid.querySelectorAll('.page-card:not(.hidden):not(.deleted), .thumbnail-card:not(.hidden):not(.deleted)')));
+
+      if (cards.length === 0) {
+        showToast(dict.toast_error_no_pages, 'alert-triangle');
         return;
       }
 
@@ -918,17 +923,34 @@
         progressPercent.textContent = '20%';
         progressStatusText.textContent = dict.progress_saving;
 
-        // Load original source PDF into PDFLib
-        const srcDoc = await window.PDFLib.PDFDocument.load(rawPdfBytes, { ignoreEncryption: true });
+        // Load original source PDF cleanly using sliced buffer
+        const srcDoc = await pdfLib.PDFDocument.load(bytesToUse.slice(0), { ignoreEncryption: true });
+        const totalPages = srcDoc.getPageCount();
+
+        // Ensure safe zero-based integer indices
+        const targetZeroBasedIndices = cards.map(card => {
+          const rawAttr = card.getAttribute('data-original-index') ?? card.dataset.origIndex;
+          let orig = parseInt(rawAttr, 10);
+          if (isNaN(orig)) return -1;
+          // If stored 1-based (1..totalPages), subtract 1. If stored 0-based (0..totalPages-1), ensure within bounds.
+          if (orig > 0 && orig >= totalPages) {
+            orig = orig - 1;
+          }
+          return orig;
+        }).filter(idx => typeof idx === 'number' && Number.isInteger(idx) && idx >= 0 && idx < totalPages);
+
+        if (targetZeroBasedIndices.length === 0) {
+          throw new Error("No valid page indices selected for compilation.");
+        }
 
         progressBarFill.style.width = '50%';
         progressPercent.textContent = '50%';
 
-        // Create clean destination PDF
-        const newDoc = await window.PDFLib.PDFDocument.create();
+        // Create clean destination PDF document
+        const newDoc = await pdfLib.PDFDocument.create();
 
         // Copy vector pages in the user-arranged sequence
-        const copiedPages = await newDoc.copyPages(srcDoc, activeIndices);
+        const copiedPages = await newDoc.copyPages(srcDoc, targetZeroBasedIndices);
         copiedPages.forEach(p => newDoc.addPage(p));
 
         progressBarFill.style.width = '85%';
@@ -941,7 +963,7 @@
         progressPercent.textContent = '100%';
         progressStatusText.textContent = dict.progress_complete;
 
-        // Prepare downloadable Blob
+        // Prepare downloadable Blob and Object URL
         const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
         if (compiledPdfBlobUrl) {
           URL.revokeObjectURL(compiledPdfBlobUrl);
@@ -994,6 +1016,7 @@
   // Reset Entire Workspace
   function resetWorkspace() {
     rawPdfBytes = null;
+    window.uploadedPdfBytes = null;
     pdfJsDoc = null;
     totalOriginalPages = 0;
     pageItems = [];
