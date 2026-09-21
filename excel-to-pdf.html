@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EZMPWQ6JGL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-EZMPWQ6JGL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Excel to PDF - Convert XLSX & XLS Spreadsheets to PDF Online Free</title>
+  <meta name="title" content="Excel to PDF - Convert XLSX & XLS Spreadsheets to PDF Online Free">
+  <meta name="description"
+    content="Convert Microsoft Excel spreadsheets (.xlsx, .xls, .csv) into clean, printable PDF documents directly in your browser. 100% secure and private.">
+  <meta name="keywords"
+    content="excel to pdf, convert excel to pdf online, xlsx to pdf, xls to pdf, csv to pdf, convert spreadsheet to pdf free, client side excel converter, convert xlsx without upload">
+  <meta name="author" content="PDFNetizen">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://pdfnetizen.com/excel-to-pdf.html">
+
+  <!-- Open Graph / Facebook Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pdfnetizen.com/excel-to-pdf.html">
+  <meta property="og:title" content="Excel to PDF - Convert XLSX & XLS Spreadsheets to PDF Online Free">
+  <meta property="og:description"
+    content="Convert Microsoft Excel spreadsheets (.xlsx, .xls, .csv) into clean, printable PDF documents directly in your browser. 100% secure and private.">
+  <meta property="og:site_name" content="PDFNetizen">
+  <meta property="og:image" content="https://pdfnetizen.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ar_AR">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://pdfnetizen.com/excel-to-pdf.html">
+  <meta name="twitter:title" content="Excel to PDF - Convert XLSX & XLS Spreadsheets to PDF Online Free">
+  <meta name="twitter:description"
+    content="Convert Microsoft Excel spreadsheets (.xlsx, .xls, .csv) into clean, printable PDF documents directly in your browser. 100% secure and private.">
+  <meta name="twitter:image" content="https://pdfnetizen.com/og-image.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- SheetJS (xlsx) for in-browser spreadsheet parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- jsPDF for client-side PDF document generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- jsPDF-AutoTable plugin for structured multi-page table generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Structured Data (JSON-LD) for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://pdfnetizen.com/excel-to-pdf.html#webapp",
+        "name": "Excel to PDF Converter Online Free",
+        "url": "https://pdfnetizen.com/excel-to-pdf.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All modern web browsers (Chrome, Firefox, Safari, Edge, Opera)",
+        "browserRequirements": "Requires JavaScript and HTML5 support",
+        "description": "Free online client-side tool to convert Microsoft Excel spreadsheets (.xlsx, .xls, .csv) into clean, formatted PDF documents with 100% privacy and zero server uploads.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "100% Client-Side In-Browser Excel to PDF Conversion",
+          "Supports .xlsx, .xls, and .csv Formats",
+          "Zero Server Uploads & Total Financial Data Privacy",
+          "Multi-Sheet Workbook Support with Tab Switching",
+          "Landscape & Portrait Page Orientation Controls",
+          "Automatic Column Fitting & Multi-Page AutoTable Wrapping",
+          "Repeat Header Rows on Multi-Page Documents",
+          "Instant On-Device Generation via jsPDF and SheetJS"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://pdfnetizen.com/excel-to-pdf.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I convert an Excel spreadsheet to PDF online for free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Drag and drop your Excel (.xlsx, .xls) or CSV file into the upload area, select your desired sheet, choose page orientation (Landscape or Portrait), and click 'Convert to PDF & Download'."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my financial spreadsheets uploaded to any server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Never. All spreadsheet parsing and PDF document rendering execute 100% locally in your web browser memory using SheetJS and jsPDF. Your sensitive numbers and data never leave your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I convert workbooks with multiple worksheets?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! The tool automatically detects all sheets in your Excel workbook. You can convert specific individual sheets or convert all sheets into a single unified PDF document."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will wide tables fit onto a single page width?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Landscape mode is enabled by default for wide data tables, and the layout engine automatically scales column widths and wraps cell text cleanly across pages."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the converter support CSV and older .XLS files?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, our client-side parsing engine seamlessly supports modern Excel workbooks (.xlsx), legacy spreadsheets (.xls), and comma-separated values (.csv)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there any file limit or watermarks added?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The tool is 100% free with unlimited conversions, zero subscriptions, and no watermarks added to your exported documents."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      /* Core Dark Color Palette */
+      --bg-main: #09090b;
+      --bg-primary: #0d0b18;
+      --bg-secondary: #161226;
+      --bg-surface: rgba(26, 20, 48, 0.75);
+      --bg-surface-elevated: rgba(36, 28, 68, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+
+      /* Theme Accents (Emerald / Excel Green Glow) */
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --primary-glow: rgba(16, 185, 129, 0.35);
+      --primary-subtle: rgba(16, 185, 129, 0.12);
+      --accent-emerald: #10b981;
+      --accent-teal: #14b8a6;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-indigo: #6366f1;
+
+      /* Typography & Neutrals */
+      --text-main: #ffffff;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #10b981;
+
+      /* Geometry & Spacing */
+      --nav-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top center, #052e16 0%, var(--bg-main) 60%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-left: 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .btn i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-lg {
+      padding: 13px 26px;
+      font-size: 1rem;
+      border-radius: var(--radius-lg);
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+
+    /* Hero Header */
+    .hero-header {
+      padding: 3.5rem 1rem 2.5rem;
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-badge i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-header h1 {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .hero-header p {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      margin-top: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* Upload Dropzone */
+    .dropzone-card {
+      background: var(--card-bg);
+      border: 2px dashed rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2.5rem;
+    }
+
+    .dropzone-card:hover,
+    .dropzone-card.drag-over {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.05);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px var(--primary-glow);
+    }
+
+    .dropzone-icon-box {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+    }
+
+    .dropzone-icon-box i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .dropzone-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 480px;
+      margin: 0 auto 1.75rem;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dropzone-footer-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .dropzone-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dropzone-pill i {
+      width: 14px;
+      height: 14px;
+      color: #10b981;
+    }
+
+    /* Workspace Panel */
+    .workspace-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+      margin-bottom: 2.5rem;
+    }
+
+    .workspace-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .file-meta-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .file-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .file-icon-box i {
+      width: 24px;
+      height: 24px;
+    }
+
+    .file-meta-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .file-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+
+    .file-details {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+    }
+
+    .file-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 0.75rem;
+    }
+
+    /* Sheet Selector Tabs */
+    .sheet-tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sheet-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+
+    .sheet-tab-btn:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .sheet-tab-btn.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #34d399;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Table Preview Section */
+    .table-preview-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .table-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .table-scroll-wrap {
+      max-height: 280px;
+      overflow: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .preview-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      text-align: left;
+    }
+
+    .preview-data-table th {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .preview-data-table td {
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .preview-data-table tr:nth-child(even) td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Settings & Conversion Controls */
+    .conversion-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-toggle-choice {
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .btn-toggle-choice:hover {
+      color: var(--text-main);
+    }
+
+    .btn-toggle-choice.active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    }
+
+    .form-select,
+    .form-input {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 9px 12px;
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color var(--transition-fast);
+    }
+
+    .form-select:focus,
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+      margin-top: 4px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      accent-color: #10b981;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Action Bar & Progress Box */
+    .action-bar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-action-main {
+      min-width: 280px;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .progress-box {
+      width: 100%;
+      max-width: 600px;
+      padding: 1.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: var(--radius-full);
+      transition: width 0.25s ease;
+    }
+
+    /* Success / Download Card */
+    .success-card {
+      text-align: center;
+      padding: 3rem 2rem;
+      max-width: 600px;
+      margin: 2rem auto 0;
+      background: rgba(16, 185, 129, 0.04);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(16, 185, 129, 0.15);
+    }
+
+    .success-icon-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.2));
+      border: 2px solid #10b981;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+      animation: bounceSuccess 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes bounceSuccess {
+      0% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+
+      70% {
+        transform: scale(1.15);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .success-icon-badge i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .success-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .success-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 440px;
+      margin: 0 auto 2rem;
+    }
+
+    .success-download-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .download-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .download-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .download-filename {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 340px;
+    }
+
+    .download-filesize {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .success-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* SEO 3-Step Guide */
+    .seo-guide-section {
+      padding: 4.5rem 0 3.5rem;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      transition: all var(--transition-fast);
+      backdrop-filter: blur(10px);
+    }
+
+    .step-card:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 3.5rem 0 5rem;
+      border-top: 1px solid var(--border-subtle);
+      width: 100%;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .faq-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      backdrop-filter: blur(10px);
+      transition: all var(--transition-fast);
+    }
+
+    .faq-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 0.75rem;
+    }
+
+    .faq-question i {
+      width: 20px;
+      height: 20px;
+      color: #10b981;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .faq-question h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .faq-answer {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      padding-left: 32px;
+    }
+
+    /* Ad Slot Placeholder */
+    .ad-container {
+      max-width: 1100px;
+      margin: 0 auto 3.5rem;
+      padding: 0 2rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ad-slot-horizontal {
+      width: 100%;
+      max-width: 728px;
+      min-height: 90px;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .ad-slot-horizontal:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .ad-slot-horizontal i {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      color: var(--primary);
+    }
+
+    /* Universal Footer */
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .footer-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge i {
+      width: 13px;
+      height: 13px;
+      color: #10b981;
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 16px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.15);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .cookie-banner.hidden {
+      display: none !important;
+    }
+
+    @keyframes cookieSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .cookie-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .cookie-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      flex-shrink: 0;
+    }
+
+    .cookie-icon-wrapper i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cookie-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .cookie-text a {
+      color: #34d399;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-left: 4px;
+    }
+
+    .cookie-text a:hover {
+      color: #a7f3d0;
+    }
+
+    .btn-cookie-accept {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-cookie-accept:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-1px);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 420px;
+      font-size: 0.9rem;
+    }
+
+    .toast.hidden {
+      display: none !important;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* RTL Layout Support */
+    [dir="rtl"] {
+      direction: rtl;
+    }
+
+    [dir="rtl"],
+    [dir="rtl"] body {
+      font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    [dir="rtl"] .hero-header h1,
+    [dir="rtl"] .brand-title,
+    [dir="rtl"] .footer-brand-title,
+    [dir="rtl"] .dropzone-title,
+    [dir="rtl"] .section-title,
+    [dir="rtl"] .step-card h3,
+    [dir="rtl"] .faq-question h3,
+    [dir="rtl"] .success-card h3 {
+      font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Outfit', sans-serif;
+    }
+
+    [dir="rtl"] .brand-badge {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+
+    [dir="rtl"] .faq-answer {
+      padding-left: 0;
+      padding-right: 32px;
+    }
+
+    [dir="rtl"] .preview-data-table {
+      text-align: right;
+    }
+
+    [dir="rtl"] .success-download-box {
+      text-align: right;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 30px;
+    }
+
+    [dir="rtl"] .cookie-banner {
+      left: 50%;
+      transform: translateX(50%);
+    }
+
+    [dir="rtl"] .cookie-text a {
+      margin-left: 0;
+      margin-right: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .hero-header {
+        padding: 2.5rem 1rem 1.75rem;
+      }
+
+      .hero-header h1 {
+        font-size: 2.2rem;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .workspace-panel {
+        padding: 1.25rem;
+      }
+
+      .conversion-settings-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top,
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+      }
+
+      .cookie-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+        bottom: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .success-download-box {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
+      .download-meta {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" style="display: none;" />
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="top-nav" id="top-nav">
+    <a href="index.html" class="nav-brand" title="PDFNetizen Platform">
+      <div class="brand-icon-wrapper">
+        <i data-lucide="file-spreadsheet" class="brand-icon"></i>
+      </div>
+      <div class="brand-text">
+        <h1 class="brand-title">PDF <span class="gradient-text">Netizen</span></h1>
+        <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <!-- Reset Workspace Button -->
+      <button id="btn-header-reset" class="btn btn-secondary" title="Reset workspace" disabled>
+        <i data-lucide="rotate-ccw"></i>
+        <span data-i18n="nav_reset">Reset</span>
+      </button>
+
+      <!-- Language Toggle Button -->
+      <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+        aria-label="Toggle language">
+        <i data-lucide="globe"></i>
+        <span id="lang-toggle-text">العربية</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-wrapper">
+    <div class="container">
+
+      <!-- Hero Header Section -->
+      <section class="hero-header">
+        <div class="hero-badge">
+          <i data-lucide="shield-check"></i>
+          <span data-i18n="hero_badge">100% Client-Side Excel to PDF Conversion • Zero Uploads</span>
+        </div>
+        <h1 data-i18n="hero_title">Convert <span class="gradient-text">Excel to PDF</span> Online</h1>
+        <p data-i18n="hero_subtitle">Convert Microsoft Excel spreadsheets (.xlsx, .xls, .csv) into clean, printable PDF
+          documents directly in your browser. 100% secure and private.</p>
+      </section>
+
+      <!-- Drag & Drop Upload Zone -->
+      <section id="dropzone" class="dropzone-card" tabindex="0" role="button" aria-label="Upload Excel Document">
+        <div class="dropzone-icon-box">
+          <i data-lucide="file-spreadsheet"></i>
+        </div>
+        <h2 class="dropzone-title" data-i18n="dropzone_title">Drop your Excel spreadsheet here</h2>
+        <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">Select or drag & drop any .xlsx, .xls, or .csv workbook
+          to convert into a structured, printable PDF document.</p>
+
+        <div class="dropzone-actions">
+          <button type="button" class="btn btn-primary btn-lg" id="btn-browse-file">
+            <i data-lucide="file-up"></i>
+            <span data-i18n="btn_browse_file">Browse Excel File</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-lg" id="btn-load-sample">
+            <i data-lucide="sparkles"></i>
+            <span data-i18n="btn_load_sample">Try Sample Spreadsheet</span>
+          </button>
+        </div>
+
+        <div class="dropzone-footer-pills">
+          <span class="dropzone-pill">
+            <i data-lucide="table"></i>
+            <span data-i18n="pill_multi_sheet">Multi-Sheet Workbook Support</span>
+          </span>
+          <span class="dropzone-pill">
+            <i data-lucide="layout"></i>
+            <span data-i18n="pill_auto_fit">Landscape & Auto Column Fit</span>
+          </span>
+          <span class="dropzone-pill">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="pill_client_privacy">100% In-Browser Privacy</span>
+          </span>
+        </div>
+      </section>
+
+      <!-- Interactive Spreadsheet Workspace -->
+      <section id="workspace-panel" class="workspace-panel hidden" aria-live="polite">
+
+        <!-- File Meta Header Bar -->
+        <div class="workspace-header">
+          <div class="file-meta-badge">
+            <div class="file-icon-box">
+              <i data-lucide="sheet"></i>
+            </div>
+            <div class="file-meta-info">
+              <div class="file-name" id="file-name-display">spreadsheet.xlsx</div>
+              <div class="file-details">
+                <span id="file-size-display">0 KB</span>
+                <span>•</span>
+                <span class="file-tag" id="sheets-count-badge">
+                  <i data-lucide="layers" style="width: 12px; height: 12px;"></i>
+                  <span id="sheets-count-text">1 Sheet</span>
+                </span>
+                <span class="file-tag" id="rows-count-badge">
+                  <i data-lucide="list" style="width: 12px; height: 12px;"></i>
+                  <span id="rows-count-text">0 Rows</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="workspace-actions">
+            <button type="button" class="btn btn-secondary" id="btn-change-file">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="btn_change_file">Change File</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sheet Selector Tabs Bar -->
+        <div id="sheet-tabs-bar" class="sheet-tabs-bar">
+          <!-- Dynamically populated sheet buttons -->
+        </div>
+
+        <!-- Table Preview Box -->
+        <div class="table-preview-card">
+          <div class="table-preview-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="eye" style="width: 16px; height: 16px; color: var(--primary);"></i>
+              <span id="preview-sheet-title">Sheet Preview</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--text-muted);" id="preview-dimensions-text">Showing active rows & columns</span>
+          </div>
+
+          <div class="table-scroll-wrap" id="table-scroll-wrap">
+            <table class="preview-data-table" id="preview-data-table">
+              <!-- Dynamically rendered table headers & rows -->
+            </table>
+          </div>
+        </div>
+
+        <!-- Conversion Customization Settings Grid -->
+        <div class="conversion-settings-grid">
+
+          <!-- Setting 1: Page Orientation -->
+          <div class="form-group">
+            <label class="form-label" data-i18n="label_orientation">Page Orientation</label>
+            <div class="btn-toggle-group">
+              <button type="button" class="btn-toggle-choice active" id="opt-orientation-landscape" data-orientation="landscape">
+                <i data-lucide="rectangle-horizontal"></i>
+                <span data-i18n="opt_landscape">Landscape (Recommended)</span>
+              </button>
+              <button type="button" class="btn-toggle-choice" id="opt-orientation-portrait" data-orientation="portrait">
+                <i data-lucide="rectangle-vertical"></i>
+                <span data-i18n="opt_portrait">Portrait</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Setting 2: Page Paper Size -->
+          <div class="form-group">
+            <label for="select-page-size" class="form-label" data-i18n="label_page_size">Paper Size</label>
+            <select id="select-page-size" class="form-select">
+              <option value="a4" selected>A4 (210 × 297 mm)</option>
+              <option value="letter">US Letter (8.5 × 11 in)</option>
+              <option value="legal">US Legal (8.5 × 14 in)</option>
+              <option value="a3">A3 (297 × 420 mm)</option>
+            </select>
+          </div>
+
+          <!-- Setting 3: Table Styling Theme -->
+          <div class="form-group">
+            <label for="select-table-theme" class="form-label" data-i18n="label_table_theme">Table Styling Theme</label>
+            <select id="select-table-theme" class="form-select">
+              <option value="emerald" selected>Emerald Modern (Grid & Header Fill)</option>
+              <option value="striped">Classic Slate (Alternating Rows)</option>
+              <option value="plain">Clean Minimalist (Light Borders)</option>
+            </select>
+          </div>
+
+          <!-- Setting 4: Conversion Scope & Headers -->
+          <div class="form-group">
+            <label class="form-label" data-i18n="label_options">Options</label>
+            <label class="checkbox-label" for="check-repeat-headers">
+              <input type="checkbox" id="check-repeat-headers" checked />
+              <span data-i18n="label_repeat_headers">Repeat header row on each page</span>
+            </label>
+            <label class="checkbox-label" for="check-fit-width">
+              <input type="checkbox" id="check-fit-width" checked />
+              <span data-i18n="label_fit_width">Fit columns to page width</span>
+            </label>
+          </div>
+
+          <!-- Setting 5: Output Filename -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="output-filename-input" class="form-label" data-i18n="label_output_filename">Output File Name</label>
+            <input type="text" id="output-filename-input" class="form-input" placeholder="spreadsheet_converted" />
+          </div>
+
+        </div>
+
+        <!-- Action Button & Progress Bar -->
+        <div class="action-bar-container">
+          <button type="button" class="btn btn-primary btn-lg btn-action-main" id="btn-convert-excel">
+            <div class="spinner hidden" id="btn-convert-spinner"></div>
+            <i data-lucide="file-down" id="btn-convert-icon"></i>
+            <span id="btn-convert-text" data-i18n="btn_convert_excel">Convert to PDF & Download</span>
+          </button>
+
+          <div id="conversion-progress" class="progress-box hidden">
+            <div class="progress-header">
+              <span id="progress-status-text" data-i18n="progress_converting">Parsing sheet and formatting table...</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Download Card -->
+        <div id="success-download-card" class="success-card hidden">
+          <div class="success-icon-badge">
+            <i data-lucide="check"></i>
+          </div>
+          <h3 data-i18n="success_title">Excel Converted to PDF Successfully!</h3>
+          <p data-i18n="success_desc">Your spreadsheet has been compiled into a clean, structured PDF document with high-quality vector typography. Download your file below.</p>
+
+          <div class="success-download-box">
+            <div class="download-meta">
+              <div class="download-icon">
+                <i data-lucide="file-check"></i>
+              </div>
+              <div>
+                <div class="download-filename" id="pdf-filename-display">spreadsheet.pdf</div>
+                <div class="download-filesize" id="pdf-filesize-display">0 KB</div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btn-download-pdf">
+              <i data-lucide="download"></i>
+              <span data-i18n="btn_download_pdf">Download PDF</span>
+            </button>
+          </div>
+
+          <div class="success-actions">
+            <button type="button" class="btn btn-secondary" id="btn-convert-another">
+              <i data-lucide="plus-circle"></i>
+              <span data-i18n="btn_convert_another">Convert Another Spreadsheet</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Ad Slot Placeholder Section (728x90) -->
+      <div class="ad-container">
+        <div class="ad-slot-horizontal" id="ad-slot-horizontal" role="complementary" aria-label="Advertisement">
+          <i data-lucide="layout"></i>
+          <span data-i18n="ad_space_label">Advertisement Space (728x90)</span>
+        </div>
+      </div>
+
+      <!-- SEO 3-Step Guide Section -->
+      <section class="seo-guide-section" aria-labelledby="guide-heading">
+        <div class="section-header-center">
+          <div class="hero-badge">
+            <i data-lucide="sparkles"></i>
+            <span data-i18n="guide_badge">Instant Table Conversion</span>
+          </div>
+          <h2 class="section-title" id="guide-heading" data-i18n="guide_title">How to Convert Excel Spreadsheets to PDF Online</h2>
+          <p class="section-subtitle" data-i18n="guide_subtitle">Transform complex spreadsheets, budgets, and invoices into clean PDF documents in three easy steps.</p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-badge">1</div>
+            <h3 data-i18n="step1_title">Upload Excel Workbook</h3>
+            <p data-i18n="step1_desc">Drag and drop your .xlsx, .xls, or .csv spreadsheet file into the upload zone. SheetJS reads the data completely in local browser memory.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-badge">2</div>
+            <h3 data-i18n="step2_title">Preview & Configure Layout</h3>
+            <p data-i18n="step2_desc">Select your desired worksheet tab, choose Landscape or Portrait orientation, pick your table theme, and adjust column fitting options.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-badge">3</div>
+            <h3 data-i18n="step3_title">Download Printable PDF</h3>
+            <p data-i18n="step3_desc">Click 'Convert to PDF & Download' to generate a formatted, multi-page vector PDF table ready for printing and sharing.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section" aria-labelledby="faq-heading">
+        <div class="section-header-center">
+          <div class="hero-badge">
+            <i data-lucide="help-circle"></i>
+            <span data-i18n="faq_badge">Got Questions?</span>
+          </div>
+          <h2 class="section-title" id="faq-heading" data-i18n="faq_title">Frequently Asked Questions</h2>
+          <p class="section-subtitle" data-i18n="faq_subtitle">Everything you need to know about our free client-side Excel to PDF converter.</p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q1">Are my financial spreadsheets uploaded to any remote server?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a1">Never. All workbook parsing and PDF document generation occur 100% locally in your web browser memory using SheetJS and jsPDF. Your confidential numbers, salaries, and customer records never leave your computer.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q2">Can I convert workbooks with multiple worksheets?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a2">Yes! The tool automatically detects all sheets in your Excel workbook. You can switch between sheet tabs to preview and convert individual sheets or compile all sheets into a single document.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q3">Will wide spreadsheets fit properly onto PDF pages?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a3">Yes. Landscape orientation is enabled by default to provide maximum width for wide data columns, and our layout algorithm automatically scales columns and wraps text across multi-page tables.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q4">Which spreadsheet file formats are supported?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a4">We support modern Microsoft Excel files (.xlsx), legacy Excel spreadsheets (.xls), and standard comma-separated text files (.csv).</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q5">Are table headers repeated on every page?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a5">Yes, by default the 'Repeat header row on each page' setting is enabled, ensuring multi-page accounting ledgers and reports remain easy to read.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <h3 data-i18n="faq_q6">Is this service free to use without limits?</h3>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a6">Yes! The converter is 100% free with unlimited document conversions, no account sign-ups, and zero watermarks added to your files.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Universal Semantic Footer -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <a href="index.html" class="footer-brand" title="PDF Netizen Home">
+            <div class="brand-icon-wrapper" style="width: 30px; height: 30px;">
+              <i data-lucide="file-spreadsheet" style="width: 16px; height: 16px;"></i>
+            </div>
+            <span class="footer-brand-title">PDF <span class="gradient-text">Netizen</span></span>
+          </a>
+          <p class="footer-tagline" data-i18n="footer_tagline">100% Client-side, private, and secure document processing directly in your browser.</p>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer Navigation">
+          <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+          <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+          <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Hub. All rights reserved.</p>
+        <div class="footer-legal-badge">
+          <i data-lucide="shield-check"></i>
+          <span data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+    <div class="cookie-content">
+      <div class="cookie-icon-wrapper">
+        <i data-lucide="cookie"></i>
+      </div>
+      <p class="cookie-text">
+        <span data-i18n="cookie_consent_text">We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</span>
+        <a href="privacy.html" data-i18n="cookie_learn_more">Privacy Policy</a>
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-cookie-accept" id="btn-accept-cookies"
+        data-i18n="cookie_accept_btn">Accept</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+    <i id="toast-icon" data-lucide="info"></i>
+    <span id="toast-message">Notification message</span>
+  </div>
+
+  <!-- Main Tool Engine Script -->
+  <script src="excel-to-pdf.js"></script>
+</body>
+
+</html>
