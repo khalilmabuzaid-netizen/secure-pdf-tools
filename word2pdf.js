@@ -463,6 +463,7 @@
     try {
       currentArrayBuffer = arrayBuffer;
       currentFile = { name: fileName, size: fileSize };
+      window.uploadedFileName = fileName;
 
       // 1. Convert DOCX to HTML
       const result = await window.mammoth.convertToHtml({ arrayBuffer });
@@ -544,8 +545,11 @@
   async function executeConversion() {
     if (!parsedHtmlContent || isConverting) return;
 
-    if (!window.html2pdf) {
-      showToast(t('toast_error') + ' (html2pdf library missing)', 'error');
+    const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF || null);
+    const hasHtml2Canvas = !!window.html2canvas;
+
+    if (!jsPDFClass || !hasHtml2Canvas) {
+      showToast(t('toast_error') + ' (PDF rendering libraries loading, please wait)', 'error');
       return;
     }
 
@@ -569,91 +573,136 @@
       }
     };
 
+    const isRtl = (directionSelect && directionSelect.value === 'rtl') ||
+      (directionSelect && directionSelect.value === 'auto' && containsArabic(parsedRawText));
+
+    // 1. Dedicated print container to prevent dark mode style inheritance and ensure valid computed layout
+    const printNode = document.createElement('div');
+    printNode.id = 'word-to-pdf-print-node';
+    printNode.style.width = '794px';
+    printNode.style.padding = '40px';
+    printNode.style.background = '#ffffff';
+    printNode.style.color = '#111827';
+    printNode.style.fontFamily = isRtl
+      ? "'Cairo', 'Segoe UI Arabic', 'Tahoma', Arial, sans-serif"
+      : "'Inter', Arial, 'Segoe UI', Tahoma, sans-serif";
+    printNode.style.fontSize = '14px';
+    printNode.style.lineHeight = '1.6';
+    printNode.style.position = 'absolute';
+    printNode.style.left = '-9999px';
+    printNode.style.top = '0';
+    printNode.style.boxSizing = 'border-box';
+
+    if (isRtl) {
+      printNode.setAttribute('dir', 'rtl');
+      printNode.style.textAlign = 'right';
+    } else {
+      printNode.setAttribute('dir', 'ltr');
+      printNode.style.textAlign = 'left';
+    }
+
+    printNode.innerHTML = parsedHtmlContent;
+
+    // Apply explicit clean printable typography & table styles to avoid dark-theme conflicts
+    printNode.querySelectorAll('*').forEach(el => {
+      el.style.boxSizing = 'border-box';
+    });
+
+    printNode.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(h => {
+      h.style.color = '#1e3a8a';
+      h.style.marginTop = '14pt';
+      h.style.marginBottom = '6pt';
+      h.style.fontWeight = '700';
+    });
+
+    printNode.querySelectorAll('p, span, div, li').forEach(el => {
+      if (!el.matches('h1, h2, h3, h4, h5, h6, th, a')) {
+        el.style.color = '#111827';
+      }
+    });
+
+    printNode.querySelectorAll('table').forEach(tbl => {
+      tbl.style.width = '100%';
+      tbl.style.borderCollapse = 'collapse';
+      tbl.style.margin = '12pt 0';
+      tbl.style.color = '#111827';
+      tbl.querySelectorAll('th, td').forEach(cell => {
+        cell.style.border = '1px solid #cbd5e1';
+        cell.style.padding = '8px 10px';
+        cell.style.color = '#111827';
+      });
+      tbl.querySelectorAll('th').forEach(th => {
+        th.style.backgroundColor = '#f1f5f9';
+        th.style.fontWeight = '600';
+      });
+    });
+
+    printNode.querySelectorAll('ul, ol').forEach(list => {
+      list.style.paddingLeft = isRtl ? '0' : '24px';
+      list.style.paddingRight = isRtl ? '24px' : '0';
+      list.style.marginBottom = '8pt';
+    });
+
+    printNode.querySelectorAll('img').forEach(img => {
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+    });
+
+    // Attach to body for html2canvas layout rendering
+    document.body.appendChild(printNode);
+
     try {
       showToast(t('toast_converting'), 'info');
-      updateProgress(25, t('word2pdf_status_parsing'));
+      updateProgress(20, t('word2pdf_status_parsing'));
 
       const format = pageFormatSelect ? pageFormatSelect.value : 'a4';
       const orientation = pageOrientationSelect ? pageOrientationSelect.value : 'portrait';
-      const marginVal = parseInt(marginsSelect ? marginsSelect.value : '12', 10);
-      const isRtl = (directionSelect && directionSelect.value === 'rtl') ||
-        (directionSelect && directionSelect.value === 'auto' && containsArabic(parsedRawText));
 
-      const originalName = currentFile ? currentFile.name : 'document.docx';
-      const baseName = originalName.replace(/\.[^/.]+$/, '');
-      const outputPdfName = `${baseName}.pdf`;
+      const pdf = new jsPDFClass({
+        orientation: orientation,
+        unit: 'pt',
+        format: format
+      });
 
-      // Prepare styled container for rendering
-      const exportElement = document.createElement('div');
-      exportElement.innerHTML = parsedHtmlContent;
-      exportElement.style.padding = '0';
-      exportElement.style.margin = '0';
-      exportElement.style.color = '#111827';
-      exportElement.style.backgroundColor = '#ffffff';
-      exportElement.style.lineHeight = '1.6';
-      exportElement.style.fontSize = '12pt';
+      updateProgress(45, t('word2pdf_status_rendering'));
 
-      if (isRtl) {
-        exportElement.setAttribute('dir', 'rtl');
-        exportElement.style.fontFamily = "'Cairo', 'Segoe UI Arabic', 'Tahoma', sans-serif";
-        exportElement.style.textAlign = 'right';
-      } else {
-        exportElement.setAttribute('dir', 'ltr');
-        exportElement.style.fontFamily = "'Inter', -apple-system, sans-serif";
-        exportElement.style.textAlign = 'left';
+      // Render clean canvas with html2canvas
+      const scaleValue = (toggleCrisp && toggleCrisp.checked) ? 2 : 1.5;
+      const canvas = await window.html2canvas(printNode, {
+        scale: scaleValue,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      updateProgress(75, t('word2pdf_status_rendering'));
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.98);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // First page
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Subsequent pages if text exceeds one page
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
 
-      // Add clean printable styles to elements
-      const headings = exportElement.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      headings.forEach(h => {
-        h.style.color = '#1e3a8a';
-        h.style.marginTop = '14pt';
-        h.style.marginBottom = '6pt';
-        h.style.fontWeight = '700';
-      });
+      updateProgress(95, "Finalizing PDF document...");
 
-      const tables = exportElement.querySelectorAll('table');
-      tables.forEach(tbl => {
-        tbl.style.width = '100%';
-        tbl.style.borderCollapse = 'collapse';
-        tbl.style.marginTop = '10pt';
-        tbl.style.marginBottom = '10pt';
-        tbl.querySelectorAll('th, td').forEach(cell => {
-          cell.style.border = '1px solid #94a3b8';
-          cell.style.padding = '6pt 8pt';
-        });
-        tbl.querySelectorAll('th').forEach(th => {
-          th.style.backgroundColor = '#f1f5f9';
-          th.style.fontWeight = '600';
-        });
-      });
-
-      updateProgress(60, t('word2pdf_status_rendering'));
-
-      const opt = {
-        margin: [marginVal, marginVal, marginVal, marginVal],
-        filename: outputPdfName,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          letterRendering: true,
-          logging: false
-        },
-        jsPDF: {
-          unit: 'mm',
-          format: format,
-          orientation: orientation
-        },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      };
-
-      // Generate PDF Blob
-      const pdfWorker = window.html2pdf().set(opt).from(exportElement);
-      const pdfBlob = await pdfWorker.output('blob');
+      const pdfBlob = pdf.output('blob');
       generatedPdfBlob = pdfBlob;
-
-      updateProgress(100, t('word2pdf_status_done'));
 
       // Calculate word & character metrics
       const words = (parsedRawText.match(/\S+/g) || []).length;
@@ -663,20 +712,30 @@
       if (statCharsCount) statCharsCount.textContent = chars.toLocaleString();
       if (statPdfSize) statPdfSize.textContent = formatBytes(pdfBlob.size);
 
+      updateProgress(100, t('word2pdf_status_done'));
+
+      const originalName = (currentFile && currentFile.name) || window.uploadedFileName || 'document.docx';
+      const baseName = originalName.replace(/\.[^/.]+$/, '');
+      const outputPdfName = `${baseName}.pdf`;
+
+      // Save PDF via jsPDF save
+      pdf.save(outputPdfName);
+
       setTimeout(() => {
         if (progressCard) progressCard.classList.add('hidden');
         if (resultsCard) resultsCard.classList.remove('hidden');
         if (resultsCard) resultsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 400);
 
-      // Auto-trigger download
-      triggerPdfDownload();
       showToast(t('toast_success'), 'success');
 
     } catch (err) {
       console.error('Word to PDF conversion failed:', err);
       showToast(t('toast_error') + ` (${err.message})`, 'error');
     } finally {
+      if (printNode.parentNode) {
+        printNode.parentNode.removeChild(printNode);
+      }
       isConverting = false;
       if (btnStartConvert) btnStartConvert.disabled = false;
       if (convertBtnIcon) {
@@ -689,7 +748,7 @@
 
   function triggerPdfDownload() {
     if (!generatedPdfBlob) return;
-    const originalName = currentFile ? currentFile.name : 'document.docx';
+    const originalName = (currentFile && currentFile.name) || window.uploadedFileName || 'document.docx';
     const baseName = originalName.replace(/\.[^/.]+$/, '');
     const outName = `${baseName}.pdf`;
 
@@ -700,7 +759,7 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    setTimeout(() => URL.revokeObjectURL(url), 6000);
   }
 
   function copyExtractedText() {
