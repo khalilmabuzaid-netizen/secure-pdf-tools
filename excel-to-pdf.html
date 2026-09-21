@@ -353,6 +353,52 @@
       border-radius: var(--radius-lg);
     }
 
+    /* Nav Divider */
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      margin: 0 4px;
+    }
+
+    /* Breadcrumbs Navigation */
+    .breadcrumb-nav {
+      padding: 1rem 0 0.5rem;
+      margin-bottom: -0.5rem;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 0;
+      margin: 0;
+    }
+
+    .breadcrumb-list a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .breadcrumb-list a:hover {
+      color: var(--text-main);
+    }
+
+    .breadcrumb-separator {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .breadcrumb-current {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
     /* Main Container */
     .main-wrapper {
       flex: 1;
@@ -1511,22 +1557,40 @@
 
   <!-- Top Sticky Navigation Bar -->
   <header class="top-nav" id="top-nav">
-    <a href="index.html" class="nav-brand" title="PDFNetizen Platform">
+    <a href="index.html" class="nav-brand" title="Return to PDF Tools Hub">
       <div class="brand-icon-wrapper">
         <i data-lucide="file-spreadsheet" class="brand-icon"></i>
       </div>
       <div class="brand-text">
-        <h1 class="brand-title">PDF <span class="gradient-text">Netizen</span></h1>
-        <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+        <span class="brand-title">PDF <span class="gradient-text">Netizen</span></span>
+        <span class="badge" data-i18n="badge_client_side">100% Client-Side</span>
       </div>
     </a>
 
-    <div class="nav-actions">
+    <nav class="nav-actions" aria-label="Main Navigation">
+      <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+        <i data-lucide="home"></i>
+        <span data-i18n="nav_home">Home</span>
+      </a>
+      <a href="annotator.html" class="btn btn-secondary" title="Open PDF Annotator">
+        <i data-lucide="file-signature"></i>
+        <span data-i18n="nav_annotator">Annotator</span>
+      </a>
+      <a href="compress.html" class="btn btn-secondary" title="Compress PDF file size">
+        <i data-lucide="minimize-2"></i>
+        <span data-i18n="nav_compress">Compress PDF</span>
+      </a>
+      <a href="split.html" class="btn btn-secondary" title="Split & Extract Pages">
+        <i data-lucide="scissors"></i>
+        <span data-i18n="nav_split">Split PDF</span>
+      </a>
       <!-- Reset Workspace Button -->
       <button id="btn-header-reset" class="btn btn-secondary" title="Reset workspace" disabled>
         <i data-lucide="rotate-ccw"></i>
         <span data-i18n="nav_reset">Reset</span>
       </button>
+
+      <div class="nav-divider"></div>
 
       <!-- Language Toggle Button -->
       <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
@@ -1534,12 +1598,23 @@
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
-    </div>
+    </nav>
   </header>
 
   <!-- Main Content Wrapper -->
   <main class="main-wrapper">
     <div class="container">
+
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumb-list">
+          <li><a href="index.html" data-i18n="breadcrumb_home">Home</a></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><a href="index.html" data-i18n="breadcrumb_tools">Tools</a></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current" aria-current="page" data-i18n="breadcrumb_current">Excel to PDF</li>
+        </ol>
+      </nav>
 
       <!-- Hero Header Section -->
       <section class="hero-header">

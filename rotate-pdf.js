@@ -18,8 +18,10 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
-      nav_merge: "Merge PDF",
+      nav_annotator: "Annotator",
+      nav_compress: "Compress PDF",
       nav_split: "Split PDF",
+      nav_merge: "Merge PDF",
       nav_pdf2jpg: "PDF to JPG",
       breadcrumb_home: "Home",
       breadcrumb_tools: "Tools",
@@ -115,8 +117,10 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
-      nav_merge: "دمج PDF",
+      nav_annotator: "المحرر",
+      nav_compress: "ضغط PDF",
       nav_split: "تقسيم PDF",
+      nav_merge: "دمج PDF",
       nav_pdf2jpg: "تحويل إلى JPG",
       breadcrumb_home: "الرئيسية",
       breadcrumb_tools: "الأدوات",
