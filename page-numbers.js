@@ -415,7 +415,7 @@
     try {
       const arrayBuffer = await file.arrayBuffer();
       rawPdfBytes = arrayBuffer;
-      await processLoadedPdf(arrayBuffer, file.name, formatBytes(file.size));
+      await processLoadedPdf(arrayBuffer.slice(0), file.name, formatBytes(file.size));
     } catch (err) {
       console.error("Error reading PDF file:", err);
       const dict = translations[currentLang] || translations.en;
@@ -433,7 +433,8 @@
 
   // Generate a multi-page sample PDF using PDFLib
   async function loadSampleDocument() {
-    if (!window.PDFLib) {
+    const pdfLib = window.PDFLib || (typeof PDFLib !== 'undefined' ? PDFLib : null);
+    if (!pdfLib) {
       showToast("PDF-Lib engine is loading, please try again in a moment.", "alert-circle");
       return;
     }
@@ -444,10 +445,10 @@
         outputFilenameInput.value = "annual_report_numbered";
       }
 
-      const samplePdfDoc = await window.PDFLib.PDFDocument.create();
-      const rgb = window.PDFLib.rgb;
-      const font = await samplePdfDoc.embedFont(window.PDFLib.StandardFonts.HelveticaBold);
-      const subFont = await samplePdfDoc.embedFont(window.PDFLib.StandardFonts.Helvetica);
+      const samplePdfDoc = await pdfLib.PDFDocument.create();
+      const rgb = pdfLib.rgb;
+      const font = await samplePdfDoc.embedFont(pdfLib.StandardFonts.HelveticaBold);
+      const subFont = await samplePdfDoc.embedFont(pdfLib.StandardFonts.Helvetica);
 
       const pageConfigs = [
         {
@@ -584,8 +585,8 @@
       }
 
       const sampleBytes = await samplePdfDoc.save();
-      rawPdfBytes = sampleBytes.buffer;
-      await processLoadedPdf(sampleBytes.buffer, "annual_report.pdf", formatBytes(sampleBytes.byteLength));
+      rawPdfBytes = sampleBytes.buffer.slice(0);
+      await processLoadedPdf(sampleBytes.buffer.slice(0), "annual_report.pdf", formatBytes(sampleBytes.byteLength));
 
       const dict = translations[currentLang] || translations.en;
       showToast(dict.toast_sample, 'sparkles');
@@ -616,8 +617,8 @@
       fileNameDisplay.textContent = name;
       fileSizeDisplay.textContent = sizeStr;
 
-      // Load with PDF.js
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      // Load with PDF.js - always pass sliced copy so worker doesn't detach buffer
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
       pdfJsDoc = await loadingTask.promise;
       totalOriginalPages = pdfJsDoc.numPages;
 
@@ -802,7 +803,7 @@
   // 5. Font Size Slider
   if (rangeFontSize && valFontSize) {
     rangeFontSize.addEventListener('input', () => {
-      settings.fontSize = parseInt(rangeFontSize.value, 10);
+      settings.fontSize = parseFloat(rangeFontSize.value) || 12;
       valFontSize.textContent = `${settings.fontSize} pt`;
       updatePreviewOverlay();
     });
@@ -811,7 +812,7 @@
   // 6. Margin Slider
   if (rangeMargin && valMargin) {
     rangeMargin.addEventListener('input', () => {
-      settings.margin = parseInt(rangeMargin.value, 10);
+      settings.margin = parseFloat(rangeMargin.value) || 30;
       valMargin.textContent = `${settings.margin} pt`;
       updatePreviewOverlay();
     });
@@ -827,17 +828,24 @@
     });
   });
 
-  // Helper: Hex Color to RGB components (0..1)
-  function hexToRgb01(hex) {
-    let cleanHex = hex.replace('#', '');
+  // Helper: Convert HEX color to PDF-Lib RGB object safely
+  function hexToPdfRgb(hex) {
+    const pdfLib = window.PDFLib || (typeof PDFLib !== 'undefined' ? PDFLib : null);
+    if (!pdfLib || !pdfLib.rgb) return { r: 0, g: 0, b: 0 };
+    if (!hex || typeof hex !== 'string') {
+      return pdfLib.rgb(0, 0, 0);
+    }
+    let cleanHex = hex.replace('#', '').trim();
     if (cleanHex.length === 3) {
       cleanHex = cleanHex.split('').map(c => c + c).join('');
     }
     const num = parseInt(cleanHex, 16);
-    const r = ((num >> 16) & 255) / 255;
-    const g = ((num >> 8) & 255) / 255;
-    const b = (num & 255) / 255;
-    return { r, g, b };
+    if (isNaN(num)) return pdfLib.rgb(0, 0, 0);
+    return pdfLib.rgb(
+      ((num >> 16) & 255) / 255,
+      ((num >> 8) & 255) / 255,
+      (num & 255) / 255
+    );
   }
 
   // Apply Page Numbers & Compile Lossless PDF via PDF-Lib
@@ -845,7 +853,8 @@
     btnApplyNumbers.addEventListener('click', async () => {
       if (!rawPdfBytes || isProcessing) return;
 
-      if (!window.PDFLib) {
+      const pdfLib = window.PDFLib || (typeof PDFLib !== 'undefined' ? PDFLib : null);
+      if (!pdfLib) {
         showToast("PDF-Lib engine is loading, please try again in a moment.", 'alert-circle');
         return;
       }
@@ -863,20 +872,19 @@
         progressPercent.textContent = '15%';
         progressStatusText.textContent = dict.progress_stamping;
 
-        // Load original document into PDF-Lib
-        const pdfDoc = await window.PDFLib.PDFDocument.load(rawPdfBytes, { ignoreEncryption: true });
-        const font = await pdfDoc.embedFont(window.PDFLib.StandardFonts.Helvetica);
+        // Load original document into PDF-Lib with clean copy to avoid detached buffer issues
+        const pdfDoc = await pdfLib.PDFDocument.load(rawPdfBytes.slice(0), { ignoreEncryption: true });
+        const font = await pdfDoc.embedFont(pdfLib.StandardFonts.Helvetica);
 
         progressBarFill.style.width = '35%';
         progressPercent.textContent = '35%';
 
         const totalPages = pdfDoc.getPageCount();
-        const startPage = settings.skipCover ? 2 : settings.startPage;
-        const firstNumber = settings.firstNumber;
-        const fontSize = settings.fontSize;
-        const margin = settings.margin;
-        const rgbColor = hexToRgb01(settings.color);
-        const textColor = window.PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b);
+        const startPage = settings.skipCover ? 2 : (parseInt(settings.startPage, 10) || 1);
+        const firstNumber = parseInt(settings.firstNumber, 10) || 1;
+        const fontSize = Math.max(6, Math.min(72, parseFloat(settings.fontSize) || 12));
+        const margin = Math.max(0, parseFloat(settings.margin) || 30);
+        const textColor = hexToPdfRgb(settings.color || '#000000');
 
         const pages = pdfDoc.getPages();
 
@@ -904,8 +912,8 @@
             const textWidth = font.widthOfTextAtSize(textStr, fontSize);
             const textHeight = font.heightAtSize(fontSize);
 
-            let x = 0;
-            let y = 0;
+            let x = margin;
+            let y = margin;
 
             // Compute coordinates in PDF coordinate space (0,0 is bottom-left)
             switch (settings.position) {
@@ -933,11 +941,18 @@
                 x = width - margin - textWidth;
                 y = margin;
                 break;
+              default:
+                x = (width - textWidth) / 2;
+                y = margin;
+                break;
             }
 
+            x = Number.isFinite(x) ? Math.max(0, x) : 30;
+            y = Number.isFinite(y) ? Math.max(0, y) : 30;
+
             page.drawText(textStr, {
-              x: Math.max(0, x),
-              y: Math.max(0, y),
+              x: x,
+              y: y,
               size: fontSize,
               font: font,
               color: textColor
@@ -996,6 +1011,7 @@
 
       } catch (err) {
         console.error("Error numbering PDF document:", err);
+        const dict = translations[currentLang] || translations.en;
         showToast(dict.toast_error_save, 'alert-circle');
       } finally {
         isProcessing = false;
