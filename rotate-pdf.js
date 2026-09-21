@@ -394,8 +394,9 @@
 
     try {
       const arrayBuffer = await file.arrayBuffer();
+      window.originalPdfBytes = arrayBuffer;
       rawPdfBuffer = arrayBuffer;
-      await processLoadedPdf(arrayBuffer, file.name, fileSize);
+      await processLoadedPdf(arrayBuffer.slice(0), file.name, fileSize);
     } catch (err) {
       console.error("Error reading PDF file:", err);
       const dict = translations[currentLang] || translations.en;
@@ -409,8 +410,9 @@
     const sampleSize = "240 KB";
 
     const samplePdfBytes = generateDemoPdfBytes();
-    rawPdfBuffer = samplePdfBytes.buffer;
-    await processLoadedPdf(samplePdfBytes.buffer, "sample_document.pdf", sampleSize);
+    window.originalPdfBytes = samplePdfBytes.buffer.slice(0);
+    rawPdfBuffer = window.originalPdfBytes;
+    await processLoadedPdf(window.originalPdfBytes.slice(0), "sample_document.pdf", sampleSize);
 
     const dict = translations[currentLang] || translations.en;
     showToast(dict.toast_sample, 'sparkles');
@@ -485,7 +487,7 @@ startxref
     }
 
     try {
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
       pdfDoc = await loadingTask.promise;
       totalPages = pdfDoc.numPages;
 
@@ -519,6 +521,7 @@ startxref
   function resetDocument() {
     pdfDoc = null;
     rawPdfBuffer = null;
+    window.originalPdfBytes = null;
     totalPages = 0;
     pageRotations = {};
     pagesGrid.innerHTML = '';
@@ -618,10 +621,15 @@ startxref
     });
   }
 
+  // Helper to normalize angles to [0, 90, 180, 270]
+  function normalizeAngle(deg) {
+    return ((deg % 360) + 360) % 360;
+  }
+
   // Rotate a single page
   function rotatePage(pageNum, deltaAngle) {
     const current = pageRotations[pageNum] || 0;
-    pageRotations[pageNum] = (current + deltaAngle + 360) % 360;
+    pageRotations[pageNum] = normalizeAngle(current + deltaAngle);
     updatePageRotationVisual(pageNum);
     updateSummaryBadge();
   }
@@ -654,7 +662,7 @@ startxref
   if (btnRotateAllLeft) {
     btnRotateAllLeft.addEventListener('click', () => {
       for (let p = 1; p <= totalPages; p++) {
-        pageRotations[p] = ((pageRotations[p] || 0) - 90 + 360) % 360;
+        pageRotations[p] = normalizeAngle((pageRotations[p] || 0) - 90);
         updatePageRotationVisual(p);
       }
       updateSummaryBadge();
@@ -666,7 +674,7 @@ startxref
   if (btnRotateAllRight) {
     btnRotateAllRight.addEventListener('click', () => {
       for (let p = 1; p <= totalPages; p++) {
-        pageRotations[p] = ((pageRotations[p] || 0) + 90) % 360;
+        pageRotations[p] = normalizeAngle((pageRotations[p] || 0) + 90);
         updatePageRotationVisual(p);
       }
       updateSummaryBadge();
@@ -706,7 +714,8 @@ startxref
   // Save & Download Lossless PDF via pdf-lib
   if (btnSavePdf) {
     btnSavePdf.addEventListener('click', async () => {
-      if (!rawPdfBuffer || isSaving) return;
+      const bytesToUse = window.originalPdfBytes || rawPdfBuffer;
+      if (!bytesToUse || isSaving) return;
 
       if (!window.PDFLib) {
         alert("PDF-Lib library is loading, please try again in a moment.");
@@ -726,22 +735,22 @@ startxref
         progressBar.style.width = '25%';
         progressPercent.textContent = '25%';
 
-        // Load original document into PDF-Lib
-        const loadedPdfDoc = await window.PDFLib.PDFDocument.load(rawPdfBuffer);
+        // Load original document into PDF-Lib using an isolated slice to avoid detached buffer issues
+        const loadedPdfDoc = await window.PDFLib.PDFDocument.load(bytesToUse.slice(0), { ignoreEncryption: true });
         const pages = loadedPdfDoc.getPages();
 
         progressBar.style.width = '55%';
         progressPercent.textContent = '55%';
 
         // Apply rotation to each page
-        for (let i = 0; i < pages.length; i++) {
-          const pageNum = i + 1;
-          const additionalAngle = pageRotations[pageNum] || 0;
-          const currentRotation = pages[i].getRotation().angle;
-          const finalAngle = (currentRotation + additionalAngle) % 360;
+        pages.forEach((page, index) => {
+          const existingAngle = (page.getRotation && page.getRotation()?.angle) ? page.getRotation().angle : 0;
+          const addedAngle = pageRotations[index + 1] || 0; // rotation delta applied by user (1-based index)
+          const finalAngle = normalizeAngle(existingAngle + addedAngle);
 
-          pages[i].setRotation(window.PDFLib.degrees(finalAngle));
-        }
+          // Correct pdf-lib method:
+          page.setRotation(window.PDFLib.degrees(finalAngle));
+        });
 
         progressBar.style.width = '80%';
         progressPercent.textContent = '80%';
@@ -772,7 +781,7 @@ startxref
         showToast(dict.toast_saved, 'check-circle-2');
 
       } catch (err) {
-        console.error("Error saving rotated PDF:", err);
+        console.error("Rotate error details:", err);
         showToast(dict.toast_error_save, 'alert-circle');
       } finally {
         isSaving = false;
