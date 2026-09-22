@@ -460,3 +460,185 @@
   background: linear-gradient(135deg, #6366F1, #8B5CF6);
   color: #FFFFFF !important;
 }
+
+/* Callouts, Highlight Boxes & Alert Banners in Light Mode (WCAG AA / AAA Compliant) */
+[data-theme="light"] .callout-box {
+  background: #F0FDF4 !important;
+  border-color: #A7F3D0 !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08) !important;
+}
+
+[data-theme="light"] .callout-title {
+  color: #065F46 !important;
+}
+
+[data-theme="light"] .callout-title i,
+[data-theme="light"] .callout-title svg {
+  color: #059669 !important;
+  stroke: #059669 !important;
+}
+
+[data-theme="light"] .callout-item {
+  color: #064E3B !important;
+  font-weight: 500;
+}
+
+[data-theme="light"] .callout-item span {
+  color: #064E3B !important;
+}
+
+[data-theme="light"] .callout-item i,
+[data-theme="light"] .callout-item svg {
+  color: #059669 !important;
+  stroke: #059669 !important;
+}
+
+[data-theme="light"] .danger-box {
+  background: #FFF1F2 !important;
+  border-color: #FECDD3 !important;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.08) !important;
+}
+
+[data-theme="light"] .danger-title {
+  color: #9F1239 !important;
+}
+
+[data-theme="light"] .danger-title i,
+[data-theme="light"] .danger-title svg {
+  color: #E11D48 !important;
+  stroke: #E11D48 !important;
+}
+
+[data-theme="light"] .danger-box .legal-paragraph,
+[data-theme="light"] .danger-box p {
+  color: #881337 !important;
+  font-weight: 500;
+}
+
+[data-theme="light"] .highlight-card {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+}
+
+[data-theme="light"] .highlight-icon {
+  background: #EFF6FF !important;
+  color: #2563EB !important;
+  border-color: #DBEAFE !important;
+}
+
+[data-theme="light"] .highlight-icon i,
+[data-theme="light"] .highlight-icon svg {
+  color: #2563EB !important;
+  stroke: #2563EB !important;
+}
+
+[data-theme="light"] .highlight-text h4 {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .highlight-text p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .legal-card {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06) !important;
+}
+
+[data-theme="light"] .section-header {
+  color: #0F172A !important;
+  border-bottom-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .section-header i,
+[data-theme="light"] .section-header svg {
+  color: #2563EB !important;
+  stroke: #2563EB !important;
+}
+
+[data-theme="light"] .legal-paragraph {
+  color: #334155 !important;
+}
+
+[data-theme="light"] .legal-link {
+  color: #1D4ED8 !important;
+}
+
+[data-theme="light"] .legal-link:hover {
+  color: #1E40AF !important;
+}
+
+[data-theme="light"] .contact-box {
+  background: #EFF6FF !important;
+  border-color: #BFDBFE !important;
+}
+
+[data-theme="light"] .contact-info h4 {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .contact-info p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .success-banner {
+  background: #ECFDF5 !important;
+  border-color: #A7F3D0 !important;
+  color: #065F46 !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08) !important;
+}
+
+[data-theme="light"] .success-banner i,
+[data-theme="light"] .success-banner svg {
+  color: #059669 !important;
+  stroke: #059669 !important;
+}
+
+[data-theme="light"] .info-card {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+}
+
+[data-theme="light"] .info-icon-box {
+  background: #EFF6FF !important;
+  border-color: #DBEAFE !important;
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .info-icon-box i,
+[data-theme="light"] .info-icon-box svg {
+  color: #2563EB !important;
+  stroke: #2563EB !important;
+}
+
+[data-theme="light"] .info-card-text h4 {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .info-card-text p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .email-card {
+  background: #EFF6FF !important;
+  border-color: #BFDBFE !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.06) !important;
+}
+
+[data-theme="light"] .email-header {
+  color: #1D4ED8 !important;
+}
+
+[data-theme="light"] .email-header i,
+[data-theme="light"] .email-header svg {
+  color: #1D4ED8 !important;
+  stroke: #1D4ED8 !important;
+}
+
+[data-theme="light"] .email-address {
+  color: #0F172A !important;
+}
+

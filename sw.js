@@ -36,6 +36,8 @@ const PRECACHE_ASSETS = [
   './pptx-to-pdf.js',
   './pdf-to-jpg.html',
   './pdf-to-jpg.js',
+  './extract-images.html',
+  './extract-images.js',
   './img2pdf.html',
   './img2pdf.js',
   './crop-pdf.html',

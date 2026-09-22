@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EZMPWQ6JGL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-EZMPWQ6JGL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B0F19">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Extract Images from PDF - Extract Embedded Photos Online Free</title>
+  <meta name="title" content="Extract Images from PDF - Extract Embedded Photos Online Free">
+  <meta name="description"
+    content="Extract all embedded JPG, PNG, and raster images from PDF documents online for free. 100% private client-side extraction in original resolution with instant batch ZIP download.">
+  <meta name="keywords"
+    content="extract images from pdf, extract photos from pdf, pdf image extractor, rip images from pdf, get images from pdf online, save pdf images as png, free client side pdf image extractor, batch extract pdf images zip">
+  <meta name="author" content="PDFNetizen">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://pdfnetizen.com/extract-images.html">
+
+  <!-- Open Graph / Facebook Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pdfnetizen.com/extract-images.html">
+  <meta property="og:title" content="Extract Images from PDF - Extract Embedded Photos Online Free">
+  <meta property="og:description"
+    content="Extract all embedded JPG, PNG, and raster images from PDF documents online for free. 100% private client-side extraction in original resolution with instant batch ZIP download.">
+  <meta property="og:site_name" content="PDFNetizen">
+  <meta property="og:image" content="https://pdfnetizen.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ar_AR">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://pdfnetizen.com/extract-images.html">
+  <meta name="twitter:title" content="Extract Images from PDF - Extract Embedded Photos Online Free">
+  <meta name="twitter:description"
+    content="Extract all embedded JPG, PNG, and raster images from PDF documents online for free. 100% private client-side extraction in original resolution with instant batch ZIP download.">
+  <meta name="twitter:image" content="https://pdfnetizen.com/og-image.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- JSZip CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Structured Data (JSON-LD) for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://pdfnetizen.com/extract-images.html#webapp",
+        "name": "Extract Images from PDF Online Free",
+        "url": "https://pdfnetizen.com/extract-images.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All modern web browsers (Chrome, Firefox, Safari, Edge, Opera)",
+        "browserRequirements": "Requires JavaScript and HTML5 Canvas support",
+        "description": "Free online client-side tool to extract embedded photos, drawings, and raster graphics from PDF documents with zero server uploads, original resolution preservation, individual file downloads, and batch ZIP export.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "100% Client-Side PDF Image Extraction",
+          "Zero Server Uploads & Total Privacy",
+          "Lossless Original Resolution Preservation",
+          "Interactive Extracted Images Gallery with Zoom Lightbox",
+          "Single Image and Batch ZIP Archive Downloads",
+          "Dimension Filters to Ignore Tiny Decorative Icons"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://pdfnetizen.com/extract-images.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I extract images from a PDF file online for free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Drag and drop your PDF into the secure upload dropzone. The tool scans every page for embedded raster image objects and displays them in a preview gallery. Click 'Download All as ZIP' or download individual photos directly."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between extracting images and converting PDF to JPG?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Converting PDF to JPG renders entire document pages (including text, margins, and layout) as a single snapshot. Extracting images retrieves only the raw, embedded photo and graphic files in their original pixel dimensions without page backgrounds or surrounding text."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my files uploaded to any external server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All extraction runs 100% in your browser using Mozilla PDF.js and WebAssembly. Your files never leave your computer or phone."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I filter out small logos and icons from extraction?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Use the built-in dimension filter to show all images, ignore tiny icons (<100px), or view only high-resolution photographs (>300px)."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
+
+  <!-- Theme Controller (executed early to prevent flash) -->
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+
+  <style>
+    :root {
+      /* Core Dark Color Palette */
+      --bg-main: #09090b;
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-surface: rgba(21, 30, 50, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 67, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+
+      /* Theme Accents (Indigo / Cyan / Vibrant Electric) */
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --primary-subtle: rgba(99, 102, 241, 0.12);
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      /* Typography & Neutrals */
+      --text-main: #ffffff;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+
+      /* Layout Spacing */
+      --nav-height: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-main) 60%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+      color: #ffffff;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .brand-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      color: #38bdf8;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #ffffff;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #818cf8, var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+    }
+
+    .btn-accent:hover {
+      background: linear-gradient(135deg, #22d3ee, #06b6d4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+    }
+
+    .btn-danger {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(244, 63, 94, 0.25);
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Hero Section */
+    .hero-header {
+      text-align: center;
+      padding: 3.5rem 1.5rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #ffffff;
+    }
+
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumb-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .breadcrumb-nav a:hover {
+      color: #818cf8;
+    }
+
+    .breadcrumb-current {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 1.5rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Dropzone Card */
+    .dropzone-card {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 2px dashed rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dropzone-card:hover,
+    .dropzone-card.dragover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 24px 60px rgba(99, 102, 241, 0.25);
+    }
+
+    .dropzone-icon-wrapper {
+      width: 76px;
+      height: 76px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #818cf8;
+      box-shadow: 0 0 24px var(--primary-glow);
+      transition: transform var(--transition-fast);
+    }
+
+    .dropzone-card:hover .dropzone-icon-wrapper {
+      transform: scale(1.08);
+    }
+
+    .dropzone-icon-wrapper i {
+      width: 36px;
+      height: 36px;
+    }
+
+    .dropzone-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .dropzone-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 500px;
+    }
+
+    .dropzone-buttons {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .dropzone-features {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .feature-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .feature-chip i {
+      width: 14px;
+      height: 14px;
+      color: #10b981;
+    }
+
+    /* Workspace Section */
+    .workspace-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .workspace-section.hidden {
+      display: none !important;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Control Bar Card */
+    .control-card {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .file-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .file-meta-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .file-name-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #ffffff;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-name-badge i {
+      width: 18px;
+      height: 18px;
+      color: #818cf8;
+      flex-shrink: 0;
+    }
+
+    .meta-pill {
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .meta-pill.highlight {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: #818cf8;
+      font-weight: 600;
+    }
+
+    .meta-pill.emerald {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    .file-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Filters & Options Row */
+    .options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-right: 4px;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 10px var(--primary-glow);
+    }
+
+    .batch-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Progress Banner */
+    .progress-banner {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .progress-banner.hidden {
+      display: none !important;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .progress-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #818cf8;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #06b6d4);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease-out;
+    }
+
+    /* Gallery Header */
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .gallery-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gallery-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Extracted Images Grid */
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Image Card */
+    .image-card {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      position: relative;
+    }
+
+    .image-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .image-card.selected {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .card-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .select-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .select-checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .page-tag {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+    }
+
+    .image-preview-wrap {
+      width: 100%;
+      height: 180px;
+      border-radius: var(--radius-md);
+      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .image-preview-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform var(--transition-normal);
+    }
+
+    .image-preview-wrap:hover img {
+      transform: scale(1.05);
+    }
+
+    .preview-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      gap: 6px;
+    }
+
+    .image-preview-wrap:hover .preview-overlay {
+      opacity: 1;
+    }
+
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      padding: 0 2px;
+    }
+
+    .card-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .btn-card-action {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+    }
+
+    /* Zero Images Notice */
+    .zero-state-card {
+      background: var(--bg-surface-elevated);
+      border: 1px dashed rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius-xl);
+      padding: 3rem 2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .zero-state-card.hidden {
+      display: none !important;
+    }
+
+    .zero-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fbbf24;
+    }
+
+    .zero-icon-wrap i {
+      width: 28px;
+      height: 28px;
+    }
+
+    .zero-state-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .zero-state-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    /* Ad Placeholder Banner */
+    .ad-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .ad-slot-horizontal {
+      width: 100%;
+      max-width: 728px;
+      min-height: 90px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* SEO Article & Content Section */
+    .seo-section {
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .seo-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .seo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .seo-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* How-to Steps Grid (4 Steps) */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .step-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Features Grid (6 Features) */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .feature-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feature-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #818cf8;
+    }
+
+    .feature-icon-wrap i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .feature-box h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .feature-box p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* FAQ Accordion List */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-question {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .faq-question i {
+      width: 18px;
+      height: 18px;
+      color: #818cf8;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-normal);
+    }
+
+    .lightbox-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      max-width: 90vw;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .lightbox-close-btn:hover {
+      background: rgba(244, 63, 94, 0.3);
+      border-color: #fb7185;
+      color: #fb7185;
+      transform: scale(1.08);
+    }
+
+    .lightbox-meta {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 1000;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease;
+    }
+
+    .toast.hidden {
+      display: none !important;
+    }
+
+    .toast.toast-error {
+      border-color: rgba(244, 63, 94, 0.5);
+      color: #fb7185;
+    }
+
+    .toast.toast-success {
+      border-color: rgba(16, 185, 129, 0.5);
+      color: #34d399;
+    }
+
+    @keyframes toastSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Universal Footer */
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .footer-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .footer-legal-badge i {
+      width: 13px;
+      height: 13px;
+      color: #10b981;
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 16px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cookie-banner.hidden {
+      display: none !important;
+    }
+
+    @keyframes cookieSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .cookie-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .cookie-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      flex-shrink: 0;
+    }
+
+    .cookie-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .cookie-text a {
+      color: #818cf8;
+      text-decoration: underline;
+      margin-left: 4px;
+    }
+
+    /* RTL Support */
+    [dir="rtl"] {
+      direction: rtl;
+    }
+
+    [dir="rtl"],
+    [dir="rtl"] body {
+      font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [dir="rtl"] .hero-title,
+    [dir="rtl"] .brand-title,
+    [dir="rtl"] .footer-brand-title,
+    [dir="rtl"] .seo-title,
+    [dir="rtl"] .gallery-title {
+      font-family: 'Segoe UI Arabic', 'Tahoma', 'Cairo', 'Outfit', sans-serif;
+    }
+
+    [dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+    }
+
+    [dir="rtl"] .lightbox-close-btn {
+      right: auto;
+      left: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
+        padding: 0 16px;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
+      .dropzone-card {
+        padding: 2.5rem 1.25rem;
+      }
+      .control-card {
+        padding: 1.25rem;
+      }
+      .seo-section {
+        padding: 2rem 1.5rem;
+      }
+      .cookie-banner {
+        flex-direction: column;
+        align-items: stretch;
+        bottom: 12px;
+        width: calc(100% - 24px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav" id="top-nav">
+    <a href="index.html" class="nav-brand" title="PDF Netizen Platform">
+      <div class="brand-icon-wrapper">
+        <i data-lucide="layers" class="brand-icon"></i>
+      </div>
+      <div class="brand-text">
+        <h1 class="brand-title">PDF <span class="gradient-text">Netizen</span></h1>
+        <span class="brand-badge" data-i18n="badge_client_side">100% Client-Side</span>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-secondary" title="Return to Tools Hub">
+        <i data-lucide="home"></i>
+        <span data-i18n="nav_home">Home</span>
+      </a>
+
+      <!-- Theme Toggle Button -->
+      <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary" title="Switch Theme / تبديل المظهر"
+        aria-label="Toggle theme">
+        <i data-lucide="sun"></i>
+      </button>
+
+      <!-- Language Toggle Button -->
+      <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
+        aria-label="Toggle language">
+        <i data-lucide="globe"></i>
+        <span id="lang-toggle-text">العربية</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Header Section -->
+  <header class="hero-header">
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <a href="index.html" data-i18n="breadcrumb_home">Home</a>
+      <span>/</span>
+      <span class="breadcrumb-current" data-i18n="breadcrumb_current">Extract Images</span>
+    </nav>
+    <div class="hero-badge">
+      <i data-lucide="shield-check"></i>
+      <span data-i18n="hero_badge">100% Client-Side • Lossless Embedded Photo Extraction • Zero Server Uploads</span>
+    </div>
+    <h1 class="hero-title" data-i18n="hero_title">Extract <span class="gradient-text">Images from PDF</span></h1>
+    <p class="hero-subtitle" data-i18n="hero_subtitle">
+      Extract every embedded photo, drawing, and graphic from your PDF in original resolution. Download single images or export a batch ZIP file in seconds.
+    </p>
+  </header>
+
+  <!-- Main Interaction Container -->
+  <main class="main-container">
+
+    <!-- Upload Dropzone (Hidden when file loaded) -->
+    <div id="dropzone-card" class="dropzone-card" role="region" aria-label="PDF File Upload Dropzone">
+      <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;">
+
+      <div class="dropzone-icon-wrapper">
+        <i data-lucide="images"></i>
+      </div>
+      <h2 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF file here</h2>
+      <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">
+        Select or drag & drop any PDF document to extract all embedded raster images. 100% private in-browser extraction.
+      </p>
+
+      <div class="dropzone-buttons">
+        <button type="button" id="btn-browse-file" class="btn btn-primary">
+          <i data-lucide="folder-open"></i>
+          <span data-i18n="btn_browse">Browse PDF File</span>
+        </button>
+        <button type="button" id="btn-sample-pdf" class="btn btn-secondary">
+          <i data-lucide="sparkles"></i>
+          <span data-i18n="btn_sample">Try Sample PDF</span>
+        </button>
+      </div>
+
+      <div class="dropzone-features">
+        <span class="feature-chip">
+          <i data-lucide="check-circle-2"></i>
+          <span data-i18n="feature_privacy">100% In-Browser Privacy</span>
+        </span>
+        <span class="feature-chip">
+          <i data-lucide="check-circle-2"></i>
+          <span data-i18n="feature_original_res">Original Resolution</span>
+        </span>
+        <span class="feature-chip">
+          <i data-lucide="check-circle-2"></i>
+          <span data-i18n="feature_zip">Batch ZIP Archive Packaging</span>
+        </span>
+        <span class="feature-chip">
+          <i data-lucide="check-circle-2"></i>
+          <span data-i18n="feature_instant">Instant Extraction</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Active Workspace Section (Shown when file is loaded) -->
+    <div id="workspace-section" class="workspace-section hidden">
+
+      <!-- Control Card -->
+      <div class="control-card">
+        <!-- File Summary -->
+        <div class="file-summary-row">
+          <div class="file-meta-group">
+            <span id="file-name-display" class="file-name-badge">
+              <i data-lucide="file-text"></i>
+              <span id="file-name-text">document.pdf</span>
+            </span>
+            <span id="file-pages-badge" class="meta-pill">0 Pages</span>
+            <span id="file-images-badge" class="meta-pill emerald">0 Images Found</span>
+            <span id="file-size-badge" class="meta-pill">0 KB</span>
+          </div>
+
+          <div class="file-actions-group">
+            <button type="button" id="btn-change-pdf" class="btn btn-secondary btn-sm">
+              <i data-lucide="refresh-cw"></i>
+              <span data-i18n="btn_change_pdf">Change PDF</span>
+            </button>
+            <button type="button" id="btn-clear-pdf" class="btn btn-danger btn-sm">
+              <i data-lucide="trash-2"></i>
+              <span data-i18n="btn_clear">Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Batch Actions Row -->
+        <div class="options-row">
+          <!-- Size Filter -->
+          <div class="filter-group">
+            <span class="filter-label" data-i18n="label_filter_size">Filter Size:</span>
+            <button type="button" class="filter-btn active" data-size-filter="0" data-i18n="filter_all">All Images</button>
+            <button type="button" class="filter-btn" data-size-filter="100" data-i18n="filter_medium">> 100px (Hide Icons)</button>
+            <button type="button" class="filter-btn" data-size-filter="300" data-i18n="filter_large">> 300px (Photos Only)</button>
+          </div>
+
+          <!-- Batch Action Buttons -->
+          <div class="batch-actions-group">
+            <button type="button" id="btn-download-selected-zip" class="btn btn-secondary btn-sm" disabled>
+              <i data-lucide="archive"></i>
+              <span data-i18n="btn_download_selected_zip">Download Selected as ZIP</span>
+            </button>
+            <button type="button" id="btn-download-all-zip" class="btn btn-primary btn-sm">
+              <i data-lucide="download"></i>
+              <span data-i18n="btn_download_all_zip">Download All as ZIP (.zip)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanning / Progress Banner -->
+      <div id="progress-banner" class="progress-banner hidden">
+        <div class="progress-header">
+          <span id="progress-status-text" class="progress-text">
+            <i data-lucide="loader" class="animate-spin"></i>
+            <span data-i18n="progress_scanning">Scanning PDF for embedded images...</span>
+          </span>
+          <span id="progress-percentage" class="progress-percentage">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Extracted Images Gallery Header -->
+      <div class="gallery-header">
+        <h3 class="gallery-title">
+          <i data-lucide="images"></i>
+          <span data-i18n="gallery_title">Extracted Images</span>
+          <span id="gallery-count-badge" class="meta-pill highlight">0</span>
+        </h3>
+
+        <div class="gallery-actions">
+          <button type="button" id="btn-select-all" class="btn btn-secondary btn-sm">
+            <i data-lucide="check-square"></i>
+            <span data-i18n="btn_select_all">Select All</span>
+          </button>
+          <button type="button" id="btn-deselect-all" class="btn btn-secondary btn-sm">
+            <i data-lucide="square"></i>
+            <span data-i18n="btn_deselect_all">Deselect All</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Images Grid -->
+      <div id="images-grid" class="images-grid" role="region" aria-label="Extracted Images Gallery">
+        <!-- Rendered dynamically by extract-images.js -->
+      </div>
+
+      <!-- Zero Images Fallback Notice -->
+      <div id="zero-state-card" class="zero-state-card hidden">
+        <div class="zero-icon-wrap">
+          <i data-lucide="image-off"></i>
+        </div>
+        <h4 class="zero-state-title" data-i18n="zero_state_title">No Embedded Images Found</h4>
+        <p class="zero-state-desc" data-i18n="zero_state_desc">
+          This document consists solely of vector text and shapes without separate embedded raster photos. If you want to convert entire PDF pages into images, use our PDF to JPG converter.
+        </p>
+        <a href="pdf-to-jpg.html" class="btn btn-accent">
+          <i data-lucide="file-image"></i>
+          <span data-i18n="btn_try_pdf2jpg">Try PDF to JPG Converter</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Ad Placeholder Space -->
+    <div class="ad-container" aria-label="Advertisement Banner">
+      <div class="ad-placeholder ad-slot-horizontal" data-i18n="ad_space_label">
+        Advertisement Space (728x90)
+      </div>
+    </div>
+
+    <!-- SEO & Knowledge Guide Section -->
+    <article class="seo-section">
+      <div class="seo-header">
+        <span class="seo-badge" data-i18n="seo_badge">100% Client-Side In-Browser Extraction</span>
+        <h2 class="seo-title" data-i18n="seo_title">How to Extract Images from PDF Documents Online for Free</h2>
+        <p class="seo-subtitle" data-i18n="seo_subtitle">
+          Extract raw photos, illustrations, and figures from any PDF without re-compressing pages or compromising your sensitive document privacy.
+        </p>
+      </div>
+
+      <!-- 4 Simple Steps -->
+      <section>
+        <h3 style="font-size: 1.3rem; margin-bottom: 1.25rem; font-weight: 700;" data-i18n="guide_h2">
+          4 Easy Steps to Extract Images from PDF
+        </h3>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h4 data-i18n="step1_title">1. Upload PDF</h4>
+            <p data-i18n="step1_desc">Drag and drop your PDF document into the dropzone or choose a file from your device.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h4 data-i18n="step2_title">2. In-Browser Scan</h4>
+            <p data-i18n="step2_desc">Our engine scans all internal PDF page operators to locate and decode embedded raster objects.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h4 data-i18n="step3_title">3. Filter & Preview</h4>
+            <p data-i18n="step3_desc">View image thumbnails, inspect exact pixel resolutions, and filter out tiny icons or logos.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h4 data-i18n="step4_title">4. Download PNG/ZIP</h4>
+            <p data-i18n="step4_desc">Download individual photos directly or export the entire collection in a single organized ZIP file.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Extract with PDFNetizen Grid (6 Features) -->
+      <section>
+        <h3 style="font-size: 1.3rem; margin-bottom: 1.25rem; font-weight: 700;" data-i18n="features_h2">
+          Why Extract PDF Images with PDFNetizen?
+        </h3>
+        <div class="features-grid">
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <h4 data-i18n="fb_privacy_title">100% Client-Side Privacy</h4>
+            <p data-i18n="fb_privacy_desc">All extraction runs locally inside your browser. No files or images are ever uploaded to any cloud server.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="maximize"></i>
+            </div>
+            <h4 data-i18n="fb_resolution_title">Original Native Resolution</h4>
+            <p data-i18n="fb_resolution_desc">Retrieves photos in their true embedded dimensions without losing sharpness or suffering re-compression artifacts.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="archive"></i>
+            </div>
+            <h4 data-i18n="fb_zip_title">One-Click Batch ZIP Export</h4>
+            <p data-i18n="fb_zip_desc">Effortlessly package dozens of extracted pictures into a single, clean ZIP archive generated in memory via JSZip.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="filter"></i>
+            </div>
+            <h4 data-i18n="fb_filter_title">Dimension Filtering</h4>
+            <p data-i18n="fb_filter_desc">Easily filter out small bullet points, header graphics, and decorative logos to focus only on full-size photos.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="award"></i>
+            </div>
+            <h4 data-i18n="fb_free_title">Zero Limits or Watermarks</h4>
+            <p data-i18n="fb_free_desc">Completely free with unlimited extractions, zero file size caps, and no watermarks added to your images.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-icon-wrap">
+              <i data-lucide="smartphone"></i>
+            </div>
+            <h4 data-i18n="fb_cross_title">Universal Compatibility</h4>
+            <p data-i18n="fb_cross_desc">Works flawlessly on iPhones, iPads, Android smartphones, Mac, Windows, and Linux laptops with no software installs.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section (4 Questions) -->
+      <section>
+        <h3 style="font-size: 1.3rem; margin-bottom: 1.25rem; font-weight: 700;" data-i18n="faq_h2">
+          Frequently Asked Questions
+        </h3>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <span data-i18n="faq_q1">How do I extract images from a PDF file online for free?</span>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a1">
+              Drag and drop your PDF into the secure upload dropzone. The tool scans every page for embedded raster image objects and displays them in a preview gallery. Click 'Download All as ZIP' or download individual photos directly.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <span data-i18n="faq_q2">What is the difference between extracting images and converting PDF to JPG?</span>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a2">
+              Converting PDF to JPG renders entire document pages (including text, margins, and layout) as a single snapshot. Extracting images retrieves only the raw, embedded photo and graphic files in their original pixel dimensions without page backgrounds or surrounding text.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <span data-i18n="faq_q3">Are my files uploaded to any external server?</span>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a3">
+              No. All extraction runs 100% in your browser using Mozilla PDF.js and WebAssembly. Your files never leave your computer or phone.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i data-lucide="help-circle"></i>
+              <span data-i18n="faq_q4">Can I filter out small logos and icons from extraction?</span>
+            </div>
+            <p class="faq-answer" data-i18n="faq_a4">
+              Yes! Use the built-in dimension filter to show all images, ignore tiny icons (<100px), or view only high-resolution photographs (>300px).
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </article>
+
+  </main>
+
+  <!-- Image Zoom Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Image Preview">
+    <button type="button" id="lightbox-close" class="lightbox-close-btn" aria-label="Close Preview">
+      <i data-lucide="x"></i>
+    </button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" class="lightbox-img" src="" alt="Enlarged PDF Image">
+    </div>
+    <div id="lightbox-meta" class="lightbox-meta"></div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+    <i data-lucide="info" id="toast-icon"></i>
+    <span id="toast-message">Notification message</span>
+  </div>
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookie-banner" class="cookie-banner" role="region" aria-label="Cookie Consent Banner">
+    <div class="cookie-content">
+      <div class="cookie-icon-wrapper">
+        <i data-lucide="cookie"></i>
+      </div>
+      <p class="cookie-text" data-i18n="cookie_consent_text">
+        We use cookies to ensure optimal functionality and analyze traffic in compliance with privacy policies.
+        <a href="privacy.html" data-i18n="cookie_learn_more">Learn more</a>
+      </p>
+    </div>
+    <button type="button" id="btn-accept-cookies" class="btn btn-primary btn-sm" data-i18n="cookie_accept_btn">
+      Accept & Close
+    </button>
+  </div>
+
+  <!-- Universal Semantic Footer -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <a href="index.html" class="footer-brand" title="PDF Netizen Home">
+            <div class="brand-icon-wrapper" style="width: 30px; height: 30px;">
+              <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+            </div>
+            <span class="footer-brand-title">PDF <span class="gradient-text">Netizen</span></span>
+          </a>
+          <p class="footer-tagline" data-i18n="footer_tagline">
+            100% Client-side, private, and secure document processing directly in your browser.
+          </p>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer Navigation">
+          <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+          <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+          <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright" data-i18n="footer_copyright">© 2026 PDF Netizen. All rights reserved.</p>
+        <div class="footer-legal-badge">
+          <i data-lucide="shield-check"></i>
+          <span data-i18n="badge_client_side">100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="extract-images.js"></script>
+</body>
+
+</html>
