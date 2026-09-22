@@ -49,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://pdfnetizen.com/ask-pdf.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://pdfnetizen.com/protect.html</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>

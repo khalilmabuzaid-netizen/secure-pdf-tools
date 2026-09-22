@@ -1112,15 +1112,27 @@
     /* Result Comparison Card */
     .result-card {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       padding: 20px 24px;
       border-radius: var(--radius-lg);
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
       border: 1px solid rgba(16, 185, 129, 0.4);
+      gap: 14px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .result-card.optimal {
+      background: linear-gradient(135deg, rgba(100, 116, 139, 0.15), rgba(51, 65, 85, 0.1));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .result-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 20px;
       flex-wrap: wrap;
-      animation: fadeIn 0.3s ease-out;
+      width: 100%;
     }
 
     .result-stat-group {
@@ -1155,6 +1167,11 @@
       color: #34d399;
     }
 
+    .stat-val.optimal {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
     .savings-badge {
       display: inline-flex;
       align-items: center;
@@ -1166,6 +1183,35 @@
       color: #6ee7b7;
       font-weight: 700;
       font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .savings-badge.optimal {
+      background: rgba(148, 163, 184, 0.18);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #cbd5e1;
+    }
+
+    .result-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md, 8px);
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .result-notice i,
+    .result-notice svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: #94a3b8;
     }
 
     /* Actions Footer */
@@ -2177,19 +2223,25 @@
 
           <!-- Results Summary Card (Shown after compression) -->
           <div class="result-card hidden" id="result-card">
-            <div class="result-stat-group">
-              <div class="stat-item">
-                <span class="stat-label" data-i18n="stat_original_size">Original Size</span>
-                <span class="stat-val" id="stat-original-size">0 KB</span>
+            <div class="result-main-row">
+              <div class="result-stat-group">
+                <div class="stat-item">
+                  <span class="stat-label" data-i18n="stat_original_size">Original Size</span>
+                  <span class="stat-val" id="stat-original-size">0 KB</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label" data-i18n="stat_compressed_size">Compressed Size</span>
+                  <span class="stat-val reduced" id="stat-compressed-size">0 KB</span>
+                </div>
               </div>
-              <div class="stat-item">
-                <span class="stat-label" data-i18n="stat_compressed_size">Compressed Size</span>
-                <span class="stat-val reduced" id="stat-compressed-size">0 KB</span>
+              <div class="savings-badge" id="savings-badge">
+                <i data-lucide="arrow-down-right" id="savings-badge-icon"></i>
+                <span id="savings-percent">0% Smaller</span>
               </div>
             </div>
-            <div class="savings-badge" id="savings-badge">
-              <i data-lucide="arrow-down-right"></i>
-              <span id="savings-percent">0% Smaller</span>
+            <div class="result-notice hidden" id="result-notice">
+              <i data-lucide="info"></i>
+              <span id="result-notice-text"></span>
             </div>
           </div>
 
