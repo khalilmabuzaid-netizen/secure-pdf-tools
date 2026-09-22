@@ -13,9 +13,9 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" href="favicon.svg">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
   <!-- Primary SEO Meta Tags -->
   <title>AI Background Remover Online Free - Remove Image Background Privately</title>
   <meta name="title" content="AI Background Remover Online Free - Remove Image Background Privately">
@@ -362,6 +362,13 @@
       background: rgba(255, 255, 255, 0.12);
       border-color: rgba(255, 255, 255, 0.2);
       transform: translateY(-1px);
+    }
+
+    .btn.active {
+      background: rgba(139, 92, 246, 0.25);
+      border-color: var(--primary);
+      color: #c084fc;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
     }
 
     .btn-sm {
@@ -803,6 +810,28 @@
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+    }
+
+    .stage-canvas.brush-mode {
+      cursor: none;
+    }
+
+    .brush-cursor-circle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      border: 1.5px solid #a855f7;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.8), inset 0 0 2px rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      display: none;
+      box-sizing: border-box;
+    }
+
+    .brush-cursor-circle.active {
+      display: block;
     }
 
     .stage-footer {
@@ -1564,6 +1593,7 @@
             </div>
             <div class="stage-canvas-container" id="result-stage-container">
               <canvas id="result-canvas" class="stage-canvas"></canvas>
+              <div id="brush-cursor-circle" class="brush-cursor-circle"></div>
             </div>
             <div class="stage-footer">
               <span id="result-card-dimensions">0 × 0 px</span>

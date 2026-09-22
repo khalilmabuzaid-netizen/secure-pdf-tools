@@ -165,7 +165,7 @@
   let featherControlGroup, featherSlider, featherValDisplay;
   let bgFillVal, bgOptionButtons, customBgColorPicker;
   let brushControlsGroup, btnBrushErase, btnBrushRestore, brushSizeSlider, brushSizeDisplay;
-  let origStageImg, resultCanvas, origCardDimensions, origCardSize, resultCardDimensions, resultCardSize;
+  let origStageImg, resultStageContainer, resultCanvas, brushCursorCircle, origCardDimensions, origCardSize, resultCardDimensions, resultCardSize;
   let statusHeadline, statusDetails, btnDownloadPng, btnReprocess;
   let btnLanguageToggle, langToggleText;
   let toastEl, toastMsgEl, toastIconEl;
@@ -221,7 +221,9 @@
     brushSizeDisplay = document.getElementById('brush-size-display');
 
     origStageImg = document.getElementById('orig-stage-img');
+    resultStageContainer = document.getElementById('result-stage-container');
     resultCanvas = document.getElementById('result-canvas');
+    brushCursorCircle = document.getElementById('brush-cursor-circle');
     origCardDimensions = document.getElementById('orig-card-dimensions');
     origCardSize = document.getElementById('orig-card-size');
     resultCardDimensions = document.getElementById('result-card-dimensions');
@@ -307,8 +309,11 @@
         if (brushControlsGroup) {
           if (currentMode === 'manual') {
             brushControlsGroup.classList.remove('hidden');
+            if (resultCanvas) resultCanvas.classList.add('brush-mode');
           } else {
             brushControlsGroup.classList.add('hidden');
+            if (resultCanvas) resultCanvas.classList.remove('brush-mode');
+            if (brushCursorCircle) brushCursorCircle.classList.remove('active');
           }
         }
 
@@ -377,6 +382,10 @@
       brushSizeSlider.addEventListener('input', () => {
         brushSize = parseInt(brushSizeSlider.value, 10);
         if (brushSizeDisplay) brushSizeDisplay.textContent = `${brushSize} px`;
+        if (brushCursorCircle) {
+          brushCursorCircle.style.width = `${brushSize}px`;
+          brushCursorCircle.style.height = `${brushSize}px`;
+        }
       });
     }
 
@@ -384,16 +393,25 @@
     if (resultCanvas) {
       resultCanvas.addEventListener('mousedown', startCanvasInteract);
       resultCanvas.addEventListener('mousemove', drawCanvasInteract);
+      resultCanvas.addEventListener('mouseenter', (e) => {
+        if (currentMode === 'manual') updateBrushCursor(e);
+      });
+      resultCanvas.addEventListener('mouseleave', () => {
+        if (brushCursorCircle) brushCursorCircle.classList.remove('active');
+        stopCanvasInteract();
+      });
+
       window.addEventListener('mouseup', stopCanvasInteract);
 
       resultCanvas.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
+          e.preventDefault();
           startCanvasInteract(e.touches[0]);
         }
       }, { passive: false });
 
       resultCanvas.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1 && isDrawing) {
+        if (e.touches.length === 1) {
           e.preventDefault();
           drawCanvasInteract(e.touches[0]);
         }
@@ -435,51 +453,139 @@
     }
   }
 
+  function getCanvasCoords(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+    const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+    return {
+      x: Math.round((clientX - rect.left) * scaleX),
+      y: Math.round((clientY - rect.top) * scaleY)
+    };
+  }
+
+  function updateBrushCursor(e) {
+    if (!brushCursorCircle || !resultStageContainer || !resultCanvas) return;
+
+    if (currentMode !== 'manual') {
+      brushCursorCircle.classList.remove('active');
+      resultCanvas.classList.remove('brush-mode');
+      return;
+    }
+
+    resultCanvas.classList.add('brush-mode');
+
+    const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+    const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+
+    if (clientX === undefined || clientY === undefined) {
+      brushCursorCircle.classList.remove('active');
+      return;
+    }
+
+    const canvasRect = resultCanvas.getBoundingClientRect();
+    const isInsideCanvas = (
+      clientX >= canvasRect.left &&
+      clientX <= canvasRect.right &&
+      clientY >= canvasRect.top &&
+      clientY <= canvasRect.bottom
+    );
+
+    if (!isInsideCanvas) {
+      brushCursorCircle.classList.remove('active');
+      return;
+    }
+
+    const containerRect = resultStageContainer.getBoundingClientRect();
+    const x = clientX - containerRect.left;
+    const y = clientY - containerRect.top;
+
+    brushCursorCircle.style.left = `${x}px`;
+    brushCursorCircle.style.top = `${y}px`;
+    brushCursorCircle.style.width = `${brushSize}px`;
+    brushCursorCircle.style.height = `${brushSize}px`;
+    brushCursorCircle.classList.add('active');
+  }
+
+  let lastPos = null;
+
   function startCanvasInteract(e) {
-    if (!maskBuffer || !resultCanvas) return;
+    if (!originalImageData || !resultCanvas) return;
 
-    const rect = resultCanvas.getBoundingClientRect();
-    const scaleX = resultCanvas.width / rect.width;
-    const scaleY = resultCanvas.height / rect.height;
-    const x = Math.floor((e.clientX - rect.left) * scaleX);
-    const y = Math.floor((e.clientY - rect.top) * scaleY);
-
-    if (x < 0 || x >= resultCanvas.width || y < 0 || y >= resultCanvas.height) return;
+    const coords = getCanvasCoords(e, resultCanvas);
+    if (coords.x < 0 || coords.x >= resultCanvas.width || coords.y < 0 || coords.y >= resultCanvas.height) return;
 
     if (currentMode === 'chroma') {
       // Sample color at clicked pixel
-      if (originalImageData) {
-        const idx = (y * resultCanvas.width + x) * 4;
-        chromaSampleColor = {
-          r: originalImageData.data[idx],
-          g: originalImageData.data[idx + 1],
-          b: originalImageData.data[idx + 2]
-        };
-        showToast(t('toast_chroma_picked'), 'info');
-        recomputeAndRender();
-      }
+      const idx = (coords.y * resultCanvas.width + coords.x) * 4;
+      chromaSampleColor = {
+        r: originalImageData.data[idx],
+        g: originalImageData.data[idx + 1],
+        b: originalImageData.data[idx + 2]
+      };
+      showToast(t('toast_chroma_picked'), 'info');
+      recomputeAndRender();
     } else if (currentMode === 'manual') {
       isDrawing = true;
-      applyBrushAt(x, y);
+      lastPos = coords;
+
+      if (!maskBuffer || maskBuffer.length !== resultCanvas.width * resultCanvas.height) {
+        maskBuffer = new Uint8Array(resultCanvas.width * resultCanvas.height);
+        maskBuffer.fill(255);
+      }
+
+      applyBrushAt(coords.x, coords.y);
+      renderCanvasFromMask();
+      updateBrushCursor(e);
     }
   }
 
   function drawCanvasInteract(e) {
-    if (!isDrawing || currentMode !== 'manual' || !resultCanvas) return;
+    if (currentMode === 'manual') {
+      updateBrushCursor(e);
+    }
+    if (!isDrawing || currentMode !== 'manual' || !resultCanvas || !maskBuffer) return;
 
-    const rect = resultCanvas.getBoundingClientRect();
-    const scaleX = resultCanvas.width / rect.width;
-    const scaleY = resultCanvas.height / rect.height;
-    const x = Math.floor((e.clientX - rect.left) * scaleX);
-    const y = Math.floor((e.clientY - rect.top) * scaleY);
-
-    applyBrushAt(x, y);
+    const coords = getCanvasCoords(e, resultCanvas);
+    if (lastPos) {
+      applyBrushLine(lastPos.x, lastPos.y, coords.x, coords.y);
+    } else {
+      applyBrushAt(coords.x, coords.y);
+    }
+    lastPos = coords;
+    renderCanvasFromMask();
   }
 
   function stopCanvasInteract() {
     if (isDrawing) {
       isDrawing = false;
+      lastPos = null;
       renderCanvasFromMask();
+      updateStatusMetrics();
+    }
+  }
+
+  function applyBrushLine(x0, y0, x1, y1) {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const rect = resultCanvas.getBoundingClientRect();
+    const scaleX = resultCanvas.width / rect.width;
+    const radius = Math.max(1, (brushSize / 2) * scaleX);
+    const step = Math.max(1, radius / 2);
+    const numSteps = Math.ceil(dist / step);
+
+    if (numSteps <= 1) {
+      applyBrushAt(x1, y1);
+      return;
+    }
+
+    for (let i = 0; i <= numSteps; i++) {
+      const t = i / numSteps;
+      const cx = Math.round(x0 + dx * t);
+      const cy = Math.round(y0 + dy * t);
+      applyBrushAt(cx, cy);
     }
   }
 
@@ -487,7 +593,9 @@
     if (!maskBuffer || !resultCanvas) return;
     const w = resultCanvas.width;
     const h = resultCanvas.height;
-    const r = brushSize;
+    const rect = resultCanvas.getBoundingClientRect();
+    const scaleX = w / rect.width;
+    const r = Math.max(1, Math.round((brushSize / 2) * scaleX));
     const rSq = r * r;
     const targetAlpha = (brushAction === 'erase') ? 0 : 255;
 
@@ -497,16 +605,15 @@
     const maxY = Math.min(h - 1, centerY + r);
 
     for (let py = minY; py <= maxY; py++) {
+      const rowOffset = py * w;
       for (let px = minX; px <= maxX; px++) {
         const dx = px - centerX;
         const dy = py - centerY;
         if (dx * dx + dy * dy <= rSq) {
-          maskBuffer[py * w + px] = targetAlpha;
+          maskBuffer[rowOffset + px] = targetAlpha;
         }
       }
     }
-
-    renderCanvasFromMask();
   }
 
   function t(key, replacements = {}) {
@@ -658,10 +765,10 @@
     const width = originalImageData.width;
     const height = originalImageData.height;
     const totalPixels = width * height;
-    maskBuffer = new Uint8Array(totalPixels);
     const data = originalImageData.data;
 
     if (currentMode === 'ai') {
+      maskBuffer = new Uint8Array(totalPixels);
       // Sample background palette from the 4 outer border edges
       const bgSamples = [];
       const step = Math.max(1, Math.floor(Math.min(width, height) / 80));
@@ -707,7 +814,12 @@
         }
       }
 
+      if (featherRadius > 0) {
+        featherMask(maskBuffer, width, height, featherRadius);
+      }
+
     } else if (currentMode === 'chroma') {
+      maskBuffer = new Uint8Array(totalPixels);
       // Exact color chroma keying
       const tolSq = (tolerance * 440) * (tolerance * 440);
       const targetR = chromaSampleColor.r;
@@ -727,11 +839,30 @@
           maskBuffer[idx] = 255;
         }
       }
-    }
 
-    // Apply edge feathering
-    if (featherRadius > 0) {
-      featherMask(maskBuffer, width, height, featherRadius);
+      if (featherRadius > 0) {
+        featherMask(maskBuffer, width, height, featherRadius);
+      }
+
+    } else if (currentMode === 'manual') {
+      // Manual Touch-Up Brush initialization:
+      // If maskBuffer doesn't exist or is not valid, initialize with 255 (fully visible)
+      if (!maskBuffer || maskBuffer.length !== totalPixels) {
+        maskBuffer = new Uint8Array(totalPixels);
+        maskBuffer.fill(255);
+      } else {
+        // If maskBuffer already has content (e.g. from previous AI cutout), preserve it so user can refine!
+        let hasAnyVisible = false;
+        for (let i = 0; i < totalPixels; i += 50) {
+          if (maskBuffer[i] > 0) {
+            hasAnyVisible = true;
+            break;
+          }
+        }
+        if (!hasAnyVisible) {
+          maskBuffer.fill(255);
+        }
+      }
     }
 
     renderCanvasFromMask();
