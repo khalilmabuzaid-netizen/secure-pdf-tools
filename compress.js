@@ -66,6 +66,10 @@ const translations = {
     total_suffix: "Total",
     savings_smaller: "{n}% Smaller ({saved} saved)",
     savings_optimized: "Optimized",
+    savings_already_optimal: "Already Optimal",
+    savings_kept_original: "Kept Original",
+    msg_already_optimal: "Your document is already maximally compact. Retained original file to preserve quality and smallest size.",
+    stat_original_preserved: "Original preserved ({size})",
     rendering_page: "Rendering page {current} of {total}...",
     compressing_page: "Compressing page {current} ({quality}% quality)...",
     processed_page: "Processed page {current} of {total}",
@@ -76,7 +80,7 @@ const translations = {
     toast_read_fail: "Failed to read the selected file.",
     toast_pdf_loaded: "PDF loaded: {pages} ready for compression.",
     toast_compress_success: "PDF compressed successfully! ({n}% size reduction)",
-    toast_already_compact: "Document is already compact. Minimal reduction possible.",
+    toast_already_compact: "Your document is already maximally compact. Retained original file to preserve quality and smallest size.",
     toast_upload_first: "Please upload a PDF document first.",
     toast_sample_generating: "Generating sample multi-page document...",
     toast_sample_error: "Error creating sample: ",
@@ -147,6 +151,10 @@ const translations = {
     total_suffix: "إجمالي",
     savings_smaller: "أصغر بنسبة {n}٪ (تم توفير {saved})",
     savings_optimized: "تم التحسين بنجاح",
+    savings_already_optimal: "المستند بحجمه الأمثل",
+    savings_kept_original: "تم الإبقاء على الأصل",
+    msg_already_optimal: "المستند مضغوط ومحسّن بالفعل لأقصى درجة. تم الاحتفاظ بالملف الأصلي للحفاظ على الجودة وأصغر حجم.",
+    stat_original_preserved: "تم الإبقاء على الأصل ({size})",
     rendering_page: "جاري تصيير الصفحة {current} من {total}...",
     compressing_page: "جاري ضغط الصفحة {current} (جودة {quality}%)...",
     processed_page: "تمت معالجة الصفحة {current} من {total}",
@@ -157,7 +165,7 @@ const translations = {
     toast_read_fail: "فشل في قراءة الملف المحدد.",
     toast_pdf_loaded: "تم تحميل PDF: {pages} جاهزة للضغط.",
     toast_compress_success: "تم ضغط ملف PDF بنجاح! (تقليل الحجم بنسبة {n}٪)",
-    toast_already_compact: "المستند مضغوط ومحسّن بالفعل. تم تحقيق الحد الأدنى من تقليل الحجم.",
+    toast_already_compact: "المستند مضغوط ومحسّن بالفعل لأقصى درجة. تم الاحتفاظ بالملف الأصلي للحفاظ على الجودة وأصغر حجم.",
     toast_upload_first: "يرجى رفع مستند PDF أولاً.",
     toast_sample_generating: "جاري توليد نموذج مستند متعدد الصفحات...",
     toast_sample_error: "حدث خطأ أثناء إنشاء النموذج: ",
@@ -245,7 +253,12 @@ let progressSubtext = null;
 let resultCard = null;
 let statOriginalSize = null;
 let statCompressedSize = null;
+let savingsBadge = null;
+let savingsBadgeIcon = null;
 let savingsPercent = null;
+let resultNotice = null;
+let resultNoticeText = null;
+let lastCompressionResult = null;
 let toastEl = null;
 let toastMsgEl = null;
 let toastIconEl = null;
@@ -295,7 +308,11 @@ function cacheDOMElements() {
   resultCard = document.getElementById('result-card');
   statOriginalSize = document.getElementById('stat-original-size');
   statCompressedSize = document.getElementById('stat-compressed-size');
+  savingsBadge = document.getElementById('savings-badge');
+  savingsBadgeIcon = document.getElementById('savings-badge-icon');
   savingsPercent = document.getElementById('savings-percent');
+  resultNotice = document.getElementById('result-notice');
+  resultNoticeText = document.getElementById('result-notice-text');
   toastEl = document.getElementById('toast');
   toastMsgEl = document.getElementById('toast-message');
   toastIconEl = document.getElementById('toast-icon');
@@ -358,6 +375,33 @@ function applyLanguage(lang) {
   // Update button text state if not compressing
   if (btnExecuteText && !isCompressing) {
     btnExecuteText.textContent = t('btn_compress_download');
+  }
+
+  // Update dynamic compression result display if result card is active
+  if (lastCompressionResult && resultCard && !resultCard.classList.contains('hidden')) {
+    if (lastCompressionResult.isSmaller) {
+      if (statCompressedSize) {
+        statCompressedSize.textContent = formatBytes(lastCompressionResult.finalSize);
+      }
+      if (savingsPercent) {
+        savingsPercent.textContent = t('savings_smaller', {
+          n: lastCompressionResult.reductionPercentStr,
+          saved: formatBytes(lastCompressionResult.bytesSaved)
+        });
+      }
+    } else {
+      if (statCompressedSize) {
+        statCompressedSize.textContent = t('stat_original_preserved', {
+          size: formatBytes(lastCompressionResult.originalSize)
+        });
+      }
+      if (savingsPercent) {
+        savingsPercent.textContent = t('savings_already_optimal');
+      }
+      if (resultNoticeText) {
+        resultNoticeText.textContent = t('msg_already_optimal');
+      }
+    }
   }
 
   if (window.lucide) {
@@ -749,50 +793,124 @@ async function executeCompressionAndDownload() {
 
     // 3. Output binary blob and measure compressed size
     const compressedPdfBlob = targetDoc.output('blob');
-    const finalSize = compressedPdfBlob.size;
-    const originalSize = currentFileSize || (currentPdfBytes ? currentPdfBytes.byteLength : 0);
+    const compressedBytes = new Uint8Array(await compressedPdfBlob.arrayBuffer());
+    const originalBytes = currentPdfBytes;
 
-    const isSmaller = finalSize < originalSize;
-    const bytesSaved = isSmaller ? (originalSize - finalSize) : 0;
-    const rawReductionPct = (originalSize > 0 && isSmaller)
-      ? ((bytesSaved / originalSize) * 100)
-      : 0;
+    const originalSize = originalBytes ? originalBytes.length : (currentFileSize || 0);
+    const finalSize = compressedBytes.length;
 
-    // Format percentage: show 1 decimal place if between 0% and 10% (e.g. 2.4%), or integer if >= 10%
-    let reductionPercentStr;
-    if (rawReductionPct > 0 && rawReductionPct < 10) {
-      reductionPercentStr = (Math.round(rawReductionPct * 10) / 10).toString();
-    } else {
-      reductionPercentStr = Math.round(rawReductionPct).toString();
-    }
-
-    updateProgress(100, t('downloading_doc'));
-
-    // 4. Update Stats & Summary UI
-    if (statOriginalSize) statOriginalSize.textContent = formatBytes(originalSize);
-    if (statCompressedSize) statCompressedSize.textContent = formatBytes(finalSize);
-    if (savingsPercent) {
-      if (isSmaller && rawReductionPct > 0) {
-        savingsPercent.textContent = t('savings_smaller', { n: reductionPercentStr, saved: formatBytes(bytesSaved) });
-      } else {
-        savingsPercent.textContent = t('savings_optimized');
-      }
-    }
-    if (resultCard) resultCard.classList.remove('hidden');
-
-    // 5. Trigger Browser Download
     let outName = outputFilenameInput?.value?.trim() || "compressed_document";
     if (!outName.toLowerCase().endsWith('.pdf')) {
       outName += '.pdf';
     }
 
-    targetDoc.save(outName);
+    updateProgress(100, t('downloading_doc'));
 
-    // 6. User Feedback (Toast)
-    if (isSmaller) {
+    // 4. Compare output size against original size
+    if (compressedBytes.length < originalBytes.length) {
+      // Normal Success: Compressed size is strictly smaller
+      const bytesSaved = originalSize - finalSize;
+      const rawReductionPct = (originalSize > 0) ? ((bytesSaved / originalSize) * 100) : 0;
+
+      let reductionPercentStr;
+      if (rawReductionPct > 0 && rawReductionPct < 10) {
+        reductionPercentStr = (Math.round(rawReductionPct * 10) / 10).toString();
+      } else {
+        reductionPercentStr = Math.round(rawReductionPct).toString();
+      }
+
+      lastCompressionResult = {
+        isSmaller: true,
+        originalSize,
+        finalSize,
+        reductionPercentStr,
+        bytesSaved
+      };
+
+      // Update UI Indicators
+      if (statOriginalSize) statOriginalSize.textContent = formatBytes(originalSize);
+      if (statCompressedSize) {
+        statCompressedSize.textContent = formatBytes(finalSize);
+        statCompressedSize.className = 'stat-val reduced';
+      }
+
+      if (savingsBadge) {
+        savingsBadge.className = 'savings-badge';
+      }
+      if (savingsBadgeIcon) {
+        savingsBadgeIcon.setAttribute('data-lucide', 'arrow-down-right');
+      }
+      if (savingsPercent) {
+        savingsPercent.textContent = t('savings_smaller', { n: reductionPercentStr, saved: formatBytes(bytesSaved) });
+      }
+
+      if (resultNotice) resultNotice.classList.add('hidden');
+      if (resultCard) {
+        resultCard.classList.remove('optimal');
+        resultCard.classList.remove('hidden');
+      }
+
+      // Provide compressedBytes for download via targetDoc
+      targetDoc.save(outName);
+
+      // User Feedback Toast
       showToast(t('toast_compress_success', { n: reductionPercentStr }), "success");
     } else {
-      showToast(t('toast_already_compact'), "info");
+      // Smart Fallback: compressedBytes >= originalBytes (rasterization inflated size or already compact)
+      lastCompressionResult = {
+        isSmaller: false,
+        originalSize,
+        finalSize,
+        reductionPercentStr: "0",
+        bytesSaved: 0
+      };
+
+      // Update UI Indicators: show "Original preserved (10.6 MB)" without green highlight
+      if (statOriginalSize) statOriginalSize.textContent = formatBytes(originalSize);
+      if (statCompressedSize) {
+        statCompressedSize.textContent = t('stat_original_preserved', { size: formatBytes(originalSize) });
+        statCompressedSize.className = 'stat-val optimal';
+      }
+
+      // Update result badge to neutral/slate: "Already Optimal"
+      if (savingsBadge) {
+        savingsBadge.className = 'savings-badge optimal';
+      }
+      if (savingsBadgeIcon) {
+        savingsBadgeIcon.setAttribute('data-lucide', 'shield-check');
+      }
+      if (savingsPercent) {
+        savingsPercent.textContent = t('savings_already_optimal');
+      }
+
+      // Show clear informative message in result notice banner
+      if (resultNotice && resultNoticeText) {
+        resultNoticeText.textContent = t('msg_already_optimal');
+        resultNotice.classList.remove('hidden');
+      }
+
+      if (resultCard) {
+        resultCard.classList.add('optimal');
+        resultCard.classList.remove('hidden');
+      }
+
+      // Serve ORIGINAL file (originalBytes) for download instead
+      const originalBlob = new Blob([originalBytes], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(originalBlob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = outName;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+
+      // User Feedback Toast
+      showToast(t('msg_already_optimal'), "info");
+    }
+
+    if (window.lucide) {
+      lucide.createIcons();
     }
   } catch (err) {
     console.error("Compression Execution Error:", err);
@@ -936,6 +1054,7 @@ function resetWorkspace() {
   currentTotalPages = 0;
   currentFileSize = 0;
   isCompressing = false;
+  lastCompressionResult = null;
 
   hideMemoryAlert();
 
@@ -943,7 +1062,15 @@ function resetWorkspace() {
   if (configPanel) configPanel.classList.add('hidden');
   if (dropzone) dropzone.classList.remove('hidden');
   if (progressCard) progressCard.classList.add('hidden');
-  if (resultCard) resultCard.classList.add('hidden');
+  if (resultNotice) resultNotice.classList.add('hidden');
+  if (resultCard) {
+    resultCard.classList.add('hidden');
+    resultCard.classList.remove('optimal');
+  }
+  if (savingsBadge) savingsBadge.className = 'savings-badge';
+  if (statCompressedSize) {
+    statCompressedSize.className = 'stat-val reduced';
+  }
   if (btnHeaderReset) btnHeaderReset.disabled = true;
 }
 
