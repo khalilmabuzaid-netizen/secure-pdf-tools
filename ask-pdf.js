@@ -56,16 +56,25 @@ const translations = {
     progress_downloading: "Downloading Local AI Model (~35 MB)...",
     progress_ready: "AI Model Ready in Browser Memory",
     progress_analyzing: "Running on-device neural inference...",
+    progress_init: "Initializing ONNX Runtime WebAssembly...",
     answer_title: "AI Answer",
     confidence_label: "Confidence:",
     btn_copy_answer: "Copy Answer",
     toast_copied: "Answer copied to clipboard!",
     context_toggle_show: "Show Extracted Text Context ({words} words)",
     context_toggle_hide: "Hide Extracted Text Context",
+    context_placeholder: "Extracted PDF text will be displayed here.",
     toast_valid_pdf: "Please select a valid PDF file (.pdf)",
     toast_empty_question: "Please enter a question to ask the AI.",
     toast_no_text: "Could not extract readable text from this PDF. Please try a text-based PDF or OCR first.",
     toast_pdf_loaded: "Document loaded: {pages} pages ({words} words ready).",
+    toast_file_size_limit: "Please select a PDF under 25MB for optimal browser performance.",
+    toast_sample_loaded: "Sample PDF loaded! Click \"Ask AI\" to test local inference.",
+    toast_sample_loading: "Loading comprehensive AI sample document...",
+    footer_privacy: "Privacy Policy",
+    footer_terms: "Terms of Service",
+    footer_contact: "Contact Us",
+    footer_copyright: "© 2026 PDFNetizen. 100% Client-Side Private Document Tools.",
     ask_seo_badge: "On-Device Neural Question Answering",
     ask_seo_title: "How to Chat with PDF & Ask AI Questions Online Privately",
     ask_seo_subtitle: "Analyze PDF files with cutting-edge local AI models running entirely in your browser without sacrificing privacy or speed.",
@@ -120,16 +129,25 @@ const translations = {
     progress_downloading: "جاري تنزيل نموذج الذكاء الاصطناعي الخفيف (~35 ميجابايت)...",
     progress_ready: "نموذج الذكاء الاصطناعي جاهز ومخزن في ذاكرة المتصفح",
     progress_analyzing: "جاري استنتاج الإجابة على جهازك...",
+    progress_init: "جاري تهيئة بيئة WebAssembly لنظام ONNX...",
     answer_title: "إجابة الذكاء الاصطناعي",
     confidence_label: "مستوى الدقة:",
     btn_copy_answer: "نسخ الإجابة",
     toast_copied: "تم نسخ الإجابة إلى الحافظة!",
     context_toggle_show: "عرض النص المستخرج من المستند ({words} كلمة)",
     context_toggle_hide: "إخفاء النص المستخرج",
+    context_placeholder: "سيتم عرض النص المستخرج من ملف PDF هنا.",
     toast_valid_pdf: "يرجى اختيار ملف PDF صالح (.pdf)",
     toast_empty_question: "يرجى كتابة سؤال أولاً.",
     toast_no_text: "لم نتمكن من استخراج نص قابل للقراءة. يرجى تجربة مستند يحتوي على نصوص أو استخدام أداة OCR أولاً.",
     toast_pdf_loaded: "تم تحميل المستند: {pages} صفحات ({words} كلمة جاهزة).",
+    toast_file_size_limit: "يرجى اختيار ملف PDF بحجم أقل من 25 ميجابايت للحفاظ على أداء المتصفح.",
+    toast_sample_loaded: "تم تحميل نموذج PDF! انقر على \"اسأل الذكاء الاصطناعي\" لاختبار الاستنتاج المحلي.",
+    toast_sample_loading: "جاري تحميل مستند الذكاء الاصطناعي التجريبي...",
+    footer_privacy: "سياسة الخصوصية",
+    footer_terms: "شروط الخدمة",
+    footer_contact: "اتصل بنا",
+    footer_copyright: "© 2026 PDFNetizen. أدوات معالجة المستندات محلياً ١٠٠٪ بأمان وخصوصية.",
     ask_seo_badge: "إجابة على الأسئلة بالذكاء الاصطناعي في المتصفح",
     ask_seo_title: "كيفية التحدث مع ملفات PDF وطرح الأسئلة بالذكاء الاصطناعي محلياً",
     ask_seo_subtitle: "حلل مستندات PDF باستخدام أحدث النماذج العصبية المحلية التي تعمل بالكامل في متصفحك دون المساومة على الخصوصية أو السرعة.",
@@ -149,8 +167,8 @@ const translations = {
   }
 };
 
-// Application State
-let currentLang = 'en';
+// Application State (Initialize language preference from localStorage)
+let currentLang = (typeof localStorage !== 'undefined' && (localStorage.getItem('pdfnetizen_lang') || localStorage.getItem('pdf_netizen_lang'))) || 'en';
 let currentPdfBytes = null;
 let currentFileName = 'document.pdf';
 let currentTotalPages = 0;
@@ -219,7 +237,7 @@ function cacheDOMElements() {
   btnBrowseFile = document.getElementById('btn-browse-file');
   btnLoadSample = document.getElementById('btn-load-sample');
   btnHeaderReset = document.getElementById('btn-header-reset');
-  btnLanguageToggle = document.getElementById('btn-language-toggle');
+  btnLanguageToggle = document.getElementById('btn-language-toggle') || document.getElementById('lang-toggle') || document.querySelector('.lang-switch-btn') || document.querySelector('.btn-lang-toggle');
   langToggleText = document.getElementById('lang-toggle-text');
   userQuestionInput = document.getElementById('user-question');
   btnAskAi = document.getElementById('ask-ai-btn');
@@ -243,10 +261,19 @@ function cacheDOMElements() {
   toastIconEl = document.getElementById('toast-icon');
 }
 
-// Translation Helper
+// Translation Helper with global dictionary fallback
 function t(key, replacements = {}) {
-  const dict = translations[currentLang] || translations.en;
-  let text = dict[key] || translations.en[key] || key;
+  const globalDict = (typeof window !== 'undefined' && (window.translations || window.I18N_TRANSLATIONS))
+    ? (window.translations || window.I18N_TRANSLATIONS)
+    : null;
+  const localDict = translations[currentLang] || translations.en;
+  
+  let text = localDict?.[key] || 
+             (globalDict?.[currentLang]?.[key]) || 
+             translations.en?.[key] || 
+             (globalDict?.en?.[key]) || 
+             key;
+
   for (const [k, v] of Object.entries(replacements)) {
     text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
   }
@@ -265,6 +292,14 @@ function applyLanguage(lang) {
   document.documentElement.dir = isAr ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
 
+  // Persist preference to localStorage
+  try {
+    localStorage.setItem('pdfnetizen_lang', lang);
+    localStorage.setItem('pdf_netizen_lang', lang);
+  } catch (e) {
+    console.warn('Could not save language preference:', e);
+  }
+
   if (langToggleText) {
     langToggleText.textContent = isAr ? 'English' : 'العربية';
   }
@@ -274,7 +309,7 @@ function applyLanguage(lang) {
     const key = el.getAttribute('data-i18n');
     const translation = t(key);
     if (translation) {
-      if (translation.includes('<span')) {
+      if (translation.includes('<span') || translation.includes('<b>') || translation.includes('<strong>')) {
         el.innerHTML = translation;
       } else {
         el.textContent = translation;

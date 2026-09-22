@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EZMPWQ6JGL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-EZMPWQ6JGL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B0F19">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Smart PDF Summarizer AI Online Free - Summarize PDF Documents Privately</title>
+  <meta name="title" content="Smart PDF Summarizer AI Online Free - Summarize PDF Documents Privately">
+  <meta name="description"
+    content="Summarize PDF documents online for free with local on-device AI. 100% private in-browser neural summarization with zero server uploads, bullet points, executive overviews, and offline support.">
+  <meta name="keywords"
+    content="summarize pdf ai, pdf summarizer online free, local ai pdf summary, client side pdf summarizer, summarize pdf bullet points, executive summary pdf, private ai pdf summarizer">
+  <meta name="author" content="PDFNetizen">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://pdfnetizen.com/summarize-pdf.html">
+
+  <!-- Open Graph / Facebook Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pdfnetizen.com/summarize-pdf.html">
+  <meta property="og:title" content="Smart PDF Summarizer AI Online Free - Summarize PDF Documents Privately">
+  <meta property="og:description"
+    content="Summarize PDF documents online for free with local on-device AI. 100% private in-browser neural summarization with zero server uploads, bullet points, executive overviews, and offline support.">
+  <meta property="og:site_name" content="PDFNetizen">
+  <meta property="og:image" content="https://pdfnetizen.com/og-summarize-pdf.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ar_AR">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://pdfnetizen.com/summarize-pdf.html">
+  <meta name="twitter:title" content="Smart PDF Summarizer AI Online Free - Summarize PDF Documents Privately">
+  <meta name="twitter:description"
+    content="Summarize PDF documents online for free with local on-device AI. 100% private in-browser neural summarization with zero server uploads, bullet points, executive overviews, and offline support.">
+  <meta name="twitter:image" content="https://pdfnetizen.com/og-summarize-pdf.png">
+
+  <!-- Google AdSense Ready Meta Tag -->
+  <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX">
+
+  <!-- Google Fonts Preconnect & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Unified Dark/Light Theme System -->
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+
+  <!-- PDF.js CDN (Client-side document parsing) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Structured Data (JSON-LD) for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://pdfnetizen.com/summarize-pdf.html#webapp",
+        "name": "Smart PDF Summarizer AI Online Free",
+        "url": "https://pdfnetizen.com/summarize-pdf.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All modern web browsers (Chrome, Firefox, Safari, Edge, Opera)",
+        "browserRequirements": "Requires JavaScript and WebAssembly support",
+        "description": "Free client-side online AI tool to summarize PDF documents into key bullet points or executive overviews with 100% privacy and zero server uploads.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "100% Client-Side In-Browser AI Summarization",
+          "Zero Server Uploads & Complete Privacy",
+          "Bullet Points and Executive Overview Formats",
+          "Quantized Lightweight DistilBART Model (~40 MB)",
+          "Works Completely Offline After Initial Download",
+          "Export as Text & Clean Printable View"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://pdfnetizen.com/summarize-pdf.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my confidential PDF documents uploaded to external servers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All text extraction and neural summarization execute 100% locally inside your browser via WebAssembly and Web Workers. Your files never touch any external server."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the maximum file size and page limit for summarization?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The maximum recommended file size is 50 MB to ensure optimal browser memory performance. For documents exceeding 80 pages, the tool analyzes and summarizes the first 80 pages with chunked processing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is there a one-time ~40 MB download on first use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To guarantee complete privacy, a lightweight quantized ONNX neural model is cached directly in your browser. All future visits and summarization queries run instantly offline with 0 MB download."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export or print the generated summary?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! You can instantly copy the summary to your clipboard, export it as a plain text file (.txt), or use the built-in clean print formatting."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* Design Tokens & CSS Variables */
+    :root,
+    :root[data-theme="dark"] {
+      --bg-primary: #07090e;
+      --bg-main: #07090e;
+      --bg-surface: rgba(11, 15, 25, 0.85);
+      --bg-surface-elevated: rgba(255, 255, 255, 0.03);
+      --bg-card: rgba(15, 23, 42, 0.85);
+      --bg-card-hover: rgba(30, 41, 59, 0.9);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-focus: rgba(99, 102, 241, 0.6);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-primary: #6366f1;
+      --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+      --accent-glow: 0 0 24px rgba(99, 102, 241, 0.35);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    :root[data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-main: #f8fafc;
+      --bg-surface: rgba(255, 255, 255, 0.95);
+      --bg-surface-elevated: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --border-subtle: #cbd5e1;
+      --border-focus: #4f46e5;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-glow: 0 0 24px rgba(99, 102, 241, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    [data-theme="light"] body {
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.04) 0%, transparent 40%);
+    }
+
+    /* RTL Arabic Font Support */
+    html[dir="rtl"] body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+    }
+
+    /* Header & Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--accent-glow);
+    }
+
+    .brand-icon i {
+      color: #ffffff;
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="light"] .nav-link:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    [data-theme="light"] .btn-secondary {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="light"] .btn-secondary:hover:not(:disabled) {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+    }
+
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 1.05rem;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #818cf8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    [data-theme="light"] .hero-badge {
+      background: rgba(99, 102, 241, 0.1);
+      color: #4f46e5;
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Rule 4: Model Transparency Banner */
+    .model-banner {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .model-banner-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .model-banner-icon {
+      background: rgba(99, 102, 241, 0.12);
+      color: #4f46e5;
+    }
+
+    .model-banner-icon i,
+    .model-banner-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    .model-banner-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .model-banner-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Warning Banner for Safety Limits */
+    .warning-banner {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #fbbf24;
+    }
+
+    [data-theme="light"] .warning-banner {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #b45309;
+    }
+
+    .warning-banner i {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .warning-banner-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Dropzone Upload Box */
+    .dropzone-card {
+      border: 2px dashed var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 48px 24px;
+      text-align: center;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 30px;
+    }
+
+    [data-theme="light"] .dropzone-card {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .dropzone-card:hover, .dropzone-card.drag-over {
+      border-color: var(--accent-primary);
+      background: var(--bg-card-hover);
+      box-shadow: var(--accent-glow);
+    }
+
+    .dropzone-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: var(--radius-md);
+      background: rgba(99, 102, 241, 0.12);
+      color: #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      transition: var(--transition);
+    }
+
+    [data-theme="light"] .dropzone-icon {
+      background: rgba(99, 102, 241, 0.1);
+      color: #4f46e5;
+    }
+
+    .dropzone-icon i,
+    .dropzone-icon svg {
+      width: 34px;
+      height: 34px;
+      stroke: currentColor;
+    }
+
+    .dropzone-card:hover .dropzone-icon,
+    .dropzone-card.drag-over .dropzone-icon {
+      transform: scale(1.08);
+      background: rgba(99, 102, 241, 0.22);
+      color: #818cf8;
+    }
+
+    .dropzone-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 24px;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .feature-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .feature-pill i {
+      color: #10b981;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Active Workspace Panel */
+    .workspace-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .file-overview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .file-overview-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .file-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 2px;
+      word-break: break-all;
+    }
+
+    .file-meta-badges {
+      display: flex;
+      gap: 8px;
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] .meta-badge {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .meta-badge.highlight {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+    }
+
+    [data-theme="light"] .meta-badge.highlight {
+      background: rgba(99, 102, 241, 0.1);
+      color: #4f46e5;
+    }
+
+    /* Options & Controls Card */
+    .controls-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control-label i {
+      width: 16px;
+      height: 16px;
+      color: #818cf8;
+    }
+
+    .segmented-control {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      gap: 4px;
+    }
+
+    [data-theme="light"] .segmented-control {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .segment-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .segment-btn.active {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Progress & Status Card */
+    .progress-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      backdrop-filter: blur(12px);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .progress-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+    }
+
+    .progress-percent {
+      color: #818cf8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    [data-theme="light"] .progress-track {
+      background: #e2e8f0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-gradient);
+      border-radius: var(--radius-full);
+      transition: width 0.2s ease;
+    }
+
+    .progress-subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Output Summary Card */
+    .summary-output-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="light"] .summary-output-card {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    }
+
+    .summary-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .summary-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .summary-title-group i {
+      color: #a855f7;
+    }
+
+    .summary-badges {
+      display: flex;
+      gap: 8px;
+    }
+
+    .stat-badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.12);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+    }
+
+    [data-theme="light"] .stat-badge {
+      background: rgba(99, 102, 241, 0.1);
+      color: #4f46e5;
+    }
+
+    .summary-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .summary-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* AdSense Placeholder Slot */
+    .ad-placeholder {
+      width: 100%;
+      max-width: 728px;
+      height: 90px;
+      margin: 36px auto;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    [data-theme="light"] .ad-placeholder {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    /* SEO Content & Editorial Section */
+    .seo-section {
+      margin-top: 60px;
+    }
+
+    .seo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      backdrop-filter: blur(12px);
+    }
+
+    .seo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #818cf8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .seo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .seo-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+    }
+
+    [data-theme="light"] .step-card {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    .step-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    [data-theme="light"] .faq-item {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .faq-a {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      padding: 30px 24px;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 920px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+
+    .footer-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    html[dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+    }
+
+    .toast-success {
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #10b981;
+    }
+
+    .toast-error {
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+    }
+
+    .toast-warning {
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #f59e0b;
+    }
+
+    .toast-info {
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #818cf8;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.1rem;
+      }
+      .nav-links {
+        display: none;
+      }
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Clean Print Formatting */
+    @media print {
+      .top-nav, .hero-section, .model-banner, .warning-banner, .dropzone-card,
+      .controls-card, .progress-card, .summary-actions, .ad-placeholder,
+      .seo-section, .site-footer, .toast {
+        display: none !important;
+      }
+      body, .main-container, .summary-output-card {
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .summary-body {
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-nav">
+    <a href="index.html" class="brand-logo" title="PDFNetizen Home">
+      <div class="brand-icon">
+        <i data-lucide="sparkles"></i>
+      </div>
+      <span>PDFNetizen</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
+      <a href="annotator.html" class="nav-link" data-i18n="nav_annotator">Annotator</a>
+      <a href="merge.html" class="nav-link" data-i18n="nav_merge">Merge PDF</a>
+      <a href="split.html" class="nav-link" data-i18n="nav_split">Split PDF</a>
+      <a href="compress.html" class="nav-link" data-i18n="nav_compress">Compress PDF</a>
+      <a href="ocr.html" class="nav-link" data-i18n="nav_ocr">OCR Extractor</a>
+      <a href="ask-pdf.html" class="nav-link" data-i18n="nav_ask_pdf">Ask PDF AI</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button id="btn-header-reset" class="btn btn-secondary btn-sm" disabled title="Reset current workspace">
+        <i data-lucide="rotate-ccw"></i>
+        <span data-i18n="nav_reset">Reset</span>
+      </button>
+
+      <!-- Theme Toggle Button -->
+      <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary btn-sm" title="Switch Theme / تبديل المظهر"
+        aria-label="Toggle theme">
+        <i data-lucide="sun"></i>
+      </button>
+
+      <!-- Language Toggle Button -->
+      <button id="btn-language-toggle" class="lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
+        <i data-lucide="globe"></i>
+        <span id="lang-toggle-text">العربية</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="main-container">
+
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <i data-lucide="shield-check"></i>
+        <span data-i18n="summarize_hero_badge">Local & Secure • 100% In-Browser AI Summarization</span>
+      </div>
+      <h1 class="hero-title" data-i18n="summarize_hero_title">
+        Smart AI <span class="gradient-text">PDF Summarizer</span>
+      </h1>
+      <p class="hero-subtitle" data-i18n="summarize_hero_subtitle">
+        Generate clear bullet points or executive overviews from your PDF documents directly inside your browser. 100% private with zero cloud uploads.
+      </p>
+    </section>
+
+    <!-- Rule 4: Model Transparency Banner -->
+    <div class="model-banner" id="model-banner">
+      <div class="model-banner-icon">
+        <i data-lucide="cpu"></i>
+      </div>
+      <div class="model-banner-content">
+        <div class="model-banner-title" data-i18n="summarize_notice_title">Client-Side DistilBART Neural Engine</div>
+        <div class="model-banner-desc" data-i18n="summarize_notice_desc">
+          One-time download (~40 MB). Runs 100% locally on your device and works offline.
+        </div>
+      </div>
+    </div>
+
+    <!-- Safety & Page Advisory Banner -->
+    <div class="warning-banner hidden" id="page-advisory-banner">
+      <i data-lucide="alert-triangle"></i>
+      <div class="warning-banner-text" id="page-advisory-text" data-i18n="summarize_page_advisory">
+        Document exceeds 80 pages. To ensure fast browser performance, the AI will summarize the first 80 pages.
+      </div>
+    </div>
+
+    <!-- Dropzone Upload Area -->
+    <section class="dropzone-card" id="dropzone" aria-label="PDF File Upload Area">
+      <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" class="hidden" aria-label="Select PDF file">
+      
+      <div class="dropzone-icon">
+        <i data-lucide="upload-cloud"></i>
+      </div>
+
+      <h2 class="dropzone-title" data-i18n="summarize_dropzone_title">Drop your PDF file here</h2>
+      <p class="dropzone-subtitle" data-i18n="summarize_dropzone_subtitle">
+        Drag and drop any PDF document under 50MB to generate an instant on-device AI summary, or browse from your device
+      </p>
+
+      <div class="dropzone-actions">
+        <button id="btn-browse-file" class="btn btn-primary btn-lg">
+          <i data-lucide="upload"></i>
+          <span data-i18n="btn_browse_file">Browse PDF File</span>
+        </button>
+        <button id="btn-load-sample" class="btn btn-secondary btn-lg">
+          <i data-lucide="sparkles"></i>
+          <span data-i18n="btn_load_sample">Try Sample PDF</span>
+        </button>
+      </div>
+
+      <div class="feature-pills">
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_local">100% On-Device Neural Model</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_offline">Works Offline After 1st Download</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_privacy">Zero Server Uploads & Private</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="summarize_max_limit">Up to 50 MB Safe Processing</span></span>
+      </div>
+    </section>
+
+    <!-- Active Workspace Panel -->
+    <section class="workspace-panel hidden" id="workspace-panel" aria-label="PDF Summarizer Workspace">
+      
+      <!-- Document Overview Card -->
+      <div class="file-overview-card">
+        <div class="file-overview-left">
+          <div class="file-icon-box">
+            <i data-lucide="file-text"></i>
+          </div>
+          <div>
+            <div class="file-name" id="file-name-display">document.pdf</div>
+            <div class="file-meta-badges">
+              <span class="meta-badge highlight" id="file-size-display">0 KB</span>
+              <span class="meta-badge" id="file-pages-display">0 Pages</span>
+              <span class="meta-badge" id="file-words-display">0 Words</span>
+            </div>
+          </div>
+        </div>
+        <button id="btn-change-file" class="btn btn-secondary btn-sm" title="Choose a different document">
+          <i data-lucide="refresh-cw"></i>
+          <span data-i18n="btn_change_file">Change File</span>
+        </button>
+      </div>
+
+      <!-- Summarization Controls Card -->
+      <div class="controls-card" id="controls-card">
+        <div class="controls-grid">
+          <!-- Summary Format -->
+          <div class="control-group">
+            <label class="control-label">
+              <i data-lucide="list"></i>
+              <span data-i18n="summarize_label_format">Summary Format</span>
+            </label>
+            <div class="segmented-control" id="format-control">
+              <button type="button" class="segment-btn active" data-format="bullets">
+                <i data-lucide="list-checks"></i>
+                <span data-i18n="summarize_format_bullets">Bullet Points</span>
+              </button>
+              <button type="button" class="segment-btn" data-format="paragraph">
+                <i data-lucide="align-left"></i>
+                <span data-i18n="summarize_format_executive">Executive Overview</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary Length -->
+          <div class="control-group">
+            <label class="control-label">
+              <i data-lucide="sliders"></i>
+              <span data-i18n="summarize_label_length">Summary Depth</span>
+            </label>
+            <div class="segmented-control" id="length-control">
+              <button type="button" class="segment-btn active" data-length="short">
+                <i data-lucide="zap"></i>
+                <span data-i18n="summarize_length_short">Key Takeaways</span>
+              </button>
+              <button type="button" class="segment-btn" data-length="comprehensive">
+                <i data-lucide="book-open"></i>
+                <span data-i18n="summarize_length_comprehensive">Comprehensive</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center;">
+          <button id="btn-summarize" class="btn btn-primary btn-lg" style="min-width: 240px;">
+            <i data-lucide="sparkles"></i>
+            <span id="btn-summarize-text" data-i18n="summarize_btn_generate">Summarize Document</span>
+            <div class="spinner hidden" id="summarize-spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Tracking Card -->
+      <div class="progress-card hidden" id="progress-card">
+        <div class="progress-header">
+          <span class="progress-label">
+            <div class="spinner"></div>
+            <span id="progress-status-text" data-i18n="summarize_progress_downloading">Downloading Local AI Model (~40 MB)...</span>
+          </span>
+          <span class="progress-percent" id="progress-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-subtext" id="progress-subtext" data-i18n="summarize_progress_init">Initializing ONNX Runtime WebAssembly...</span>
+      </div>
+
+      <!-- Summary Output Card -->
+      <div class="summary-output-card hidden" id="summary-output-card">
+        <div class="summary-header">
+          <div class="summary-title-group">
+            <i data-lucide="sparkles"></i>
+            <span data-i18n="summarize_output_title">AI Generated Summary</span>
+          </div>
+          <div class="summary-badges">
+            <span class="stat-badge" id="summary-format-badge">Bullet Points</span>
+            <span class="stat-badge" id="summary-duration-badge">⚡ 1.2s</span>
+          </div>
+        </div>
+
+        <div class="summary-body" id="summary-content">
+          Summary text appears here.
+        </div>
+
+        <div class="summary-actions">
+          <button id="btn-copy-summary" class="btn btn-secondary btn-sm">
+            <i data-lucide="copy"></i>
+            <span data-i18n="btn_copy_summary">Copy to Clipboard</span>
+          </button>
+          <button id="btn-export-txt" class="btn btn-secondary btn-sm">
+            <i data-lucide="download"></i>
+            <span data-i18n="btn_export_txt">Export as TXT</span>
+          </button>
+          <button id="btn-print-summary" class="btn btn-secondary btn-sm">
+            <i data-lucide="printer"></i>
+            <span data-i18n="btn_print_summary">Print Summary</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- AdSense Placeholder Slot (728x90) -->
+    <div class="ad-placeholder" role="complementary" aria-label="Advertisement">
+      ADVERTISEMENT SPACE (728X90)
+    </div>
+
+    <!-- Comprehensive SEO Editorial Section -->
+    <section class="seo-section" aria-label="PDF AI Summarizer Guide and FAQ">
+      <article class="seo-card">
+        <div class="seo-header">
+          <div class="seo-badge">
+            <i data-lucide="cpu"></i>
+            <span data-i18n="summarize_seo_badge">On-Device Neural DistilBART Model</span>
+          </div>
+          <h2 class="seo-title" data-i18n="summarize_seo_title">How to Summarize PDF Documents Online Privately</h2>
+          <p class="seo-subtitle" data-i18n="summarize_seo_subtitle">
+            Condense lengthy reports, legal agreements, academic research papers, and books into concise summaries using local in-browser artificial intelligence.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3 data-i18n="summarize_step1_title">1. Upload PDF Document</h3>
+            <p data-i18n="summarize_step1_desc">Drag and drop any PDF file up to 50MB. Text extraction executes 100% locally in your device memory.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3 data-i18n="summarize_step2_title">2. Select Summary Style</h3>
+            <p data-i18n="summarize_step2_desc">Choose between Key Bullet Points or an Executive Overview, and adjust depth from quick takeaways to comprehensive.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3 data-i18n="summarize_step3_title">3. Generate AI Summary</h3>
+            <p data-i18n="summarize_step3_desc">Click Summarize to initiate off-thread neural inference with automatic token window chunking.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3 data-i18n="summarize_step4_title">4. Copy, Export or Print</h3>
+            <p data-i18n="summarize_step4_desc">Copy the formatted insights to your clipboard, download as a text file, or print with clean document formatting.</p>
+          </div>
+        </div>
+
+        <h3 class="seo-title" style="font-size: 1.4rem; margin-top: 2rem;" data-i18n="summarize_faq_title">Frequently Asked Questions</h3>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <div class="faq-q" data-i18n="summarize_faq_q1">Are my confidential PDF documents uploaded to external servers?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a1">No. All text extraction and neural summarization execute 100% locally inside your browser via WebAssembly and Web Workers. Your files never touch any external server.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" data-i18n="summarize_faq_q2">What is the maximum file size and page limit for summarization?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a2">The maximum recommended file size is 50 MB to ensure optimal browser memory performance. For documents exceeding 80 pages, the tool analyzes and summarizes the first 80 pages with chunked processing.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" data-i18n="summarize_faq_q3">Why is there a one-time ~40 MB download on first use?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a3">To guarantee complete privacy, a lightweight quantized ONNX neural model is cached directly in your browser. All future visits and summarization queries run instantly offline with 0 MB download.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" data-i18n="summarize_faq_q4">Can I export or print the generated summary?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a4">Yes! You can instantly copy the summary to your clipboard, export it as a plain text file (.txt), or use the built-in clean print formatting.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="footer_copyright">
+        © 2026 PDFNetizen. 100% Client-Side Private Document Tools.
+      </div>
+      <div class="footer-links">
+        <a href="index.html" class="footer-link" data-i18n="nav_home">Home</a>
+        <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+        <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+        <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Element -->
+  <div id="toast" class="toast toast-info hidden" role="alert" aria-live="polite">
+    <i data-lucide="info" id="toast-icon"></i>
+    <span id="toast-message">Notification message</span>
+  </div>
+
+  <!-- i18n Localization Dictionary -->
+  <script src="i18n.js"></script>
+  <!-- Main Controller Script -->
+  <script src="summarize-pdf.js"></script>
+  <!-- PWA Service Worker Registration -->
+  <script src="pwa.js" defer></script>
+</body>
+
+</html>
