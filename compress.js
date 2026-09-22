@@ -76,6 +76,7 @@ const translations = {
     toast_read_fail: "Failed to read the selected file.",
     toast_pdf_loaded: "PDF loaded: {pages} ready for compression.",
     toast_compress_success: "PDF compressed successfully! ({n}% size reduction)",
+    toast_already_compact: "Document is already compact. Minimal reduction possible.",
     toast_upload_first: "Please upload a PDF document first.",
     toast_sample_generating: "Generating sample multi-page document...",
     toast_sample_error: "Error creating sample: ",
@@ -156,6 +157,7 @@ const translations = {
     toast_read_fail: "فشل في قراءة الملف المحدد.",
     toast_pdf_loaded: "تم تحميل PDF: {pages} جاهزة للضغط.",
     toast_compress_success: "تم ضغط ملف PDF بنجاح! (تقليل الحجم بنسبة {n}٪)",
+    toast_already_compact: "المستند مضغوط ومحسّن بالفعل. تم تحقيق الحد الأدنى من تقليل الحجم.",
     toast_upload_first: "يرجى رفع مستند PDF أولاً.",
     toast_sample_generating: "جاري توليد نموذج مستند متعدد الصفحات...",
     toast_sample_error: "حدث خطأ أثناء إنشاء النموذج: ",
@@ -748,28 +750,21 @@ async function executeCompressionAndDownload() {
     // 3. Output binary blob and measure compressed size
     const compressedPdfBlob = targetDoc.output('blob');
     const finalSize = compressedPdfBlob.size;
-    const originalSize = currentFileSize || currentPdfBytes.byteLength;
+    const originalSize = currentFileSize || (currentPdfBytes ? currentPdfBytes.byteLength : 0);
 
-    // SIZE CHECK FALLBACK & ABORT CHECK:
-    // If the compressed output is equal or larger than original, abort download and display alert
-    if (finalSize >= originalSize) {
-      // Reset progress bar
-      updateProgress(0, "");
-      if (progressCard) progressCard.classList.add('hidden');
-      if (resultCard) resultCard.classList.add('hidden');
-
-      const alertMsg = t('alert_text_optimized');
-      const alertTitle = t('alert_text_optimized_title');
-
-      showMemoryAlert(true, alertMsg, alertTitle);
-      showToast(alertMsg, "warning");
-      return;
-    }
-
-    const bytesSaved = Math.max(0, originalSize - finalSize);
-    const reductionPercent = originalSize > 0
-      ? Math.round((bytesSaved / originalSize) * 100)
+    const isSmaller = finalSize < originalSize;
+    const bytesSaved = isSmaller ? (originalSize - finalSize) : 0;
+    const rawReductionPct = (originalSize > 0 && isSmaller)
+      ? ((bytesSaved / originalSize) * 100)
       : 0;
+
+    // Format percentage: show 1 decimal place if between 0% and 10% (e.g. 2.4%), or integer if >= 10%
+    let reductionPercentStr;
+    if (rawReductionPct > 0 && rawReductionPct < 10) {
+      reductionPercentStr = (Math.round(rawReductionPct * 10) / 10).toString();
+    } else {
+      reductionPercentStr = Math.round(rawReductionPct).toString();
+    }
 
     updateProgress(100, t('downloading_doc'));
 
@@ -777,8 +772,8 @@ async function executeCompressionAndDownload() {
     if (statOriginalSize) statOriginalSize.textContent = formatBytes(originalSize);
     if (statCompressedSize) statCompressedSize.textContent = formatBytes(finalSize);
     if (savingsPercent) {
-      if (reductionPercent > 0) {
-        savingsPercent.textContent = t('savings_smaller', { n: reductionPercent, saved: formatBytes(bytesSaved) });
+      if (isSmaller && rawReductionPct > 0) {
+        savingsPercent.textContent = t('savings_smaller', { n: reductionPercentStr, saved: formatBytes(bytesSaved) });
       } else {
         savingsPercent.textContent = t('savings_optimized');
       }
@@ -793,7 +788,12 @@ async function executeCompressionAndDownload() {
 
     targetDoc.save(outName);
 
-    showToast(t('toast_compress_success', { n: reductionPercent }), "success");
+    // 6. User Feedback (Toast)
+    if (isSmaller) {
+      showToast(t('toast_compress_success', { n: reductionPercentStr }), "success");
+    } else {
+      showToast(t('toast_already_compact'), "info");
+    }
   } catch (err) {
     console.error("Compression Execution Error:", err);
     showMemoryAlert(true, `Compression halted: ${err.message}`, t('alert_title'));
