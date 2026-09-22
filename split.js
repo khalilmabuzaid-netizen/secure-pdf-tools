@@ -406,7 +406,7 @@ async function processLoadedPdfBytes(bytes, filename, sizeBytes = null) {
     }
 
     // Load PDF with PDF-Lib to get page count
-    const pdfDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+    const pdfDoc = await PDFLib.PDFDocument.load(bytes.slice(0), { ignoreEncryption: true });
     currentTotalPages = pdfDoc.getPageCount();
 
     if (currentTotalPages === 0) {
@@ -639,7 +639,7 @@ async function executeSplitAndDownload() {
 
   try {
     // 1. Load source document in PDF-Lib
-    const srcDoc = await PDFLib.PDFDocument.load(currentPdfBytes, { ignoreEncryption: true });
+    const srcDoc = await PDFLib.PDFDocument.load(currentPdfBytes.slice(0), { ignoreEncryption: true });
 
     // 2. Create target new document
     const newDoc = await PDFLib.PDFDocument.create();

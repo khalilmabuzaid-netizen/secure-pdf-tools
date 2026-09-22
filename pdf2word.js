@@ -521,7 +521,7 @@
     }
 
     try {
-      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
       currentPdfDoc = pdf;
       currentArrayBuffer = arrayBuffer;
       currentFile = { name: fileName, size: fileSize };

@@ -627,7 +627,7 @@
     currentPdfBytes = new Uint8Array(arrayBuffer);
 
     try {
-      currentPdfDoc = await PDFLib.PDFDocument.load(currentPdfBytes);
+      currentPdfDoc = await PDFLib.PDFDocument.load(currentPdfBytes.slice(0));
       totalPdfPages = currentPdfDoc.getPageCount();
 
       if (fileNameDisplay) fileNameDisplay.textContent = currentFileName;
@@ -819,7 +819,7 @@
       updateProgressUI(40, 'sign_status_processing');
 
       // 2. Load PDF with PDFLib
-      const pdfDoc = await PDFLib.PDFDocument.load(currentPdfBytes);
+      const pdfDoc = await PDFLib.PDFDocument.load(currentPdfBytes.slice(0));
       const signatureImage = await pdfDoc.embedPng(signatureImageBytes);
 
       updateProgressUI(60, 'sign_status_processing');

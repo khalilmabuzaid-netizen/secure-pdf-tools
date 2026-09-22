@@ -466,11 +466,11 @@
       window.uploadedFileName = fileName;
 
       // 1. Convert DOCX to HTML
-      const result = await window.mammoth.convertToHtml({ arrayBuffer });
+      const result = await window.mammoth.convertToHtml({ arrayBuffer: arrayBuffer.slice(0) });
       parsedHtmlContent = result.value || '<p>Document has no readable text.</p>';
 
       // 2. Extract Raw Text for Stats & Copying
-      const textResult = await window.mammoth.extractRawText({ arrayBuffer });
+      const textResult = await window.mammoth.extractRawText({ arrayBuffer: arrayBuffer.slice(0) });
       parsedRawText = textResult.value || '';
 
       // Update UI File Info

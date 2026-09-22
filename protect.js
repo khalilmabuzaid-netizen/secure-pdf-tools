@@ -519,7 +519,7 @@
         throw new Error('PDF-Lib is still loading. Please try again.');
       }
 
-      const pdfDoc = await window.PDFLib.PDFDocument.load(uint8, {
+      const pdfDoc = await window.PDFLib.PDFDocument.load(uint8.slice(0), {
         ignoreEncryption: true,
         updateMetadata: false
       });

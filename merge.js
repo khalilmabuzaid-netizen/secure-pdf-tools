@@ -366,7 +366,7 @@
 
         if (window.PDFLib) {
           try {
-            const pdfDoc = await PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
+            const pdfDoc = await PDFLib.PDFDocument.load(buffer.slice(0), { ignoreEncryption: true });
             item.pageCount = pdfDoc.getPageCount();
           } catch (docErr) {
             console.warn('Could not inspect page count for', file.name, docErr);
@@ -673,7 +673,7 @@
 
         let pdfDoc;
         try {
-          pdfDoc = await PDFLib.PDFDocument.load(fileBuffer, { ignoreEncryption: true });
+          pdfDoc = await PDFLib.PDFDocument.load(fileBuffer.slice(0), { ignoreEncryption: true });
         } catch (loadErr) {
           console.error(`Failed loading "${item.name}":`, loadErr);
           throw new Error(`File "${item.name}" could not be read.`);

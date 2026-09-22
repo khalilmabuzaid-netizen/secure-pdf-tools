@@ -426,7 +426,7 @@
   async function loadPdfDocument(file) {
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
       pdfDoc = await loadingTask.promise;
       totalPdfPages = pdfDoc.numPages;
       currentPdfPageNumber = 1;

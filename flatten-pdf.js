@@ -483,7 +483,7 @@ async function processAndLoadPdf(bytes, fileName, fileSize) {
   let pageCount = 1;
 
   try {
-    pdfLibDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+    pdfLibDoc = await PDFLib.PDFDocument.load(bytes.slice(0), { ignoreEncryption: true });
     pageCount = pdfLibDoc.getPageCount();
     try {
       const form = pdfLibDoc.getForm();
@@ -860,7 +860,7 @@ async function executePdfFlattening() {
       // Standard Vector Flattening
       updateProgress(20, t('progress_flattening'), t('progress_detail_fields'));
       
-      const pdfDoc = await PDFLib.PDFDocument.load(state.currentFile.bytes, { ignoreEncryption: true });
+      const pdfDoc = await PDFLib.PDFDocument.load(state.currentFile.bytes.slice(0), { ignoreEncryption: true });
       updateProgress(50, t('progress_flattening'), t('progress_detail_fields'));
 
       try {

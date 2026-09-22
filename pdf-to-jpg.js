@@ -546,7 +546,7 @@ startxref
     }
 
     try {
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
       pdfDoc = await loadingTask.promise;
       totalPages = pdfDoc.numPages;
 

@@ -493,7 +493,7 @@ async function processAndLoadPdf(bytes, fileName, fileSize) {
   let totalPages = 1;
 
   try {
-    pdfLibDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+    pdfLibDoc = await PDFLib.PDFDocument.load(bytes.slice(0), { ignoreEncryption: true });
     totalPages = pdfLibDoc.getPageCount();
   } catch (e) {
     console.warn('PDF-Lib parse warning:', e);
@@ -950,7 +950,7 @@ async function executePdfCropping() {
     if (progressFill) progressFill.style.width = '30%';
     if (progressPercent) progressPercent.textContent = '30%';
 
-    const pdfDoc = await PDFLib.PDFDocument.load(state.currentFile.bytes, { ignoreEncryption: true });
+    const pdfDoc = await PDFLib.PDFDocument.load(state.currentFile.bytes.slice(0), { ignoreEncryption: true });
     const pages = pdfDoc.getPages();
 
     if (progressFill) progressFill.style.width = '60%';
