@@ -40,6 +40,8 @@ const PRECACHE_ASSETS = [
   './extract-images.js',
   './compare-pdf.html',
   './compare-pdf.js',
+  './print-pdf.html',
+  './print-pdf.js',
   './img2pdf.html',
   './img2pdf.js',
   './crop-pdf.html',
