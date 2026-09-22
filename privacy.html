@@ -401,34 +401,37 @@
 
         /* Callout Box */
         .callout-box {
-            background: rgba(16, 185, 129, 0.06);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.28);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .callout-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 600;
+            font-weight: 700;
             color: #34d399;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
-        .callout-title i {
-            width: 18px;
-            height: 18px;
+        .callout-title i,
+        .callout-title svg {
+            width: 20px;
+            height: 20px;
+            color: #34d399;
+            stroke: #34d399;
         }
 
         .callout-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             padding: 0;
             margin: 0;
         }
@@ -437,16 +440,20 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: #e2e8f0;
+            font-weight: 500;
         }
 
-        .callout-item i {
-            width: 16px;
-            height: 16px;
+        .callout-item i,
+        .callout-item svg {
+            width: 18px;
+            height: 18px;
             color: #34d399;
+            stroke: #34d399;
             flex-shrink: 0;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         /* Links */
@@ -498,6 +505,136 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             margin: 0;
+        }
+
+        /* ==========================================================================
+           Light Mode High-Contrast Overrides (WCAG AA / AAA Compliant)
+           ========================================================================== */
+        [data-theme="light"] .page-badge {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border-color: #BFDBFE;
+        }
+
+        [data-theme="light"] .page-badge i,
+        [data-theme="light"] .page-badge svg {
+            color: #1D4ED8;
+            stroke: #1D4ED8;
+        }
+
+        [data-theme="light"] .date-badge {
+            background: #F1F5F9;
+            color: #475569;
+            border-color: #CBD5E1;
+        }
+
+        [data-theme="light"] .privacy-lead {
+            color: #475569;
+        }
+
+        [data-theme="light"] .highlight-card {
+            background: #FFFFFF;
+            border-color: #E2E8F0;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        }
+
+        [data-theme="light"] .highlight-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        [data-theme="light"] .highlight-icon {
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #DBEAFE;
+        }
+
+        [data-theme="light"] .highlight-icon i,
+        [data-theme="light"] .highlight-icon svg {
+            color: #2563EB;
+            stroke: #2563EB;
+        }
+
+        [data-theme="light"] .highlight-text h4 {
+            color: #0F172A;
+        }
+
+        [data-theme="light"] .highlight-text p {
+            color: #475569;
+        }
+
+        [data-theme="light"] .legal-card {
+            background: #FFFFFF;
+            border-color: #E2E8F0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        [data-theme="light"] .section-header {
+            color: #0F172A;
+            border-bottom-color: #E2E8F0;
+        }
+
+        [data-theme="light"] .section-header i,
+        [data-theme="light"] .section-header svg {
+            color: #2563EB;
+            stroke: #2563EB;
+        }
+
+        [data-theme="light"] .legal-paragraph {
+            color: #334155;
+        }
+
+        /* Light Mode Callout Box - Deep Forest Green / Dark Slate High Contrast */
+        [data-theme="light"] .callout-box {
+            background: #F0FDF4;
+            border: 1px solid #A7F3D0;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+        }
+
+        [data-theme="light"] .callout-title {
+            color: #065F46;
+        }
+
+        [data-theme="light"] .callout-title i,
+        [data-theme="light"] .callout-title svg {
+            color: #059669;
+            stroke: #059669;
+        }
+
+        [data-theme="light"] .callout-item {
+            color: #064E3B;
+            font-weight: 500;
+        }
+
+        [data-theme="light"] .callout-item span {
+            color: #064E3B;
+        }
+
+        [data-theme="light"] .callout-item i,
+        [data-theme="light"] .callout-item svg {
+            color: #059669;
+            stroke: #059669;
+        }
+
+        [data-theme="light"] .legal-link {
+            color: #1D4ED8;
+        }
+
+        [data-theme="light"] .legal-link:hover {
+            color: #1E40AF;
+        }
+
+        [data-theme="light"] .contact-box {
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+        }
+
+        [data-theme="light"] .contact-info h4 {
+            color: #0F172A;
+        }
+
+        [data-theme="light"] .contact-info p {
+            color: #475569;
         }
 
         /* Universal Footer */
