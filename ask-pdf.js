@@ -20,6 +20,10 @@ const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
 // Multi-language translation dictionary
 const translations = {
   en: {
+    ask_pdf_title: "Ask PDF & Search",
+    ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
+    tool_ask_pdf_title: "Ask PDF & Search",
+    tool_ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
     badge_client_side: "100% Local AI",
     nav_home: "Home",
     nav_annotator: "Annotator",
@@ -80,6 +84,10 @@ const translations = {
     ask_faq_a3: "AskPDF is optimized for text and vector PDF documents. For scanned image files, use our free OCR Text Extractor tool first, then query the extracted text."
   },
   ar: {
+    ask_pdf_title: "اسأل PDF والبحث الذكي",
+    ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
+    tool_ask_pdf_title: "اسأل PDF والبحث الذكي",
+    tool_ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
     badge_client_side: "ذكاء اصطناعي محلي ١٠٠٪",
     nav_home: "الرئيسية",
     nav_annotator: "محرر PDF",
