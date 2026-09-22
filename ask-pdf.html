@@ -1212,15 +1212,15 @@
 
       <h2 class="dropzone-title" data-i18n="dropzone_title">Drop your PDF file here</h2>
       <p class="dropzone-subtitle" data-i18n="dropzone_subtitle">
-        Drag and drop any PDF document under 25MB to begin local AI analysis, or browse from your computer
+        Drag and drop any PDF document under 50MB to begin local AI analysis, or browse from your computer
       </p>
 
       <div class="dropzone-actions">
-        <label id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20" style="cursor: pointer;">
-          <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" class="hidden" onchange="handleSelectedFile(this.files[0])" aria-label="Select PDF file" />
-          <i data-lucide="upload" class="pointer-events-none"></i>
-          <span data-i18n="btn_browse_file" class="pointer-events-none">Browse PDF File</span>
-        </label>
+        <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" onchange="window.handleSelectedFile(this.files[0])">
+        <button type="button" id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20" onclick="document.getElementById('pdf-file-input').click()">
+          <i class="fas fa-file-upload me-2"></i>
+          <span data-i18n="btn_browse_file">Browse PDF File</span>
+        </button>
         <button id="btn-load-sample" class="btn btn-secondary btn-lg">
           <i data-lucide="sparkles"></i>
           <span data-i18n="btn_load_sample">Try Sample PDF</span>
@@ -1365,7 +1365,7 @@
           <div class="step-card">
             <div class="step-number">1</div>
             <h3 data-i18n="ask_step1_title">1. Upload Your PDF Document</h3>
-            <p data-i18n="ask_step1_desc">Select any PDF file up to 25MB. PDFNetizen extracts document text 100% locally in your device memory.</p>
+            <p data-i18n="ask_step1_desc">Select any PDF file up to 50MB. PDFNetizen extracts document text 100% locally in your device memory.</p>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>

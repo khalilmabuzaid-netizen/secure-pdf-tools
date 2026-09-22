@@ -47,13 +47,9 @@ if (window.pdfjsLib) {
 const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 const MAX_PAGE_CEILING = 80;
 
-// Merge tool-specific translations into global translations dictionary
-if (typeof window !== 'undefined') {
-  window.translations = window.translations || { en: {}, ar: {} };
-  if (!window.translations.en) window.translations.en = {};
-  if (!window.translations.ar) window.translations.ar = {};
-
-  Object.assign(window.translations.en, {
+// Translations dictionary for bilingual support (English & Arabic)
+const translations = {
+  en: {
     ask_pdf_title: "Ask PDF & Search",
     ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
     summarize_title: "Smart PDF Summarizer",
@@ -89,6 +85,7 @@ if (typeof window !== 'undefined') {
     summarize_dropzone_title: "Drop your PDF file here",
     summarize_dropzone_subtitle: "Drag and drop any PDF document under 50MB to generate an instant on-device AI summary, or browse from your device",
     btn_browse_file: "Browse PDF File",
+    browse_pdf_file: "Browse PDF File",
     btn_load_sample: "Try Sample PDF",
     feature_local: "100% On-Device Neural Model",
     feature_offline: "Works Offline After 1st Download",
@@ -143,9 +140,8 @@ if (typeof window !== 'undefined') {
     summarize_faq_a3: "To guarantee complete privacy, a lightweight quantized ONNX neural model is cached directly in your browser. All future visits and summarization queries run instantly offline with 0 MB download.",
     summarize_faq_q4: "Can I export or print the generated summary?",
     summarize_faq_a4: "Yes! You can instantly copy the summary to your clipboard, export it as a plain text file (.txt), or use the built-in clean print formatting."
-  });
-
-  Object.assign(window.translations.ar, {
+  },
+  ar: {
     ask_pdf_title: "اسأل PDF والبحث الذكي",
     ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
     summarize_title: "تلخيص PDF الذكي",
@@ -181,6 +177,7 @@ if (typeof window !== 'undefined') {
     summarize_dropzone_title: "اسحب ملف PDF هنا",
     summarize_dropzone_subtitle: "اسحب وأفلت أي ملف PDF أقل من 50 ميجابايت لإنشاء تلخيص فوري بالذكاء الاصطناعي، أو تصفح من جهازك",
     btn_browse_file: "استعراض ملف PDF",
+    browse_pdf_file: "استعراض ملف PDF",
     btn_load_sample: "تجربة نموذج جاهز",
     feature_local: "نموذج عصبي محلي ١٠٠٪ على جهازك",
     feature_offline: "يعمل بدون إنترنت بعد أول تنزيل",
@@ -235,7 +232,16 @@ if (typeof window !== 'undefined') {
     summarize_faq_a3: "لضمان الخصوصية التامة، يتم تخزين نموذج عصبي مكمم في ذاكرة المتصفح المؤقتة. جميع الزيارات والاستفسارات اللاحقة تعمل فورياً وبدون إنترنت بحجم 0 ميجابايت.",
     summarize_faq_q4: "هل يمكنني تصدير أو طباعة الملخص الناتج؟",
     summarize_faq_a4: "نعم! يمكنك نسخ الملخص فوراً إلى الحافظة، أو تصديره كملف نصي (.txt)، أو استخدام ميزة الطباعة المدمجة بتنسيق نظيف."
-  });
+  }
+};
+
+// Merge into global translations dictionary if available
+if (typeof window !== 'undefined') {
+  window.translations = window.translations || { en: {}, ar: {} };
+  if (!window.translations.en) window.translations.en = {};
+  if (!window.translations.ar) window.translations.ar = {};
+  Object.assign(window.translations.en, translations.en);
+  Object.assign(window.translations.ar, translations.ar);
 }
 
 // Application State (Initialize language preference from localStorage)
@@ -472,11 +478,10 @@ function bindEventListeners() {
   
   browseElements.forEach(btn => {
     btn.addEventListener('click', (e) => {
-      // If it's a LABEL containing the input, native browser behavior opens the file picker
-      if (btn.tagName !== 'LABEL' && (!fileInputEl || !btn.contains(fileInputEl)) && fileInputEl) {
-        e.preventDefault();
-        fileInputEl.click();
-      }
+      e.preventDefault();
+      e.stopPropagation();
+      const input = document.getElementById('pdf-file-input') || fileInput;
+      if (input) input.click();
     });
   });
 
@@ -491,8 +496,10 @@ function bindEventListeners() {
   // Dropzone Handlers
   if (dropzone) {
     dropzone.addEventListener('click', (e) => {
-      if (e.target.closest('button') || e.target.closest('label') || e.target.closest('#browse-btn')) return;
-      if (fileInputEl) fileInputEl.click();
+      if (e.target.closest('#btn-load-sample')) return;
+      if (e.target.closest('#browse-btn') || e.target.closest('.browse-btn')) return;
+      const input = document.getElementById('pdf-file-input') || fileInput;
+      if (input) input.click();
     });
 
     ['dragenter', 'dragover'].forEach(eventName => {
