@@ -38,6 +38,8 @@ const PRECACHE_ASSETS = [
   './pdf-to-jpg.js',
   './extract-images.html',
   './extract-images.js',
+  './compare-pdf.html',
+  './compare-pdf.js',
   './img2pdf.html',
   './img2pdf.js',
   './crop-pdf.html',

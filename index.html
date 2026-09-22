@@ -128,10 +128,10 @@
     }
     </script>
 
-      <!-- Theme Controller (executed early to prevent flash) -->
-  <link rel="stylesheet" href="theme.css">
-  <script src="theme.js"></script>
-  <style>
+    <!-- Theme Controller (executed early to prevent flash) -->
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <style>
         :root {
             --bg-main: #09090b;
             --bg-surface: rgba(21, 30, 50, 0.75);
@@ -801,12 +801,13 @@
         </a>
 
         <div class="nav-actions">
-                    <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary" title="Switch Theme / تبديل المظهر" aria-label="Toggle theme">
-          <i data-lucide="sun"></i>
-        </button>
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary" title="Switch Theme / تبديل المظهر"
+                aria-label="Toggle theme">
+                <i data-lucide="sun"></i>
+            </button>
 
-        <!-- Language Toggle Button -->
+            <!-- Language Toggle Button -->
             <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
                 aria-label="Toggle language">
                 <i data-lucide="globe"></i>
@@ -894,7 +895,8 @@
                     <i data-lucide="file-image"></i>
                 </div>
                 <h3 data-i18n="tool_pdf2jpg_title">PDF to JPG</h3>
-                <p data-i18n="tool_pdf2jpg_desc">Convert PDF pages into high-quality JPG images directly in your browser with 100% privacy.</p>
+                <p data-i18n="tool_pdf2jpg_desc">Convert PDF pages into high-quality JPG images directly in your browser
+                    with 100% privacy.</p>
             </a>
 
             <!-- Extract Images Tool -->
@@ -903,7 +905,18 @@
                     <i data-lucide="images"></i>
                 </div>
                 <h3 data-i18n="tool_extract_images_title">Extract Images</h3>
-                <p data-i18n="tool_extract_images_desc">Extract all embedded photos and raster images from PDF documents without quality loss.</p>
+                <p data-i18n="tool_extract_images_desc">Extract all embedded photos and raster images from PDF documents
+                    without quality loss.</p>
+            </a>
+
+            <!-- Compare PDF Tool -->
+            <a href="compare-pdf.html" class="card">
+                <div class="icon-wrapper purple">
+                    <i data-lucide="git-compare"></i>
+                </div>
+                <h3 data-i18n="tool_compare_title">Compare PDF</h3>
+                <p data-i18n="tool_compare_desc">Visually compare two PDF documents side-by-side or highlight
+                    differences with visual diff overlay.</p>
             </a>
 
             <!-- Rotate PDF Tool -->
@@ -912,7 +925,8 @@
                     <i data-lucide="rotate-cw"></i>
                 </div>
                 <h3 data-i18n="tool_rotate_title">Rotate PDF</h3>
-                <p data-i18n="tool_rotate_desc">Rotate individual pages or entire documents permanently with 100% privacy.</p>
+                <p data-i18n="tool_rotate_desc">Rotate individual pages or entire documents permanently with 100%
+                    privacy.</p>
             </a>
 
             <!-- Organize PDF Tool -->
@@ -921,7 +935,8 @@
                     <i data-lucide="layers-3"></i>
                 </div>
                 <h3 data-i18n="tool_organize_title">Organize PDF</h3>
-                <p data-i18n="tool_organize_desc">Reorder, sort, and delete pages from PDF documents directly in your browser with 100% privacy.</p>
+                <p data-i18n="tool_organize_desc">Reorder, sort, and delete pages from PDF documents directly in your
+                    browser with 100% privacy.</p>
             </a>
 
             <!-- Protect Tool -->
@@ -939,7 +954,8 @@
                     <i data-lucide="unlock"></i>
                 </div>
                 <h3 data-i18n="tool_unlock_title">Unlock PDF</h3>
-                <p data-i18n="tool_unlock_desc">Remove passwords and restrictions from your PDF files with 100% privacy.</p>
+                <p data-i18n="tool_unlock_desc">Remove passwords and restrictions from your PDF files with 100% privacy.
+                </p>
             </a>
 
             <!-- Page Numbers Tool -->
@@ -948,7 +964,8 @@
                     <i data-lucide="list-ordered"></i>
                 </div>
                 <h3 data-i18n="tool_page_numbers_title">Page Numbers</h3>
-                <p data-i18n="tool_page_numbers_desc">Add customizable page numbers and headers/footers to PDF documents.</p>
+                <p data-i18n="tool_page_numbers_desc">Add customizable page numbers and headers/footers to PDF
+                    documents.</p>
             </a>
 
 
@@ -980,7 +997,8 @@
                     <i data-lucide="presentation"></i>
                 </div>
                 <h3 data-i18n="tool_pptx2pdf_title">PowerPoint to PDF</h3>
-                <p data-i18n="tool_pptx2pdf_desc">Convert PowerPoint presentations (.pptx) into polished PDF documents locally.</p>
+                <p data-i18n="tool_pptx2pdf_desc">Convert PowerPoint presentations (.pptx) into polished PDF documents
+                    locally.</p>
             </a>
 
             <!-- Excel to PDF Tool -->
@@ -989,7 +1007,8 @@
                     <i data-lucide="file-spreadsheet"></i>
                 </div>
                 <h3 data-i18n="tool_excel2pdf_title">Excel to PDF</h3>
-                <p data-i18n="tool_excel2pdf_desc">Convert Excel spreadsheets (.xlsx, .xls, .csv) into formatted PDF documents.</p>
+                <p data-i18n="tool_excel2pdf_desc">Convert Excel spreadsheets (.xlsx, .xls, .csv) into formatted PDF
+                    documents.</p>
             </a>
 
             <!-- Flatten PDF Tool -->
@@ -998,7 +1017,8 @@
                     <i data-lucide="layers"></i>
                 </div>
                 <h3 data-i18n="tool_flatten_title">Flatten PDF</h3>
-                <p data-i18n="tool_flatten_desc">Make PDF forms, signatures, and annotations permanent and non-editable.</p>
+                <p data-i18n="tool_flatten_desc">Make PDF forms, signatures, and annotations permanent and non-editable.
+                </p>
             </a>
 
             <!-- Crop PDF Tool -->
@@ -1007,7 +1027,8 @@
                     <i data-lucide="crop"></i>
                 </div>
                 <h3 data-i18n="tool_crop_pdf_title">Crop PDF</h3>
-                <p data-i18n="tool_crop_pdf_desc">Trim margins, cut white borders, and adjust PDF page dimensions visually.</p>
+                <p data-i18n="tool_crop_pdf_desc">Trim margins, cut white borders, and adjust PDF page dimensions
+                    visually.</p>
             </a>
 
 
@@ -1146,6 +1167,8 @@
                 tool_pdf2jpg_desc: "Convert PDF pages into high-quality JPG images directly in your browser with 100% privacy.",
                 tool_extract_images_title: "Extract Images",
                 tool_extract_images_desc: "Extract all embedded photos and raster images from PDF documents without quality loss.",
+                tool_compare_title: "Compare PDF",
+                tool_compare_desc: "Visually compare two PDF documents side-by-side or highlight differences with visual diff overlay.",
                 tool_rotate_title: "Rotate PDF",
                 tool_rotate_desc: "Rotate individual pages or entire documents permanently with 100% privacy.",
                 tool_organize_title: "Organize PDF",
@@ -1318,6 +1341,8 @@
                 tool_pdf2jpg_desc: "حوّل صفحات PDF إلى صور JPG عالية الدقة مباشرة داخل متصفحك مع خصوصية وأمان محلي ١٠٠٪.",
                 tool_extract_images_title: "استخراج الصور من PDF",
                 tool_extract_images_desc: "استخرج كافة الصور والرسومات المدمجة داخل ملفات PDF بدقتها الأصلية دون فقدان الجودة.",
+                tool_compare_title: "مقارنة ملفات PDF",
+                tool_compare_desc: "قارن بين مستندي PDF جنباً إلى جنب بصرياً أو أظهر الفروقات تلقائياً بطبقة تلوين دقيقة.",
                 tool_rotate_title: "تدوير PDF",
                 tool_rotate_desc: "دوّر صفحات مفردة أو مستندات كاملة بشكل دائم وبأعلى جودة مع خصوصية محلية ١٠٠٪.",
                 tool_organize_title: "تنظيم وترتيب PDF",
