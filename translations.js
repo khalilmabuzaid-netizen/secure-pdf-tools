@@ -4,7 +4,7 @@
  * Master dictionary containing all site keys across all tools.
  */
 
-const translations = {
+var translations = {
   "en": {
     "badge_client_side": "100% Client-Side",
     "nav_home": "Home",

@@ -1111,6 +1111,18 @@
       display: none !important;
     }
 
+    .relative {
+      position: relative;
+    }
+
+    .z-20 {
+      z-index: 20;
+    }
+
+    .pointer-events-none {
+      pointer-events: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .hero-title { font-size: 1.85rem; }
@@ -1155,7 +1167,7 @@
       </button>
 
       <!-- Language Toggle Button -->
-      <button id="lang-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
+      <button id="btn-language-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
@@ -1194,8 +1206,6 @@
 
     <!-- Dropzone Upload Area -->
     <section class="dropzone-card" id="dropzone" aria-label="PDF File Upload Area">
-      <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" class="hidden" aria-label="Select PDF file" />
-      
       <div class="dropzone-icon">
         <i data-lucide="upload-cloud"></i>
       </div>
@@ -1206,10 +1216,11 @@
       </p>
 
       <div class="dropzone-actions">
-        <button id="browse-btn" class="btn btn-primary btn-lg browse-btn">
-          <i data-lucide="upload"></i>
-          <span data-i18n="btn_browse_file">Browse PDF File</span>
-        </button>
+        <label id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20" style="cursor: pointer;">
+          <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" class="hidden" onchange="handleSelectedFile(this.files[0])" aria-label="Select PDF file" />
+          <i data-lucide="upload" class="pointer-events-none"></i>
+          <span data-i18n="btn_browse_file" class="pointer-events-none">Browse PDF File</span>
+        </label>
         <button id="btn-load-sample" class="btn btn-secondary btn-lg">
           <i data-lucide="sparkles"></i>
           <span data-i18n="btn_load_sample">Try Sample PDF</span>

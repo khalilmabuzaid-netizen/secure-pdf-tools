@@ -9,6 +9,35 @@
  * 4. User Transparency & Real-Time Progress Bar.
  */
 
+// Define handleSelectedFile globally before any other imports or logic
+window.handleSelectedFile = function(file) {
+  if (!file) return;
+
+  if (file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    if (typeof showToast === 'function') {
+      showToast(typeof t === 'function' ? t('toast_valid_pdf') : 'Please select a valid PDF file (.pdf)', 'warning');
+    }
+    const input = document.getElementById('pdf-file-input');
+    if (input) input.value = '';
+    return;
+  }
+
+  if (file.size > (50 * 1024 * 1024)) {
+    if (typeof showToast === 'function') {
+      showToast(typeof t === 'function' ? t('toast_file_size_limit') : 'File too large (maximum recommended size for in-browser AI is 50 MB).', 'error');
+    }
+    const input = document.getElementById('pdf-file-input');
+    if (input) input.value = '';
+    return;
+  }
+
+  if (typeof handlePdfFile === 'function') {
+    handlePdfFile(file);
+  } else if (typeof handleFileSelected === 'function') {
+    handleFileSelected(file);
+  }
+};
+
 // Configure PDF.js Worker
 if (window.pdfjsLib) {
   window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -18,9 +47,13 @@ if (window.pdfjsLib) {
 const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 const MAX_PAGE_CEILING = 80;
 
-// Multi-language translation dictionary
-const translations = {
-  en: {
+// Merge tool-specific translations into global translations dictionary
+if (typeof window !== 'undefined') {
+  window.translations = window.translations || { en: {}, ar: {} };
+  if (!window.translations.en) window.translations.en = {};
+  if (!window.translations.ar) window.translations.ar = {};
+
+  Object.assign(window.translations.en, {
     ask_pdf_title: "Ask PDF & Search",
     ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
     summarize_title: "Smart PDF Summarizer",
@@ -110,8 +143,9 @@ const translations = {
     summarize_faq_a3: "To guarantee complete privacy, a lightweight quantized ONNX neural model is cached directly in your browser. All future visits and summarization queries run instantly offline with 0 MB download.",
     summarize_faq_q4: "Can I export or print the generated summary?",
     summarize_faq_a4: "Yes! You can instantly copy the summary to your clipboard, export it as a plain text file (.txt), or use the built-in clean print formatting."
-  },
-  ar: {
+  });
+
+  Object.assign(window.translations.ar, {
     ask_pdf_title: "اسأل PDF والبحث الذكي",
     ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
     summarize_title: "تلخيص PDF الذكي",
@@ -201,8 +235,8 @@ const translations = {
     summarize_faq_a3: "لضمان الخصوصية التامة، يتم تخزين نموذج عصبي مكمم في ذاكرة المتصفح المؤقتة. جميع الزيارات والاستفسارات اللاحقة تعمل فورياً وبدون إنترنت بحجم 0 ميجابايت.",
     summarize_faq_q4: "هل يمكنني تصدير أو طباعة الملخص الناتج؟",
     summarize_faq_a4: "نعم! يمكنك نسخ الملخص فوراً إلى الحافظة، أو تصديره كملف نصي (.txt)، أو استخدام ميزة الطباعة المدمجة بتنسيق نظيف."
-  }
-};
+  });
+}
 
 // Application State (Initialize language preference from localStorage)
 let currentLang = (typeof localStorage !== 'undefined' && (localStorage.getItem('pdfnetizen_lang') || localStorage.getItem('pdf_netizen_lang'))) || 'en';
@@ -313,14 +347,10 @@ function cacheDOMElements() {
 function t(key, replacements = {}) {
   const globalDict = (typeof window !== 'undefined' && (window.translations || window.I18N_TRANSLATIONS))
     ? (window.translations || window.I18N_TRANSLATIONS)
-    : null;
-  const localDict = translations[currentLang] || translations.en;
+    : (typeof translations !== 'undefined' ? translations : null);
+  const langDict = globalDict?.[currentLang] || globalDict?.en || {};
   
-  let text = localDict?.[key] || 
-             (globalDict?.[currentLang]?.[key]) || 
-             translations.en?.[key] || 
-             (globalDict?.en?.[key]) || 
-             key;
+  let text = langDict?.[key] || key;
 
   for (const [k, v] of Object.entries(replacements)) {
     text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
@@ -440,22 +470,15 @@ function bindEventListeners() {
   const browseElements = document.querySelectorAll('#browse-btn, .browse-btn, #btn-browse-file');
   const fileInputEl = document.getElementById('pdf-file-input') || fileInput;
   
-  if (browseElements.length > 0 && fileInputEl) {
-    browseElements.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+  browseElements.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // If it's a LABEL containing the input, native browser behavior opens the file picker
+      if (btn.tagName !== 'LABEL' && (!fileInputEl || !btn.contains(fileInputEl)) && fileInputEl) {
         e.preventDefault();
         fileInputEl.click();
-      });
+      }
     });
-  } else {
-    const singleBrowseBtn = document.getElementById('browse-btn') || document.querySelector('.browse-btn') || document.getElementById('btn-browse-file') || btnBrowseFile;
-    if (singleBrowseBtn && fileInputEl) {
-      singleBrowseBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        fileInputEl.click();
-      });
-    }
-  }
+  });
 
   if (fileInputEl) {
     fileInputEl.addEventListener('change', (e) => {
@@ -468,7 +491,7 @@ function bindEventListeners() {
   // Dropzone Handlers
   if (dropzone) {
     dropzone.addEventListener('click', (e) => {
-      if (e.target.closest('button')) return;
+      if (e.target.closest('button') || e.target.closest('label') || e.target.closest('#browse-btn')) return;
       if (fileInputEl) fileInputEl.click();
     });
 

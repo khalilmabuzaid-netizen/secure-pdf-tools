@@ -1,843 +1,326 @@
-/**
- * AskPDF Pro - In-Browser AI Assistant & Document Question Answering
- * 100% Client-Side • Transformers.js ONNX Web Worker • Zero Server Uploads
- * 
- * 4 Golden Performance Rules:
- * 1. Web Worker Offloading (Module Worker for 60 FPS non-blocking UI).
- * 2. On-Demand Lazy Initialization (0 MB initial bundle impact).
- * 3. Quantized Model (DistilBERT SQuAD Quantized ~35 MB).
- * 4. User Transparency & Real-Time Progress Bar.
- */
+// ask-pdf.js - معالجة الاستعلامات والبحث الذكي محلياً داخل المتصفح
 
-// Configure PDF.js Worker
-if (window.pdfjsLib) {
-  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// منع أخطاء تكرار متغير الترجمة وضمان التوافق العام
+window.translations = window.translations || {};
+
+const MAX_FILE_SIZE_MB = 50;
+const MAX_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+// متغيرات حالة المستند والنموذج
+let pdfDoc = null;
+let extractedPages = []; // مصفوفة لحفظ النصوص وأرقام الصفحات
+let aiWorker = null;
+let isWorkerReady = false;
+
+// دالة مساعدة لعرض التنبيهات (Toast)
+function showToast(message, type = 'info') {
+  const existingToast = document.querySelector('.custom-toast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.className = `custom-toast fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-xl transition-all duration-300 transform translate-y-0 ${type === 'error' ? 'bg-red-600 text-white' : 'bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900'
+    }`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
 }
 
-// Maximum file size protection (25MB)
-const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+// 1. الدالة العامة لاستقبال الملف فور اختياره (Globally Bound)
+window.handleSelectedFile = function (file) {
+  if (!file) return;
 
-// Multi-language translation dictionary
-const translations = {
-  en: {
-    ask_pdf_title: "Ask PDF & Search",
-    ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
-    summarize_title: "Smart PDF Summarizer",
-    summarize_desc: "Summarize PDF documents into concise bullet points or executive overviews locally with zero cloud uploads.",
-    summarize_pdf_title: "Smart PDF Summarizer",
-    summarize_pdf_desc: "Summarize PDF documents into concise bullet points or executive overviews locally with zero cloud uploads.",
-    drop_pdf_here: "Drop your PDF file here",
-    browse_file_btn: "Browse PDF File",
-    client_engine_badge: "Client-Side AI Engine",
-    size_limit_warning: "Please select a PDF under 25MB for optimal browser performance.",
-    ask_placeholder: "e.g., What are the key findings or main topic of this document?",
-    ask_btn: "Ask AI",
-    summarize_btn: "Summarize Document",
-    copy_btn: "Copy Answer",
-    export_btn: "Export as TXT",
-    tool_ask_pdf_title: "Ask PDF & Search",
-    tool_ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
-    badge_client_side: "100% Local AI",
-    nav_home: "Home",
-    nav_annotator: "Annotator",
-    nav_merge: "Merge PDF",
-    nav_split: "Split PDF",
-    nav_compress: "Compress PDF",
-    nav_ocr: "OCR Extractor",
-    nav_reset: "Reset",
-    hero_badge: "Local & Secure • 100% Private In-Browser AI • No Cloud Uploads",
-    hero_title: 'Ask AI Questions from <span class="gradient-text">PDF Documents</span> Instantly',
-    hero_subtitle: "Extract instant answers, insights, and summaries directly inside your browser. No accounts, zero server uploads, and complete data privacy.",
-    model_notice_title: "Client-Side AI Engine",
-    model_notice_desc: "One-time download (~35 MB). Runs 100% locally and works offline.",
-    dropzone_title: "Drop your PDF file here",
-    dropzone_subtitle: "Drag and drop any PDF document under 25MB to begin local AI analysis, or browse from your computer",
-    btn_browse_file: "Browse PDF File",
-    btn_load_sample: "Try Sample PDF",
-    feature_local: "100% On-Device Neural Model",
-    feature_offline: "Works Offline After 1st Download",
-    feature_privacy: "Zero Server Uploads & Private",
-    btn_change_file: "Change File",
-    label_question: "Ask a Question About Your PDF",
-    placeholder_question: "e.g., What are the key findings or main topic of this document?",
-    btn_ask_ai: "Ask AI",
-    btn_analyzing: "Analyzing Document...",
-    suggestions_title: "Suggested Questions:",
-    suggestion_1: "What is the main topic of this document?",
-    suggestion_2: "Summarize the key takeaways",
-    suggestion_3: "What are the important requirements or dates?",
-    progress_downloading: "Downloading Local AI Model (~35 MB)...",
-    progress_ready: "AI Model Ready in Browser Memory",
-    progress_analyzing: "Running on-device neural inference...",
-    progress_init: "Initializing ONNX Runtime WebAssembly...",
-    answer_title: "AI Answer",
-    confidence_label: "Confidence:",
-    btn_copy_answer: "Copy Answer",
-    toast_copied: "Answer copied to clipboard!",
-    context_toggle_show: "Show Extracted Text Context ({words} words)",
-    context_toggle_hide: "Hide Extracted Text Context",
-    context_placeholder: "Extracted PDF text will be displayed here.",
-    toast_valid_pdf: "Please select a valid PDF file (.pdf)",
-    toast_empty_question: "Please enter a question to ask the AI.",
-    toast_no_text: "Could not extract readable text from this PDF. Please try a text-based PDF or OCR first.",
-    toast_pdf_loaded: "Document loaded: {pages} pages ({words} words ready).",
-    toast_file_size_limit: "Please select a PDF under 25MB for optimal browser performance.",
-    toast_sample_loaded: "Sample PDF loaded! Click \"Ask AI\" to test local inference.",
-    toast_sample_loading: "Loading comprehensive AI sample document...",
-    footer_privacy: "Privacy Policy",
-    footer_terms: "Terms of Service",
-    footer_contact: "Contact Us",
-    footer_copyright: "© 2026 PDFNetizen. 100% Client-Side Private Document Tools.",
-    ask_seo_badge: "On-Device Neural Question Answering",
-    ask_seo_title: "How to Chat with PDF & Ask AI Questions Online Privately",
-    ask_seo_subtitle: "Analyze PDF files with cutting-edge local AI models running entirely in your browser without sacrificing privacy or speed.",
-    ask_step1_title: "1. Upload Your PDF Document",
-    ask_step1_desc: "Select any PDF file up to 25MB. PDFNetizen extracts document text 100% locally in your device memory.",
-    ask_step2_title: "2. Ask Any Question",
-    ask_step2_desc: "Type your query or click one of the suggested prompts to investigate specific details, contracts, or summaries.",
-    ask_step3_title: "3. Instant Local AI Answers",
-    ask_step3_desc: "The lightweight on-device AI model scans the document text to extract precise answers without sending data to any cloud.",
-    ask_faq_title: "Frequently Asked Questions",
-    ask_faq_q1: "Are my documents sent to OpenAI, ChatGPT, or external cloud servers?",
-    ask_faq_a1: "No. Our AI question-answering engine runs 100% client-side inside your browser via WebAssembly and Web Workers. Your private documents, financial sheets, and legal contracts never leave your machine.",
-    ask_faq_q2: "Why is there a one-time ~35 MB download on the first question?",
-    ask_faq_a2: "To guarantee 100% privacy, a lightweight quantized ONNX neural model is downloaded directly into your browser cache. Subsequent queries and future visits execute instantly offline with 0 MB download.",
-    ask_faq_q3: "Does this tool work with scanned image PDFs?",
-    ask_faq_a3: "AskPDF is optimized for text and vector PDF documents. For scanned image files, use our free OCR Text Extractor tool first, then query the extracted text."
-  },
-  ar: {
-    ask_pdf_title: "اسأل PDF والبحث الذكي",
-    ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
-    summarize_title: "تلخيص PDF الذكي",
-    summarize_desc: "لخص مستندات PDF إلى نقاط أساسية أو نظرة عامة تنفيذية محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
-    summarize_pdf_title: "تلخيص PDF الذكي",
-    summarize_pdf_desc: "لخص مستندات PDF إلى نقاط أساسية أو نظرة عامة تنفيذية محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
-    drop_pdf_here: "اسحب ملف PDF هنا",
-    browse_file_btn: "استعراض ملف PDF",
-    client_engine_badge: "محرك الذكاء الاصطناعي المحلي",
-    size_limit_warning: "يرجى اختيار ملف PDF بحجم أقل من 25 ميجابايت للحفاظ على أداء المتصفح.",
-    ask_placeholder: "مثال: ما هو الموضوع الرئيسي أو النقاط الأساسية في هذا المستند؟",
-    ask_btn: "اسأل الذكاء الاصطناعي",
-    summarize_btn: "تلخيص المستند",
-    copy_btn: "نسخ الإجابة",
-    export_btn: "تصدير كملف نصي TXT",
-    tool_ask_pdf_title: "اسأل PDF والبحث الذكي",
-    tool_ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
-    badge_client_side: "ذكاء اصطناعي محلي ١٠٠٪",
-    nav_home: "الرئيسية",
-    nav_annotator: "محرر PDF",
-    nav_merge: "دمج PDF",
-    nav_split: "تقسيم PDF",
-    nav_compress: "ضغط PDF",
-    nav_ocr: "استخراج النصوص OCR",
-    nav_reset: "إعادة ضبط",
-    hero_badge: "محلي وآمن • ذكاء اصطناعي في المتصفح • بدون خوادم سحابية",
-    hero_title: 'اسأل الذكاء الاصطناعي حول <span class="gradient-text">ملفات PDF</span> فوراً',
-    hero_subtitle: "استخرج إجابات وملخصات دقيقة مباشرة داخل متصفحك. بدون تسجيل، بدون رفع سحابي، وخصوصية تامة ١٠٠٪.",
-    model_notice_title: "محرك الذكاء الاصطناعي المحلي",
-    model_notice_desc: "تنزيل لمرة واحدة (~35 ميجابايت). يعمل محلياً بالكامل ١٠٠٪ ويدعم العمل بدون إنترنت.",
-    dropzone_title: "اسحب ملف PDF هنا",
-    dropzone_subtitle: "اسحب وأفلت أي ملف PDF أقل من 25 ميجابايت لبدء التحليل بالذكاء الاصطناعي، أو تصفح من جهازك",
-    btn_browse_file: "استعراض ملف PDF",
-    btn_load_sample: "تجربة نموذج جاهز",
-    feature_local: "نموذج عصبي محلي ١٠٠٪ على جهازك",
-    feature_offline: "يعمل بدون إنترنت بعد أول تنزيل",
-    feature_privacy: "بدون أي رفع للخوادم وأمان تام",
-    btn_change_file: "تغيير الملف",
-    label_question: "اطرح سؤالاً حول محتوى المستند",
-    placeholder_question: "مثال: ما هو الموضوع الرئيسي أو النقاط الأساسية في هذا المستند؟",
-    btn_ask_ai: "اسأل الذكاء الاصطناعي",
-    btn_analyzing: "جاري تحليل المستند...",
-    suggestions_title: "أسئلة مقترحة:",
-    suggestion_1: "ما هو الموضوع الأساسي في هذا المستند؟",
-    suggestion_2: "لخص النقاط والنتائج الرئيسية",
-    suggestion_3: "ما هي المتطلبات أو التواريخ الهامة؟",
-    progress_downloading: "جاري تنزيل نموذج الذكاء الاصطناعي الخفيف (~35 ميجابايت)...",
-    progress_ready: "نموذج الذكاء الاصطناعي جاهز ومخزن في ذاكرة المتصفح",
-    progress_analyzing: "جاري استنتاج الإجابة على جهازك...",
-    progress_init: "جاري تهيئة بيئة WebAssembly لنظام ONNX...",
-    answer_title: "إجابة الذكاء الاصطناعي",
-    confidence_label: "مستوى الدقة:",
-    btn_copy_answer: "نسخ الإجابة",
-    toast_copied: "تم نسخ الإجابة إلى الحافظة!",
-    context_toggle_show: "عرض النص المستخرج من المستند ({words} كلمة)",
-    context_toggle_hide: "إخفاء النص المستخرج",
-    context_placeholder: "سيتم عرض النص المستخرج من ملف PDF هنا.",
-    toast_valid_pdf: "يرجى اختيار ملف PDF صالح (.pdf)",
-    toast_empty_question: "يرجى كتابة سؤال أولاً.",
-    toast_no_text: "لم نتمكن من استخراج نص قابل للقراءة. يرجى تجربة مستند يحتوي على نصوص أو استخدام أداة OCR أولاً.",
-    toast_pdf_loaded: "تم تحميل المستند: {pages} صفحات ({words} كلمة جاهزة).",
-    toast_file_size_limit: "يرجى اختيار ملف PDF بحجم أقل من 25 ميجابايت للحفاظ على أداء المتصفح.",
-    toast_sample_loaded: "تم تحميل نموذج PDF! انقر على \"اسأل الذكاء الاصطناعي\" لاختبار الاستنتاج المحلي.",
-    toast_sample_loading: "جاري تحميل مستند الذكاء الاصطناعي التجريبي...",
-    footer_privacy: "سياسة الخصوصية",
-    footer_terms: "شروط الخدمة",
-    footer_contact: "اتصل بنا",
-    footer_copyright: "© 2026 PDFNetizen. أدوات معالجة المستندات محلياً ١٠٠٪ بأمان وخصوصية.",
-    ask_seo_badge: "إجابة على الأسئلة بالذكاء الاصطناعي في المتصفح",
-    ask_seo_title: "كيفية التحدث مع ملفات PDF وطرح الأسئلة بالذكاء الاصطناعي محلياً",
-    ask_seo_subtitle: "حلل مستندات PDF باستخدام أحدث النماذج العصبية المحلية التي تعمل بالكامل في متصفحك دون المساومة على الخصوصية أو السرعة.",
-    ask_step1_title: "١. رفع مستند PDF",
-    ask_step1_desc: "اختر أي ملف PDF حتى 25 ميجابايت. يقوم النظام باستخراج النص محلياً ١٠٠٪ في ذاكرة جهازك.",
-    ask_step2_title: "٢. طرح السؤال",
-    ask_step2_desc: "اكتب سؤالك أو انقر على أحد الاقتراحات الجاهزة للاستفسار عن تفاصيل أو شروط معينة.",
-    ask_step3_title: "٣. إجابات فورية وآمنة",
-    ask_step3_desc: "يقوم النموذج المحلي بفحص سياق المستند واستخراج الإجابة الدقيقة دون إرسال أي بايت لخوادم خارجية.",
-    ask_faq_title: "الأسئلة الشائعة",
-    ask_faq_q1: "هل يتم إرسال مستنداتي إلى OpenAI أو خوادم سحابية خارجية؟",
-    ask_faq_a1: "لا على الإطلاق. يعمل محرك الذكاء الاصطناعي محلياً ١٠٠٪ في متصفحك باستخدام WebAssembly وWeb Workers. ملفاتك القانونية والمالية والشخصية لا تغادر جهازك أبداً.",
-    ask_faq_q2: "لماذا يوجد تنزيل لمرة واحدة بحجم ~35 ميجابايت عند أول سؤال؟",
-    ask_faq_a2: "لضمان الخصوصية التامة، يتم تنزيل نموذج ذكاء اصطناعي مكمم خفيف وتخزينه في ذاكرة المتصفح المؤقتة. الأسئلة اللاحقة والزيارات المستقبلية تعمل فورياً وبدون إنترنت بحجم 0 ميجابايت.",
-    ask_faq_q3: "هل تعمل الأداة مع ملفات PDF الممسوحة ضوئياً (صور)؟",
-    ask_faq_a3: "الأداة مصممة لملفات PDF النصية. بالنسبة للمستندات الممسوحة ضوئياً كصور، يمكنك استخدام أداة OCR المجانية أولاً لاستخراج النصوص ثم توجيه الأسئلة إليها."
+  // التحقق من نوع الملف
+  const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  if (!isPdf) {
+    const errorMsg = document.documentElement.lang === 'ar'
+      ? 'يرجى اختيار ملف PDF صالح'
+      : 'Please select a valid PDF document';
+    showToast(errorMsg, 'error');
+    resetFileInput();
+    return;
   }
+
+  // التحقق من سقف الحجم المسموح به (50 ميجابايت)
+  if (file.size > MAX_BYTES) {
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    const limitMsg = document.documentElement.lang === 'ar'
+      ? `حجم الملف (${sizeMB} ميجابايت) يتجاوز الحد المسموح به (50 ميجابايت). يرجى اختيار ملف أصغر.`
+      : `File size (${sizeMB} MB) exceeds the 50 MB limit. Please select a smaller file.`;
+    showToast(limitMsg, 'error');
+    resetFileInput();
+    return;
+  }
+
+  // بدء قراءة واستخراج نص المستند
+  parsePdfDocument(file);
 };
 
-// Application State (Initialize language preference from localStorage)
-let currentLang = (typeof localStorage !== 'undefined' && (localStorage.getItem('pdfnetizen_lang') || localStorage.getItem('pdf_netizen_lang'))) || 'en';
-let currentPdfBytes = null;
-let currentFileName = 'document.pdf';
-let currentTotalPages = 0;
-let extractedText = '';
-let isAnalyzing = false;
-let isModelReady = false;
-
-// Web Worker instance (Rule 2: Lazy instantiated on user action)
-let aiWorker = null;
-
-// Cached DOM Elements
-let dropzone = null;
-let fileInput = null;
-let workspacePanel = null;
-let fileNameDisplay = null;
-let fileSizeDisplay = null;
-let filePagesDisplay = null;
-let fileWordsDisplay = null;
-let btnChangeFile = null;
-let btnBrowseFile = null;
-let btnLoadSample = null;
-let btnHeaderReset = null;
-let btnLanguageToggle = null;
-let langToggleText = null;
-let userQuestionInput = null;
-let btnAskAi = null;
-let btnAskText = null;
-let btnSpinner = null;
-let progressCard = null;
-let progressStatusText = null;
-let progressPercent = null;
-let progressFill = null;
-let progressSubtext = null;
-let answerCard = null;
-let answerText = null;
-let confidenceBadge = null;
-let answerDuration = null;
-let btnCopyAnswer = null;
-let contextToggleBtn = null;
-let contextBox = null;
-let contextContent = null;
-let toastEl = null;
-let toastMsgEl = null;
-let toastIconEl = null;
-
-// Initialize on DOM Ready
-document.addEventListener('DOMContentLoaded', () => {
-  cacheDOMElements();
-  bindEventListeners();
-  applyLanguage(currentLang);
-
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-});
-
-function cacheDOMElements() {
-  dropzone = document.getElementById('dropzone');
-  fileInput = document.getElementById('pdf-file-input');
-  workspacePanel = document.getElementById('workspace-panel');
-  fileNameDisplay = document.getElementById('file-name-display');
-  fileSizeDisplay = document.getElementById('file-size-display');
-  filePagesDisplay = document.getElementById('file-pages-display');
-  fileWordsDisplay = document.getElementById('file-words-display');
-  btnChangeFile = document.getElementById('btn-change-file');
-  btnBrowseFile = document.getElementById('browse-btn') || document.getElementById('btn-browse-file') || document.querySelector('.browse-btn');
-  btnLoadSample = document.getElementById('btn-load-sample');
-  btnHeaderReset = document.getElementById('btn-header-reset');
-  btnLanguageToggle = document.getElementById('lang-toggle') || document.getElementById('btn-language-toggle') || document.querySelector('.lang-switch-btn') || document.querySelector('.btn-language-toggle');
-  langToggleText = document.getElementById('lang-toggle-text');
-  userQuestionInput = document.getElementById('user-question');
-  btnAskAi = document.getElementById('ask-ai-btn');
-  btnAskText = document.getElementById('btn-ask-text');
-  btnSpinner = document.getElementById('btn-spinner');
-  progressCard = document.getElementById('progress-card');
-  progressStatusText = document.getElementById('progress-status-text');
-  progressPercent = document.getElementById('progress-percent');
-  progressFill = document.getElementById('progress-fill');
-  progressSubtext = document.getElementById('progress-subtext');
-  answerCard = document.getElementById('answer-card');
-  answerText = document.getElementById('answer-text');
-  confidenceBadge = document.getElementById('confidence-badge');
-  answerDuration = document.getElementById('answer-duration');
-  btnCopyAnswer = document.getElementById('btn-copy-answer');
-  contextToggleBtn = document.getElementById('btn-toggle-context');
-  contextBox = document.getElementById('context-box');
-  contextContent = document.getElementById('context-content');
-  toastEl = document.getElementById('toast');
-  toastMsgEl = document.getElementById('toast-message');
-  toastIconEl = document.getElementById('toast-icon');
+function resetFileInput() {
+  const input = document.getElementById('pdf-file-input');
+  if (input) input.value = '';
 }
 
-// Translation Helper with global dictionary fallback
-function t(key, replacements = {}) {
-  const globalDict = (typeof window !== 'undefined' && (window.translations || window.I18N_TRANSLATIONS))
-    ? (window.translations || window.I18N_TRANSLATIONS)
-    : null;
-  const localDict = translations[currentLang] || translations.en;
-  
-  let text = localDict?.[key] || 
-             (globalDict?.[currentLang]?.[key]) || 
-             translations.en?.[key] || 
-             (globalDict?.en?.[key]) || 
-             key;
-
-  for (const [k, v] of Object.entries(replacements)) {
-    text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
-  }
-  return text;
-}
-
-function toggleLanguage() {
-  currentLang = (currentLang === 'en') ? 'ar' : 'en';
-  applyLanguage(currentLang);
-}
-
-function applyLanguage(lang) {
-  currentLang = lang;
-  const isAr = (lang === 'ar');
-
-  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
-  document.documentElement.lang = lang;
-
-  // Persist preference to localStorage
+// 2. قراءة صفحات المستند عبر PDF.js
+async function parsePdfDocument(file) {
   try {
-    localStorage.setItem('pdfnetizen_lang', lang);
-    localStorage.setItem('pdf_netizen_lang', lang);
-  } catch (e) {
-    console.warn('Could not save language preference:', e);
-  }
+    setLoadingUI(true, document.documentElement.lang === 'ar' ? 'جاري استخراج نصوص المستند...' : 'Extracting document text...');
 
-  if (langToggleText) {
-    langToggleText.textContent = isAr ? 'English' : 'العربية';
-  }
+    const arrayBuffer = await file.arrayBuffer();
 
-  // Update static text elements
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const translation = t(key);
-    if (translation) {
-      if (translation.includes('<span') || translation.includes('<b>') || translation.includes('<strong>')) {
-        el.innerHTML = translation;
-      } else {
-        el.textContent = translation;
+    // تهيئة مكتبة PDF.js
+    if (typeof pdfjsLib === 'undefined') {
+      throw new Error('PDF.js library is not loaded');
+    }
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    pdfDoc = await loadingTask.promise;
+
+    extractedPages = [];
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ').trim();
+
+      if (pageText.length > 0) {
+        extractedPages.push({ page: pageNum, text: pageText });
       }
     }
-  });
 
-  // Update placeholders
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    const translation = t(key);
-    if (translation) {
-      el.placeholder = translation;
+    setLoadingUI(false);
+
+    if (extractedPages.length === 0) {
+      showToast(
+        document.documentElement.lang === 'ar'
+          ? 'المستند ممسوح ضوئياً كصور ولا يحتوي على نص رقمي قابل للبحث'
+          : 'Scanned image PDF detected. No extractable digital text found.',
+        'error'
+      );
+      return;
     }
-  });
 
-  // Update context toggle button label
-  if (contextToggleBtn && extractedText) {
-    const wordCount = extractedText.split(/\s+/).filter(Boolean).length;
-    const isHidden = contextBox && contextBox.classList.contains('hidden');
-    contextToggleBtn.textContent = isHidden
-      ? t('context_toggle_show', { words: wordCount })
-      : t('context_toggle_hide');
-  }
+    // تحديث الواجهة لعرض تفاصيل الملف وقسم الأسئلة
+    showWorkspace(file.name, pdfDoc.numPages, file.size);
 
-  // Update button state text
-  if (btnAskText && !isAnalyzing) {
-    btnAskText.textContent = t('btn_ask_ai');
-  }
-
-  if (window.lucide) {
-    lucide.createIcons();
+  } catch (error) {
+    setLoadingUI(false);
+    console.error('PDF Parse Error:', error);
+    showToast(
+      document.documentElement.lang === 'ar'
+        ? 'حدث خطأ أثناء قراءة ملف الـ PDF'
+        : 'Failed to read PDF file',
+      'error'
+    );
   }
 }
 
-function bindEventListeners() {
-  // Language Toggle
-  if (btnLanguageToggle) {
-    btnLanguageToggle.addEventListener('click', toggleLanguage);
-  }
+// 3. تهيئة العامل الخلفي (Web Worker) للذكاء الاصطناعي عند الطلب
+function initWorkerIfNeeded() {
+  if (!aiWorker) {
+    aiWorker = new Worker('ai-worker.js', { type: 'module' });
 
-  // Reset
-  if (btnHeaderReset) {
-    btnHeaderReset.addEventListener('click', resetWorkspace);
-  }
+    aiWorker.onmessage = (event) => {
+      const { status, progress, result, error, message } = event.data;
 
-  // File Upload Trigger Binding
-  const browseBtn = document.getElementById('browse-btn') || document.getElementById('btn-browse-file') || document.querySelector('.browse-btn');
-  const fileInputEl = document.getElementById('pdf-file-input') || fileInput;
-  if (browseBtn && fileInputEl) {
-    browseBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      fileInputEl.click();
-    });
-  }
+      switch (status) {
+        case 'loading_model':
+          updateDownloadBanner(true, message, 0);
+          break;
 
-  if (fileInputEl) {
-    fileInputEl.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files[0]) {
-        handlePdfFile(e.target.files[0]);
+        case 'progress':
+          updateDownloadBanner(true, `Downloading Local Model: ${progress}%`, progress);
+          break;
+
+        case 'ready':
+          isWorkerReady = true;
+          updateDownloadBanner(false);
+          break;
+
+        case 'complete':
+          setAnalyzingState(false);
+          displayAnswer(result);
+          break;
+
+        case 'error':
+          setAnalyzingState(false);
+          showToast(error || 'AI Inference error', 'error');
+          break;
       }
-    });
+    };
+  }
+}
+
+// 4. تنفيذ استعلام السؤال واستخراج الإجابة
+function executeAskQuestion() {
+  const queryInput = document.getElementById('user-question-input');
+  const question = queryInput ? queryInput.value.trim() : '';
+
+  if (!question) {
+    showToast(document.documentElement.lang === 'ar' ? 'يرجى كتابة سؤال أولاً' : 'Please enter a question first');
+    return;
   }
 
-  // Dropzone Handlers
-  if (dropzone) {
-    dropzone.addEventListener('click', (e) => {
-      if (e.target.closest('button')) return;
-      if (fileInputEl) fileInputEl.click();
+  if (extractedPages.length === 0) {
+    showToast(document.documentElement.lang === 'ar' ? 'يرجى رفع ملف PDF أولاً' : 'Please upload a PDF first');
+    return;
+  }
+
+  setAnalyzingState(true);
+  initWorkerIfNeeded();
+
+  // تصفية الصفحات الأكثر ملائمة للبحث لتقليل استهلاك الذاكرة
+  const relevantContext = findMostRelevantContext(question, extractedPages);
+
+  aiWorker.postMessage({
+    type: 'query',
+    question: question,
+    context: relevantContext.text,
+    page: relevantContext.page
+  });
+}
+
+// تصفية سياق الفقرات بحسب الكلمات المفتاحية
+function findMostRelevantContext(question, pages) {
+  const terms = question.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  let bestPage = pages[0];
+  let highestScore = -1;
+
+  for (const item of pages) {
+    const lowerText = item.text.toLowerCase();
+    let score = 0;
+    terms.forEach(term => {
+      if (lowerText.includes(term)) score += 1;
     });
 
-    ['dragenter', 'dragover'].forEach(eventName => {
-      dropzone.addEventListener(eventName, (e) => {
+    if (score > highestScore) {
+      highestScore = score;
+      bestPage = item;
+    }
+  }
+
+  return bestPage;
+}
+
+// 5. تحديثات عناصر الواجهة
+function showWorkspace(fileName, pageCount, bytes) {
+  const dropzone = document.getElementById('dropzone-container') || document.querySelector('.dropzone');
+  const workspace = document.getElementById('qa-workspace');
+  const fileInfo = document.getElementById('file-info-badge');
+
+  if (dropzone) dropzone.classList.add('hidden');
+  if (workspace) workspace.classList.remove('hidden');
+
+  if (fileInfo) {
+    const sizeMB = (bytes / (1024 * 1024)).toFixed(2);
+    fileInfo.textContent = `${fileName} • ${pageCount} Pages • ${sizeMB} MB`;
+  }
+}
+
+function displayAnswer(result) {
+  const answerContainer = document.getElementById('answer-container');
+  const answerText = document.getElementById('answer-text');
+  const scoreBadge = document.getElementById('confidence-score');
+  const pageBadge = document.getElementById('answer-page');
+
+  if (answerContainer) answerContainer.classList.remove('hidden');
+  if (answerText) answerText.textContent = result.answer || 'No direct answer found.';
+  if (scoreBadge && result.score) scoreBadge.textContent = `${(result.score * 100).toFixed(0)}% Confidence`;
+  if (pageBadge && result.page) pageBadge.textContent = `Page ${result.page}`;
+
+  // تمرير الشاشة للنتيجة بسلاسة
+  if (answerContainer) {
+    answerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function setAnalyzingState(isAnalyzing) {
+  const askBtn = document.getElementById('ask-submit-btn');
+  const spinner = document.getElementById('ask-spinner');
+
+  if (askBtn) askBtn.disabled = isAnalyzing;
+  if (spinner) {
+    if (isAnalyzing) spinner.classList.remove('hidden');
+    else spinner.classList.add('hidden');
+  }
+}
+
+function updateDownloadBanner(show, text = '', progress = 0) {
+  const banner = document.getElementById('model-progress-banner');
+  const progressText = document.getElementById('model-progress-text');
+  const progressBar = document.getElementById('model-progress-bar');
+
+  if (banner) {
+    if (show) {
+      banner.classList.remove('hidden');
+      if (progressText) progressText.textContent = text;
+      if (progressBar) progressBar.style.width = `${progress}%`;
+    } else {
+      banner.classList.add('hidden');
+    }
+  }
+}
+
+function setLoadingUI(isLoading, text = '') {
+  const statusEl = document.getElementById('extract-status');
+  if (statusEl) {
+    statusEl.textContent = text;
+    if (isLoading) statusEl.classList.remove('hidden');
+    else statusEl.classList.add('hidden');
+  }
+}
+
+// 6. ربط الأحداث عند تحميل المستند
+document.addEventListener('DOMContentLoaded', () => {
+  // تفعيل خيار سحب وإفلات الملفات (Drag & Drop)
+  const dropzone = document.getElementById('dropzone-container') || document.querySelector('.dropzone');
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(name => {
+      dropzone.addEventListener(name, (e) => {
         e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.add('drag-over');
+        dropzone.classList.add('border-indigo-500', 'bg-indigo-50/50', 'dark:bg-indigo-950/20');
       });
     });
 
-    ['dragleave', 'drop'].forEach(eventName => {
-      dropzone.addEventListener(eventName, (e) => {
+    ['dragleave', 'drop'].forEach(name => {
+      dropzone.addEventListener(name, (e) => {
         e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.remove('drag-over');
+        dropzone.classList.remove('border-indigo-500', 'bg-indigo-50/50', 'dark:bg-indigo-950/20');
       });
     });
 
     dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.remove('drag-over');
-      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handlePdfFile(e.dataTransfer.files[0]);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        window.handleSelectedFile(e.dataTransfer.files[0]);
       }
     });
   }
 
-  // Sample PDF Loader
-  if (btnLoadSample) {
-    btnLoadSample.addEventListener('click', loadSamplePDF);
+  // ربط زر الاستعلام
+  const askBtn = document.getElementById('ask-submit-btn');
+  if (askBtn) {
+    askBtn.addEventListener('click', executeAskQuestion);
   }
 
-  // Change File Button
-  if (btnChangeFile && fileInput) {
-    btnChangeFile.addEventListener('click', () => fileInput.click());
-  }
-
-  // Question Form Submission
-  if (btnAskAi) {
-    btnAskAi.addEventListener('click', handleAskQuestion);
-  }
-
-  if (userQuestionInput) {
-    userQuestionInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleAskQuestion();
-      }
+  // دعم النقر على Enter في حقل السؤال
+  const queryInput = document.getElementById('user-question-input');
+  if (queryInput) {
+    queryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') executeAskQuestion();
     });
   }
 
-  // Suggested Question Chips
-  document.querySelectorAll('.suggestion-chip').forEach(chip => {
+  // ربط الأسئلة المقترحة (Sample Chips)
+  document.querySelectorAll('.sample-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      const qText = chip.getAttribute('data-question') || chip.textContent.trim();
-      if (userQuestionInput) {
-        userQuestionInput.value = qText;
-        handleAskQuestion();
+      if (queryInput) {
+        queryInput.value = chip.textContent.trim();
+        executeAskQuestion();
       }
     });
   });
-
-  // Copy Answer
-  if (btnCopyAnswer && answerText) {
-    btnCopyAnswer.addEventListener('click', () => {
-      const txt = answerText.textContent;
-      if (txt) {
-        navigator.clipboard.writeText(txt).then(() => {
-          showToast(t('toast_copied'), 'success');
-        });
-      }
-    });
-  }
-
-  // Context Toggle
-  if (contextToggleBtn && contextBox) {
-    contextToggleBtn.addEventListener('click', () => {
-      const isHidden = contextBox.classList.toggle('hidden');
-      const wordCount = extractedText.split(/\s+/).filter(Boolean).length;
-      contextToggleBtn.textContent = isHidden
-        ? t('context_toggle_show', { words: wordCount })
-        : t('context_toggle_hide');
-    });
-  }
-}
-
-/* ==========================================================================
-   Rule 1 & 2: Web Worker Offloading & On-Demand Lazy Initialization
-   ========================================================================== */
-function initWorkerIfNeeded() {
-  if (aiWorker) return aiWorker;
-
-  // Rule 1: Instantiate module web worker
-  aiWorker = new Worker(new URL('./ai-worker.js', import.meta.url), { type: 'module' });
-
-  aiWorker.onmessage = (e) => {
-    const { status, progress, file, result, error, message } = e.data || {};
-
-    switch (status) {
-      case 'loading_model':
-        showProgressCard(true);
-        updateProgressBar(0, t('progress_downloading'), message);
-        break;
-
-      case 'progress':
-        showProgressCard(true);
-        updateProgressBar(progress, t('progress_downloading'), `Fetching ${file} (${progress}%)`);
-        break;
-
-      case 'ready':
-        isModelReady = true;
-        updateProgressBar(100, t('progress_ready'), message);
-        setTimeout(() => {
-          showProgressCard(false);
-        }, 1200);
-        break;
-
-      case 'analyzing':
-        setAnalyzingState(true);
-        if (progressCard) {
-          showProgressCard(true);
-          updateProgressBar(100, t('progress_analyzing'), 'Processing neural attention weights...');
-        }
-        break;
-
-      case 'complete':
-        setAnalyzingState(false);
-        showProgressCard(false);
-        displayAnswer(result);
-        break;
-
-      case 'error':
-        setAnalyzingState(false);
-        showProgressCard(false);
-        showToast(error || 'An error occurred during AI processing.', 'error');
-        break;
-    }
-  };
-
-  aiWorker.onerror = (err) => {
-    setAnalyzingState(false);
-    showProgressCard(false);
-    showToast(`Worker error: ${err.message}`, 'error');
-  };
-
-  return aiWorker;
-}
-
-/* ==========================================================================
-   File Ingestion & Text Extraction (PDF.js)
-   ========================================================================== */
-function handlePdfFile(file) {
-  return handleFileSelected(file);
-}
-
-async function handleFileSelected(file) {
-  if (!file) return;
-
-  if (file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    showToast(t('toast_valid_pdf'), 'warning');
-    if (fileInput) fileInput.value = '';
-    return;
-  }
-
-  if (file.size > MAX_FILE_SIZE_BYTES) {
-    showToast('Please select a PDF under 25MB for optimal browser performance.', 'error');
-    if (fileInput) fileInput.value = '';
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = async function (e) {
-    const rawBuffer = e.target.result;
-    currentPdfBytes = new Uint8Array(rawBuffer);
-    currentFileName = file.name || 'document.pdf';
-    await extractTextFromPdf(currentPdfBytes, currentFileName, file.size);
-  };
-  reader.onerror = () => showToast('Failed to read selected PDF file.', 'error');
-  reader.readAsArrayBuffer(file);
-}
-
-async function extractTextFromPdf(bytes, filename, sizeBytes) {
-  try {
-    if (!window.pdfjsLib) {
-      throw new Error('PDF.js library is not loaded. Check your internet connection.');
-    }
-
-    const loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
-    const pdfDoc = await loadingTask.promise;
-    currentTotalPages = pdfDoc.numPages;
-
-    let fullText = '';
-    for (let pageNum = 1; pageNum <= currentTotalPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items.map(item => item.str).join(' ');
-      if (pageText.trim()) {
-        fullText += `--- Page ${pageNum} ---\n${pageText}\n\n`;
-      }
-    }
-
-    extractedText = fullText.trim();
-    window.extractedPdfText = extractedText;
-
-    if (!extractedText) {
-      showToast(t('toast_no_text'), 'warning');
-    }
-
-    // Update Overview UI
-    const wordCount = extractedText ? extractedText.split(/\s+/).filter(Boolean).length : 0;
-    if (fileNameDisplay) fileNameDisplay.textContent = filename;
-    if (fileSizeDisplay) fileSizeDisplay.textContent = formatBytes(sizeBytes || bytes.byteLength);
-    if (filePagesDisplay) filePagesDisplay.textContent = `${currentTotalPages} Pages`;
-    if (fileWordsDisplay) fileWordsDisplay.textContent = `${wordCount.toLocaleString()} Words`;
-
-    if (contextContent) {
-      contextContent.textContent = extractedText || 'No readable text extracted.';
-    }
-
-    if (contextToggleBtn) {
-      contextToggleBtn.textContent = t('context_toggle_show', { words: wordCount });
-    }
-
-    // Switch view to workspace
-    if (dropzone) dropzone.classList.add('hidden');
-    if (workspacePanel) workspacePanel.classList.remove('hidden');
-    if (answerCard) answerCard.classList.add('hidden');
-    if (btnHeaderReset) btnHeaderReset.disabled = false;
-
-    showToast(t('toast_pdf_loaded', { pages: currentTotalPages, words: wordCount.toLocaleString() }), 'success');
-  } catch (err) {
-    console.error('PDF Extraction Error:', err);
-    showToast(`Failed to parse PDF: ${err.message}`, 'error');
-    resetWorkspace();
-  }
-}
-
-/* ==========================================================================
-   Question Handling & Worker Query Dispatch
-   ========================================================================== */
-function handleAskQuestion() {
-  if (isAnalyzing) return;
-
-  const question = userQuestionInput ? userQuestionInput.value.trim() : '';
-  if (!question) {
-    showToast(t('toast_empty_question'), 'warning');
-    if (userQuestionInput) userQuestionInput.focus();
-    return;
-  }
-
-  const context = window.extractedPdfText || extractedText;
-  if (!context) {
-    showToast(t('toast_no_text'), 'error');
-    return;
-  }
-
-  // Rule 2: Lazy Initialize worker on explicit user interaction
-  const worker = initWorkerIfNeeded();
-
-  setAnalyzingState(true);
-  if (answerCard) answerCard.classList.add('hidden');
-
-  // Dispatch query to Web Worker
-  worker.postMessage({
-    type: 'query',
-    question,
-    context
-  });
-}
-
-function displayAnswer(result) {
-  if (!result || !answerCard || !answerText) return;
-
-  answerText.textContent = result.answer || 'No answer found.';
-
-  if (confidenceBadge) {
-    confidenceBadge.textContent = `${t('confidence_label')} ${result.score}%`;
-    if (result.score >= 70) {
-      confidenceBadge.className = 'confidence-badge high';
-    } else if (result.score >= 40) {
-      confidenceBadge.className = 'confidence-badge medium';
-    } else {
-      confidenceBadge.className = 'confidence-badge low';
-    }
-  }
-
-  if (answerDuration && result.durationMs) {
-    answerDuration.textContent = `⚡ ${(result.durationMs / 1000).toFixed(2)}s on device`;
-  }
-
-  answerCard.classList.remove('hidden');
-  answerCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-}
-
-/* ==========================================================================
-   UI Helpers & Progress Tracking
-   ========================================================================== */
-function showProgressCard(visible) {
-  if (progressCard) {
-    progressCard.classList.toggle('hidden', !visible);
-  }
-}
-
-function updateProgressBar(percent, statusText, subtext) {
-  const p = Math.min(100, Math.max(0, percent || 0));
-  if (progressPercent) progressPercent.textContent = `${p}%`;
-  if (progressFill) progressFill.style.width = `${p}%`;
-  if (progressStatusText && statusText) progressStatusText.textContent = statusText;
-  if (progressSubtext && subtext) progressSubtext.textContent = subtext;
-}
-
-function setAnalyzingState(active) {
-  isAnalyzing = active;
-  if (btnAskAi) btnAskAi.disabled = active;
-  if (btnSpinner) btnSpinner.classList.toggle('hidden', !active);
-  if (btnAskText) {
-    btnAskText.textContent = active ? t('btn_analyzing') : t('btn_ask_ai');
-  }
-}
-
-/* ==========================================================================
-   Interactive Sample PDF Generator
-   ========================================================================== */
-async function loadSamplePDF() {
-  try {
-    showToast('Loading comprehensive AI sample document...', 'info');
-
-    const sampleText = `=== PDFNetizen Cloud Architecture & Privacy Whitepaper ===
-
-1. Executive Summary & Core Infrastructure
-PDFNetizen provides 100% client-side document processing for modern web browsers. All document operations, including PDF merging, compression, splitting, optical character recognition (OCR), and neural question answering, execute completely inside the client device's browser sandbox.
-
-2. On-Device AI Question Answering Specs
-The AskPDF intelligent Q&A module utilizes a quantized ONNX DistilBERT neural model (distilbert-base-cased-distilled-squad) running inside a dedicated Web Worker via Transformers.js. The model download size is approximately 35 MB and is cached permanently in browser IndexedDB/CacheStorage for offline availability.
-
-3. Zero-Server Privacy Guarantee
-No document bytes, extracted text, embeddings, or query prompts are ever transmitted to any third-party or cloud server. Processing is compliant with GDPR, HIPAA, and CCPA standards because data never leaves localhost.
-
-4. Performance & Memory Ceilings
-The system enforces a strict 25 MB document ceiling to prevent browser tab crashes and memory overflow. On typical modern hardware, question answering inference takes between 0.25 and 1.20 seconds per query.
-
-5. Key Contacts & Release Information
-Published by: PDFNetizen Security & Machine Learning Core Team.
-Release Version: 2.4.0-Production (Build 2026).
-Primary License: MIT Open Ecosystem License.`;
-
-    extractedText = sampleText;
-    window.extractedPdfText = sampleText;
-    currentFileName = 'PDFNetizen_AI_Whitepaper_Sample.pdf';
-    currentTotalPages = 3;
-
-    const wordCount = extractedText.split(/\s+/).filter(Boolean).length;
-    if (fileNameDisplay) fileNameDisplay.textContent = currentFileName;
-    if (fileSizeDisplay) fileSizeDisplay.textContent = '42.5 KB';
-    if (filePagesDisplay) filePagesDisplay.textContent = '3 Pages';
-    if (fileWordsDisplay) fileWordsDisplay.textContent = `${wordCount} Words`;
-
-    if (contextContent) contextContent.textContent = extractedText;
-    if (contextToggleBtn) contextToggleBtn.textContent = t('context_toggle_show', { words: wordCount });
-
-    if (dropzone) dropzone.classList.add('hidden');
-    if (workspacePanel) workspacePanel.classList.remove('hidden');
-    if (answerCard) answerCard.classList.add('hidden');
-    if (btnHeaderReset) btnHeaderReset.disabled = false;
-
-    if (userQuestionInput) {
-      userQuestionInput.value = 'What is the model download size?';
-    }
-
-    showToast('Sample PDF loaded! Click "Ask AI" to test local inference.', 'success');
-  } catch (err) {
-    showToast(`Error creating sample: ${err.message}`, 'error');
-  }
-}
-
-/* ==========================================================================
-   Workspace Reset & Utility Helpers
-   ========================================================================== */
-function resetWorkspace() {
-  currentPdfBytes = null;
-  currentFileName = 'document.pdf';
-  currentTotalPages = 0;
-  extractedText = '';
-  window.extractedPdfText = '';
-  isAnalyzing = false;
-
-  if (fileInput) fileInput.value = '';
-  if (userQuestionInput) userQuestionInput.value = '';
-  if (workspacePanel) workspacePanel.classList.add('hidden');
-  if (dropzone) dropzone.classList.remove('hidden');
-  if (progressCard) progressCard.classList.add('hidden');
-  if (answerCard) answerCard.classList.add('hidden');
-  if (contextBox) contextBox.classList.add('hidden');
-  if (btnHeaderReset) btnHeaderReset.disabled = true;
-
-  setAnalyzingState(false);
-}
-
-function formatBytes(bytes, decimals = 1) {
-  if (!bytes || bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-function showToast(message, type = 'info') {
-  if (!toastEl || !toastMsgEl) return;
-
-  toastMsgEl.textContent = message;
-  toastEl.className = `toast toast-${type}`;
-
-  if (toastIconEl) {
-    let iconName = 'info';
-    if (type === 'success') iconName = 'check-circle-2';
-    if (type === 'error') iconName = 'alert-triangle';
-    if (type === 'warning') iconName = 'alert-circle';
-    toastIconEl.setAttribute('data-lucide', iconName);
-  }
-
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-
-  toastEl.classList.remove('hidden');
-  clearTimeout(toastEl._timer);
-  toastEl._timer = setTimeout(() => {
-    toastEl.classList.add('hidden');
-  }, 4000);
-}
+});
