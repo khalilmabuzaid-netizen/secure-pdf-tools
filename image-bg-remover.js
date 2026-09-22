@@ -24,6 +24,8 @@
       imgbg_mode_ai: "Smart AI Auto-Detect",
       imgbg_mode_chroma: "Color / Chroma Key",
       imgbg_mode_manual: "Manual Touch-Up Brush",
+      imgbg_eyedropper_label: "Chroma Key Color",
+      imgbg_btn_pick_color: "Pick Color from Image",
       imgbg_tolerance_label: "Detection Tolerance",
       imgbg_feather_label: "Edge Smoothness",
       imgbg_bg_label: "Background Fill",
@@ -48,7 +50,8 @@
       toast_downloading: "Downloading transparent PNG...",
       toast_invalid_img: "Please upload a valid image file (PNG, JPG, WebP, or BMP).",
       toast_error: "An error occurred during background removal.",
-      toast_chroma_picked: "Sampled color from clicked point.",
+      toast_eyedropper_active: "Eyedropper active: Click on the original image to pick a key color.",
+      toast_chroma_picked: "Sampled color: {color}",
       status_erased: "Background erased successfully ({dimensions})",
       status_details: "Format: Transparent PNG • {size}",
       imgbg_seo_badge: "Fast, Private & Accurate Background Eraser",
@@ -85,6 +88,8 @@
       imgbg_mode_ai: "التعرف الذكي التلقائي (AI)",
       imgbg_mode_chroma: "تحديد اللون والشفافية (Chroma)",
       imgbg_mode_manual: "فرشاة اللمسات اليدوية",
+      imgbg_eyedropper_label: "لون الكروما المستهدف",
+      imgbg_btn_pick_color: "التقاط اللون من الصورة",
       imgbg_tolerance_label: "حساسية التعرف على الخلفية",
       imgbg_feather_label: "نعومة حواف العنصر",
       imgbg_bg_label: "الخلفية البديلة",
@@ -109,7 +114,8 @@
       toast_downloading: "جاري تحميل الصورة المفرغة...",
       toast_invalid_img: "يرجى اختيار ملف صورة صالح (PNG أو JPG أو WebP أو BMP).",
       toast_error: "حدث خطأ أثناء إزالة الخلفية.",
-      toast_chroma_picked: "تم التقاط اللون المستهدف بنجاح.",
+      toast_eyedropper_active: "أداة القطارة نشطة: انقر على الصورة الأصلية لاختيار لون الخلفية.",
+      toast_chroma_picked: "تم التقاط اللون: {color}",
       status_erased: "تم تفريغ الخلفية بنجاح ({dimensions})",
       status_details: "الصيغة: PNG شفافة • {size}",
       imgbg_seo_badge: "إزالة خلفيات الصور فائق السرعة، الدقة والأمان",
@@ -145,6 +151,7 @@
   let featherRadius = 3;
   let backgroundFill = 'transparent'; // 'transparent', '#ffffff', 'gradient-sunset', etc.
   let chromaSampleColor = { r: 255, g: 255, b: 255 };
+  let isEyedropperActive = false;
 
   // Manual brush
   let brushAction = 'erase'; // 'erase', 'restore'
@@ -162,10 +169,11 @@
   let dropzone, fileInput, btnBrowse, btnLoadSample;
   let workspacePanel, metaThumbnail, fileNameDisplay, origDimensionsBadge, origSizeBadge, processingStatusBadge, btnChangeFile;
   let modeButtons, toleranceControlGroup, toleranceSlider, toleranceValDisplay;
+  let eyedropperControlsGroup, btnEyedropper, eyedropperHexDisplay, sampledColorSwatch, sampledColorText;
   let featherControlGroup, featherSlider, featherValDisplay;
   let bgFillVal, bgOptionButtons, customBgColorPicker;
   let brushControlsGroup, btnBrushErase, btnBrushRestore, brushSizeSlider, brushSizeDisplay;
-  let origStageImg, resultStageContainer, resultCanvas, brushCursorCircle, origCardDimensions, origCardSize, resultCardDimensions, resultCardSize;
+  let origStageImg, origStageContainer, resultStageContainer, resultCanvas, brushCursorCircle, origCardDimensions, origCardSize, resultCardDimensions, resultCardSize;
   let statusHeadline, statusDetails, btnDownloadPng, btnReprocess;
   let btnLanguageToggle, langToggleText;
   let toastEl, toastMsgEl, toastIconEl;
@@ -202,6 +210,12 @@
     btnChangeFile = document.getElementById('btn-change-file');
 
     modeButtons = document.querySelectorAll('.mode-btn');
+    eyedropperControlsGroup = document.getElementById('eyedropper-controls-group');
+    btnEyedropper = document.getElementById('btn-eyedropper');
+    eyedropperHexDisplay = document.getElementById('eyedropper-hex-display');
+    sampledColorSwatch = document.getElementById('sampled-color-swatch');
+    sampledColorText = document.getElementById('sampled-color-text');
+
     toleranceControlGroup = document.getElementById('tolerance-control-group');
     toleranceSlider = document.getElementById('tolerance-slider');
     toleranceValDisplay = document.getElementById('tolerance-val-display');
@@ -221,6 +235,7 @@
     brushSizeDisplay = document.getElementById('brush-size-display');
 
     origStageImg = document.getElementById('orig-stage-img');
+    origStageContainer = origStageImg ? origStageImg.closest('.stage-canvas-container') : null;
     resultStageContainer = document.getElementById('result-stage-container');
     resultCanvas = document.getElementById('result-canvas');
     brushCursorCircle = document.getElementById('brush-cursor-circle');
@@ -306,20 +321,59 @@
         btn.classList.add('active');
         currentMode = btn.getAttribute('data-mode');
 
-        if (brushControlsGroup) {
-          if (currentMode === 'manual') {
-            brushControlsGroup.classList.remove('hidden');
-            if (resultCanvas) resultCanvas.classList.add('brush-mode');
-          } else {
-            brushControlsGroup.classList.add('hidden');
-            if (resultCanvas) resultCanvas.classList.remove('brush-mode');
-            if (brushCursorCircle) brushCursorCircle.classList.remove('active');
-          }
+        if (currentMode === 'chroma') {
+          if (eyedropperControlsGroup) eyedropperControlsGroup.classList.remove('hidden');
+          if (toleranceControlGroup) toleranceControlGroup.classList.remove('hidden');
+          if (featherControlGroup) featherControlGroup.classList.remove('hidden');
+          if (brushControlsGroup) brushControlsGroup.classList.add('hidden');
+          if (resultCanvas) resultCanvas.classList.remove('brush-mode');
+          if (brushCursorCircle) brushCursorCircle.classList.remove('active');
+          // Activate Eyedropper sampling mode
+          setEyedropperMode(true);
+        } else if (currentMode === 'manual') {
+          if (eyedropperControlsGroup) eyedropperControlsGroup.classList.add('hidden');
+          if (brushControlsGroup) brushControlsGroup.classList.remove('hidden');
+          if (resultCanvas) resultCanvas.classList.add('brush-mode');
+          setEyedropperMode(false);
+        } else {
+          // AI mode
+          if (eyedropperControlsGroup) eyedropperControlsGroup.classList.add('hidden');
+          if (brushControlsGroup) brushControlsGroup.classList.add('hidden');
+          if (toleranceControlGroup) toleranceControlGroup.classList.remove('hidden');
+          if (featherControlGroup) featherControlGroup.classList.remove('hidden');
+          if (resultCanvas) resultCanvas.classList.remove('brush-mode');
+          if (brushCursorCircle) brushCursorCircle.classList.remove('active');
+          setEyedropperMode(false);
         }
 
         recomputeAndRender();
       });
     });
+
+    // Eyedropper Button
+    if (btnEyedropper) {
+      btnEyedropper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleEyedropperMode();
+      });
+    }
+
+    // Original Image Pixel Sampling
+    if (origStageImg) {
+      origStageImg.addEventListener('click', handleOriginalImageClick);
+      origStageImg.addEventListener('touchend', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          e.preventDefault();
+          handleOriginalImageClick(e.touches[0]);
+        }
+      }, { passive: false });
+    }
+
+    if (origStageContainer) {
+      origStageContainer.addEventListener('click', (e) => {
+        if (e.target !== origStageImg) handleOriginalImageClick(e);
+      });
+    }
 
     // Tolerance Slider
     if (toleranceSlider) {
@@ -453,6 +507,117 @@
     }
   }
 
+  function rgbToHex(r, g, b) {
+    const toHex = (c) => {
+      const hex = Math.max(0, Math.min(255, Math.round(c))).toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+    };
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  }
+
+  function toggleEyedropperMode() {
+    setEyedropperMode(!isEyedropperActive);
+  }
+
+  function setEyedropperMode(active) {
+    isEyedropperActive = active;
+    if (btnEyedropper) {
+      if (isEyedropperActive) {
+        btnEyedropper.classList.add('active');
+        showToast(t('toast_eyedropper_active'), 'info');
+      } else {
+        btnEyedropper.classList.remove('active');
+      }
+    }
+
+    if (origStageImg) {
+      origStageImg.classList.toggle('eyedropper-active', isEyedropperActive);
+    }
+    if (origStageContainer) {
+      origStageContainer.classList.toggle('eyedropper-active', isEyedropperActive);
+    }
+    if (resultCanvas && currentMode === 'chroma') {
+      resultCanvas.classList.toggle('eyedropper-active', isEyedropperActive);
+    }
+  }
+
+  function handleOriginalImageClick(e) {
+    if (!originalImageData || !originalDimensions.width || !originalDimensions.height) return;
+    if (currentMode === 'chroma' || isEyedropperActive) {
+      sampleColorFromEvent(e, origStageImg);
+    }
+  }
+
+  function getCoordsFromElement(e, element, naturalWidth, naturalHeight) {
+    const rect = element.getBoundingClientRect();
+    const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+    const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+
+    const relX = clientX - rect.left;
+    const relY = clientY - rect.top;
+
+    const elemAspect = rect.width / rect.height;
+    const imgAspect = naturalWidth / naturalHeight;
+
+    let renderWidth = rect.width;
+    let renderHeight = rect.height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (elemAspect > imgAspect) {
+      renderHeight = rect.height;
+      renderWidth = renderHeight * imgAspect;
+      offsetX = (rect.width - renderWidth) / 2;
+    } else {
+      renderWidth = rect.width;
+      renderHeight = renderWidth / imgAspect;
+      offsetY = (rect.height - renderHeight) / 2;
+    }
+
+    const imgX = relX - offsetX;
+    const imgY = relY - offsetY;
+
+    const scaleX = naturalWidth / renderWidth;
+    const scaleY = naturalHeight / renderHeight;
+
+    const x = Math.max(0, Math.min(naturalWidth - 1, Math.floor(imgX * scaleX)));
+    const y = Math.max(0, Math.min(naturalHeight - 1, Math.floor(imgY * scaleY)));
+
+    return { x, y };
+  }
+
+  function sampleColorFromEvent(e, element) {
+    if (!originalImageData || !originalDimensions.width || !originalDimensions.height) return;
+    const targetEl = origStageImg || element;
+    const coords = getCoordsFromElement(e, targetEl, originalDimensions.width, originalDimensions.height);
+
+    const idx = (coords.y * originalDimensions.width + coords.x) * 4;
+    const r = originalImageData.data[idx];
+    const g = originalImageData.data[idx + 1];
+    const b = originalImageData.data[idx + 2];
+
+    setChromaColor(r, g, b);
+    setEyedropperMode(false);
+  }
+
+  function setChromaColor(r, g, b) {
+    chromaSampleColor = { r, g, b };
+    const hex = rgbToHex(r, g, b);
+
+    if (sampledColorSwatch) {
+      sampledColorSwatch.style.backgroundColor = hex;
+    }
+    if (sampledColorText) {
+      sampledColorText.textContent = hex;
+    }
+    if (eyedropperHexDisplay) {
+      eyedropperHexDisplay.textContent = hex;
+    }
+
+    showToast(t('toast_chroma_picked', { color: hex }), 'info');
+    recomputeAndRender();
+  }
+
   function getCanvasCoords(e, canvas) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -513,20 +678,15 @@
   function startCanvasInteract(e) {
     if (!originalImageData || !resultCanvas) return;
 
+    if (currentMode === 'chroma' || isEyedropperActive) {
+      sampleColorFromEvent(e, resultCanvas);
+      return;
+    }
+
     const coords = getCanvasCoords(e, resultCanvas);
     if (coords.x < 0 || coords.x >= resultCanvas.width || coords.y < 0 || coords.y >= resultCanvas.height) return;
 
-    if (currentMode === 'chroma') {
-      // Sample color at clicked pixel
-      const idx = (coords.y * resultCanvas.width + coords.x) * 4;
-      chromaSampleColor = {
-        r: originalImageData.data[idx],
-        g: originalImageData.data[idx + 1],
-        b: originalImageData.data[idx + 2]
-      };
-      showToast(t('toast_chroma_picked'), 'info');
-      recomputeAndRender();
-    } else if (currentMode === 'manual') {
+    if (currentMode === 'manual') {
       isDrawing = true;
       lastPos = coords;
 
@@ -739,6 +899,14 @@
       resultCanvas.width = originalDimensions.width;
       resultCanvas.height = originalDimensions.height;
     }
+
+    // Refresh color preview swatch
+    const initialHex = rgbToHex(chromaSampleColor.r, chromaSampleColor.g, chromaSampleColor.b);
+    if (sampledColorSwatch) sampledColorSwatch.style.backgroundColor = initialHex;
+    if (sampledColorText) sampledColorText.textContent = initialHex;
+    if (eyedropperHexDisplay) eyedropperHexDisplay.textContent = initialHex;
+
+    setEyedropperMode(false);
 
     if (dropzone) dropzone.parentElement.classList.add('hidden');
     if (workspacePanel) workspacePanel.classList.remove('hidden');
@@ -1022,6 +1190,7 @@
     maskBuffer = null;
     processedBlob = null;
     processedDataUrl = null;
+    setEyedropperMode(false);
 
     if (fileInput) fileInput.value = '';
     if (workspacePanel) workspacePanel.classList.add('hidden');

@@ -816,6 +816,50 @@
       cursor: none;
     }
 
+    .stage-img.eyedropper-active,
+    .stage-canvas-container.eyedropper-active,
+    .stage-canvas.eyedropper-active {
+      cursor: crosshair !important;
+    }
+
+    .eyedropper-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sampled-color-preview-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 4px 10px 4px 6px;
+    }
+
+    .sampled-color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      transition: background-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .sampled-color-swatch:hover {
+      transform: scale(1.1);
+      border-color: var(--primary-light);
+    }
+
+    .sampled-color-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
     .brush-cursor-circle {
       position: absolute;
       top: 0;
@@ -1511,6 +1555,24 @@
 
         <!-- Fine-Tuning Controls Grid -->
         <div class="settings-controls-grid">
+
+          <!-- Chroma Key Eyedropper Controls (Only visible in Chroma mode) -->
+          <div class="control-group hidden" id="eyedropper-controls-group">
+            <div class="control-label-wrapper">
+              <label class="control-label" data-i18n="imgbg_eyedropper_label">Chroma Key Color</label>
+              <span id="eyedropper-hex-display" class="control-value">#FFFFFF</span>
+            </div>
+            <div class="eyedropper-actions-row">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-eyedropper">
+                <i data-lucide="pipette"></i>
+                <span data-i18n="imgbg_btn_pick_color">Pick Color from Image</span>
+              </button>
+              <div class="sampled-color-preview-wrapper" title="Sampled Chroma Key Color">
+                <div id="sampled-color-swatch" class="sampled-color-swatch" style="background-color: #ffffff;"></div>
+                <span id="sampled-color-text" class="sampled-color-text">#FFFFFF</span>
+              </div>
+            </div>
+          </div>
 
           <!-- Tolerance Slider (Chroma Mode) / Threshold -->
           <div class="control-group" id="tolerance-control-group">
