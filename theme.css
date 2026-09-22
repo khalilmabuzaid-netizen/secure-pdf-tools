@@ -131,7 +131,47 @@
 }
 
 /* --------------------------------------------------------------------------
-   4. Light Mode Component Overrides (Parity & Contrast Polish)
+   4. Dark Mode Heading & Contrast Rules
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] .hero-title,
+[data-theme="dark"] .hero-header h1,
+[data-theme="dark"] .page-title,
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .seo-title,
+[data-theme="dark"] .tool-title,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .dropzone-title,
+[data-theme="dark"] .brand-title,
+[data-theme="dark"] .footer-brand-title {
+  color: #F9FAFB !important;
+}
+
+[data-theme="dark"] .hero-header p,
+[data-theme="dark"] .hero-desc,
+[data-theme="dark"] .hero-subtitle,
+[data-theme="dark"] .page-lead,
+[data-theme="dark"] .page-subtitle,
+[data-theme="dark"] .dropzone-subtitle,
+[data-theme="dark"] .card-desc,
+[data-theme="dark"] .card p,
+[data-theme="dark"] .seo-subtitle,
+[data-theme="dark"] .feature-box p,
+[data-theme="dark"] .step-card p,
+[data-theme="dark"] .faq-answer,
+[data-theme="dark"] .faq-item p,
+[data-theme="dark"] .text-muted,
+[data-theme="dark"] .text-secondary {
+  color: #9CA3AF !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Light Mode Component Overrides & High-Contrast Polish
    -------------------------------------------------------------------------- */
 [data-theme="light"] body {
   background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.04), transparent 50%), #F8FAFC !important;
@@ -157,6 +197,82 @@
   color: #0F172A !important;
 }
 
+/* Headings in Light Mode: Dark slate text (#0F172A) with 18:1 contrast */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] .hero-title,
+[data-theme="light"] .hero-header h1,
+[data-theme="light"] .page-title,
+[data-theme="light"] .section-title,
+[data-theme="light"] .seo-title,
+[data-theme="light"] .tool-title,
+[data-theme="light"] .card-title,
+[data-theme="light"] .dropzone-title,
+[data-theme="light"] .brand-title,
+[data-theme="light"] .footer-brand-title,
+[data-theme="light"] .pages-grid-title,
+[data-theme="light"] .config-title,
+[data-theme="light"] .control-card-title,
+[data-theme="light"] .pwd-header-text h3,
+[data-theme="light"] .success-card h3 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  color: #0F172A !important;
+}
+
+/* Gradient Text inside Headings: Rich saturated indigo gradient (contrast > 5.5:1) */
+[data-theme="light"] .gradient-text {
+  background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Subheadings & Paragraphs in Light Mode: Crisp Slate-600 (#475569) (contrast 5.9:1) */
+[data-theme="light"] .hero-header p,
+[data-theme="light"] .hero-desc,
+[data-theme="light"] .hero-subtitle,
+[data-theme="light"] .page-lead,
+[data-theme="light"] .page-subtitle,
+[data-theme="light"] .dropzone-subtitle,
+[data-theme="light"] .card-desc,
+[data-theme="light"] .card p,
+[data-theme="light"] .seo-subtitle,
+[data-theme="light"] .feature-box p,
+[data-theme="light"] .step-card p,
+[data-theme="light"] .faq-answer,
+[data-theme="light"] .faq-item p,
+[data-theme="light"] .text-muted,
+[data-theme="light"] .text-secondary {
+  color: #475569 !important;
+}
+
+/* Badges & Pills in Light Mode: High-contrast legible badges */
+[data-theme="light"] .badge,
+[data-theme="light"] .brand-badge,
+[data-theme="light"] .badge-pill,
+[data-theme="light"] .date-badge,
+[data-theme="light"] .meta-chip,
+[data-theme="light"] .badge-client-side {
+  background: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  border: 1px solid #BFDBFE !important;
+}
+
+[data-theme="light"] .hero-badge,
+[data-theme="light"] .badge-emerald {
+  background: #ECFDF5 !important;
+  color: #047857 !important;
+  border: 1px solid #A7F3D0 !important;
+}
+
+/* Buttons in Light Mode */
 [data-theme="light"] .btn-secondary,
 [data-theme="light"] .btn-ghost,
 [data-theme="light"] .btn-outline {
@@ -173,6 +289,7 @@
   color: #0F172A !important;
 }
 
+/* Cards & Surfaces in Light Mode */
 [data-theme="light"] .card,
 [data-theme="light"] .tool-card,
 [data-theme="light"] .seo-card,
@@ -201,6 +318,15 @@
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
 }
 
+[data-theme="light"] .card h3,
+[data-theme="light"] .tool-card h3,
+[data-theme="light"] .feature-box h4,
+[data-theme="light"] .step-card h3,
+[data-theme="light"] .faq-question h3 {
+  color: #0F172A !important;
+}
+
+/* Dropzones in Light Mode */
 [data-theme="light"] .dropzone,
 [data-theme="light"] .dropzone-container,
 [data-theme="light"] .upload-area,
@@ -220,30 +346,7 @@
   border-color: #6366F1 !important;
 }
 
-[data-theme="light"] .dropzone-title,
-[data-theme="light"] .hero-title,
-[data-theme="light"] .page-title,
-[data-theme="light"] .section-title,
-[data-theme="light"] .tool-title,
-[data-theme="light"] .card-title,
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4 {
-  color: #0F172A !important;
-}
-
-[data-theme="light"] .dropzone-subtitle,
-[data-theme="light"] .hero-desc,
-[data-theme="light"] .hero-subtitle,
-[data-theme="light"] .page-subtitle,
-[data-theme="light"] .card-desc,
-[data-theme="light"] .card p,
-[data-theme="light"] .text-muted,
-[data-theme="light"] .text-secondary {
-  color: #64748B !important;
-}
-
+/* Form Controls in Light Mode */
 [data-theme="light"] input[type="text"],
 [data-theme="light"] input[type="number"],
 [data-theme="light"] input[type="password"],
@@ -263,6 +366,7 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
 }
 
+/* Tables in Light Mode */
 [data-theme="light"] .comparison-table th,
 [data-theme="light"] .table th {
   background: #F8FAFC !important;
@@ -284,11 +388,7 @@
   color: #0F172A !important;
 }
 
-[data-theme="light"] .faq-answer,
-[data-theme="light"] .faq-item p {
-  color: #475569 !important;
-}
-
+/* Footer & Cookie Banner in Light Mode */
 [data-theme="light"] .site-footer {
   background: #F8FAFC !important;
   border-top-color: #E2E8F0 !important;
@@ -310,6 +410,7 @@
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12) !important;
 }
 
+/* Modals & Dialogs in Light Mode */
 [data-theme="light"] .modal-content,
 [data-theme="light"] .modal-card,
 [data-theme="light"] .dialog-card {
@@ -319,6 +420,7 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Floating Toolbars in Light Mode */
 [data-theme="light"] .tool-dock,
 [data-theme="light"] .bottom-dock,
 [data-theme="light"] .floating-toolbar,
