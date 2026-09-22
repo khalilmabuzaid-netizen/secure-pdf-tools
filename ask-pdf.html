@@ -69,6 +69,7 @@
 
   <!-- PDF.js CDN (Client-side document parsing) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
 
   <!-- Structured Data (JSON-LD) for SEO -->
   <script type="application/ld+json">
@@ -1154,7 +1155,7 @@
       </button>
 
       <!-- Language Toggle Button -->
-      <button id="btn-language-toggle" class="lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
+      <button id="lang-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
@@ -1193,7 +1194,7 @@
 
     <!-- Dropzone Upload Area -->
     <section class="dropzone-card" id="dropzone" aria-label="PDF File Upload Area">
-      <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" class="hidden" aria-label="Select PDF file">
+      <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" class="hidden" aria-label="Select PDF file" />
       
       <div class="dropzone-icon">
         <i data-lucide="upload-cloud"></i>
@@ -1205,7 +1206,7 @@
       </p>
 
       <div class="dropzone-actions">
-        <button id="btn-browse-file" class="btn btn-primary btn-lg">
+        <button id="browse-btn" class="btn btn-primary btn-lg browse-btn">
           <i data-lucide="upload"></i>
           <span data-i18n="btn_browse_file">Browse PDF File</span>
         </button>

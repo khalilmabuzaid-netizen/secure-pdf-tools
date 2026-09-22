@@ -22,6 +22,19 @@ const translations = {
   en: {
     ask_pdf_title: "Ask PDF & Search",
     ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
+    summarize_title: "Smart PDF Summarizer",
+    summarize_desc: "Summarize PDF documents into concise bullet points or executive overviews locally with zero cloud uploads.",
+    summarize_pdf_title: "Smart PDF Summarizer",
+    summarize_pdf_desc: "Summarize PDF documents into concise bullet points or executive overviews locally with zero cloud uploads.",
+    drop_pdf_here: "Drop your PDF file here",
+    browse_file_btn: "Browse PDF File",
+    client_engine_badge: "Client-Side AI Engine",
+    size_limit_warning: "Please select a PDF under 25MB for optimal browser performance.",
+    ask_placeholder: "e.g., What are the key findings or main topic of this document?",
+    ask_btn: "Ask AI",
+    summarize_btn: "Summarize Document",
+    copy_btn: "Copy Answer",
+    export_btn: "Export as TXT",
     tool_ask_pdf_title: "Ask PDF & Search",
     tool_ask_pdf_desc: "Ask questions, search semantically, and get instant answers from your PDF locally with zero server uploads.",
     badge_client_side: "100% Local AI",
@@ -95,6 +108,19 @@ const translations = {
   ar: {
     ask_pdf_title: "اسأل PDF والبحث الذكي",
     ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
+    summarize_title: "تلخيص PDF الذكي",
+    summarize_desc: "لخص مستندات PDF إلى نقاط أساسية أو نظرة عامة تنفيذية محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
+    summarize_pdf_title: "تلخيص PDF الذكي",
+    summarize_pdf_desc: "لخص مستندات PDF إلى نقاط أساسية أو نظرة عامة تنفيذية محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
+    drop_pdf_here: "اسحب ملف PDF هنا",
+    browse_file_btn: "استعراض ملف PDF",
+    client_engine_badge: "محرك الذكاء الاصطناعي المحلي",
+    size_limit_warning: "يرجى اختيار ملف PDF بحجم أقل من 25 ميجابايت للحفاظ على أداء المتصفح.",
+    ask_placeholder: "مثال: ما هو الموضوع الرئيسي أو النقاط الأساسية في هذا المستند؟",
+    ask_btn: "اسأل الذكاء الاصطناعي",
+    summarize_btn: "تلخيص المستند",
+    copy_btn: "نسخ الإجابة",
+    export_btn: "تصدير كملف نصي TXT",
     tool_ask_pdf_title: "اسأل PDF والبحث الذكي",
     tool_ask_pdf_desc: "اطرح أسئلة وابحث ذكياً واستخرج إجابات فورية من مستندات PDF محلياً بالذكاء الاصطناعي دون أي رفع سحابي.",
     badge_client_side: "ذكاء اصطناعي محلي ١٠٠٪",
@@ -234,10 +260,10 @@ function cacheDOMElements() {
   filePagesDisplay = document.getElementById('file-pages-display');
   fileWordsDisplay = document.getElementById('file-words-display');
   btnChangeFile = document.getElementById('btn-change-file');
-  btnBrowseFile = document.getElementById('btn-browse-file');
+  btnBrowseFile = document.getElementById('browse-btn') || document.getElementById('btn-browse-file') || document.querySelector('.browse-btn');
   btnLoadSample = document.getElementById('btn-load-sample');
   btnHeaderReset = document.getElementById('btn-header-reset');
-  btnLanguageToggle = document.getElementById('btn-language-toggle') || document.getElementById('lang-toggle') || document.querySelector('.lang-switch-btn') || document.querySelector('.btn-lang-toggle');
+  btnLanguageToggle = document.getElementById('lang-toggle') || document.getElementById('btn-language-toggle') || document.querySelector('.lang-switch-btn') || document.querySelector('.btn-language-toggle');
   langToggleText = document.getElementById('lang-toggle-text');
   userQuestionInput = document.getElementById('user-question');
   btnAskAi = document.getElementById('ask-ai-btn');
@@ -356,16 +382,29 @@ function bindEventListeners() {
     btnHeaderReset.addEventListener('click', resetWorkspace);
   }
 
-  // Browse File
-  if (btnBrowseFile && fileInput) {
-    btnBrowseFile.addEventListener('click', () => fileInput.click());
+  // File Upload Trigger Binding
+  const browseBtn = document.getElementById('browse-btn') || document.getElementById('btn-browse-file') || document.querySelector('.browse-btn');
+  const fileInputEl = document.getElementById('pdf-file-input') || fileInput;
+  if (browseBtn && fileInputEl) {
+    browseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      fileInputEl.click();
+    });
+  }
+
+  if (fileInputEl) {
+    fileInputEl.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handlePdfFile(e.target.files[0]);
+      }
+    });
   }
 
   // Dropzone Handlers
-  if (dropzone && fileInput) {
+  if (dropzone) {
     dropzone.addEventListener('click', (e) => {
       if (e.target.closest('button')) return;
-      fileInput.click();
+      if (fileInputEl) fileInputEl.click();
     });
 
     ['dragenter', 'dragover'].forEach(eventName => {
@@ -385,17 +424,11 @@ function bindEventListeners() {
     });
 
     dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('drag-over');
       if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleFileSelected(e.dataTransfer.files[0]);
-      }
-    });
-  }
-
-  // File Input
-  if (fileInput) {
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files.length > 0) {
-        handleFileSelected(e.target.files[0]);
+        handlePdfFile(e.dataTransfer.files[0]);
       }
     });
   }
@@ -524,6 +557,10 @@ function initWorkerIfNeeded() {
 /* ==========================================================================
    File Ingestion & Text Extraction (PDF.js)
    ========================================================================== */
+function handlePdfFile(file) {
+  return handleFileSelected(file);
+}
+
 async function handleFileSelected(file) {
   if (!file) return;
 
