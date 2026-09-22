@@ -1154,7 +1154,7 @@
       </button>
 
       <!-- Language Toggle Button -->
-      <button id="btn-language-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle language">
+      <button id="btn-language-toggle" class="lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
@@ -1258,7 +1258,7 @@
         <div class="progress-track">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
-        <span class="progress-subtext" id="progress-subtext">Initializing ONNX Runtime WebAssembly...</span>
+        <span class="progress-subtext" id="progress-subtext" data-i18n="progress_init">Initializing ONNX Runtime WebAssembly...</span>
       </div>
 
       <!-- Question Input Form -->
@@ -1329,7 +1329,7 @@
           <span data-i18n="context_toggle_show">Show Extracted Text Context (0 words)</span>
         </button>
         <div class="context-box hidden" id="context-box">
-          <pre id="context-content">Extracted PDF text will be displayed here.</pre>
+          <pre id="context-content" data-i18n="context_placeholder">Extracted PDF text will be displayed here.</pre>
         </div>
       </div>
 
@@ -1390,14 +1390,14 @@
   <!-- Global Footer -->
   <footer class="site-footer">
     <div class="footer-content">
-      <div style="font-size: 0.85rem; color: var(--text-muted);">
+      <div style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="footer_copyright">
         © 2026 PDFNetizen. 100% Client-Side Private Document Tools.
       </div>
       <div class="footer-links">
-        <a href="index.html" class="footer-link">Home</a>
-        <a href="privacy.html" class="footer-link">Privacy Policy</a>
-        <a href="terms.html" class="footer-link">Terms of Service</a>
-        <a href="contact.html" class="footer-link">Contact</a>
+        <a href="index.html" class="footer-link" data-i18n="nav_home">Home</a>
+        <a href="privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+        <a href="terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+        <a href="contact.html" class="footer-link" data-i18n="footer_contact">Contact Us</a>
       </div>
     </div>
   </footer>
@@ -1408,6 +1408,8 @@
     <span id="toast-message">Notification message</span>
   </div>
 
+  <!-- i18n Localization Dictionary -->
+  <script src="i18n.js"></script>
   <!-- Main Controller Script -->
   <script src="ask-pdf.js"></script>
   <!-- PWA Service Worker Registration -->
