@@ -7,6 +7,8 @@ const PRECACHE_ASSETS = [
   './favicon.svg',
   './style.css',
   './merge.css',
+  './theme.css',
+  './theme.js',
   './app.js',
   './pwa.js',
   './i18n.js',

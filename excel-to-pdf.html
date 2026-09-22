@@ -161,6 +161,9 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
     crossorigin="anonymous"></script>
 
+    <!-- Theme Controller (executed early to prevent flash) -->
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
   <style>
     :root {
       /* Core Dark Color Palette */
@@ -1595,7 +1598,12 @@
 
       <div class="nav-divider"></div>
 
-      <!-- Language Toggle Button -->
+              <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary" title="Switch Theme / تبديل المظهر" aria-label="Toggle theme">
+          <i data-lucide="sun"></i>
+        </button>
+
+        <!-- Language Toggle Button -->
       <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"
         aria-label="Toggle language">
         <i data-lucide="globe"></i>

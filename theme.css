@@ -1,0 +1,360 @@
+/* ==========================================================================
+   theme.css - Unified Dark / Light Design System Tokens & Parity Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens - Dark Theme (Default)
+   -------------------------------------------------------------------------- */
+:root,
+:root[data-theme="dark"] {
+  --theme-name: dark;
+
+  /* Background Palette */
+  --bg-primary: #0B0F19;
+  --bg-main: #0B0F19;
+  --bg-secondary: #0F172A;
+  --bg-surface: #111827;
+  --bg-surface-elevated: #1F2937;
+  --bg-card: #111827;
+  --bg-card-hover: #1E293B;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-active: rgba(99, 102, 241, 0.18);
+  --card-bg: #111827;
+
+  /* Borders & Dividers */
+  --border-color: #1F2937;
+  --border-subtle: #1F2937;
+  --border-focus: #6366F1;
+  --border-active: rgba(99, 102, 241, 0.6);
+  --card-border: #1F2937;
+
+  /* Typography */
+  --text-primary: #F9FAFB;
+  --text-main: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #9CA3AF;
+  --text-inverse: #0F172A;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.25);
+  --shadow-pdf: 0 14px 45px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   2. Design Tokens - Light Theme
+   -------------------------------------------------------------------------- */
+:root[data-theme="light"] {
+  --theme-name: light;
+
+  /* Background Palette */
+  --bg-primary: #F8FAFC;
+  --bg-main: #F8FAFC;
+  --bg-secondary: #F1F5F9;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F1F5F9;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --bg-active: rgba(99, 102, 241, 0.12);
+  --card-bg: #FFFFFF;
+
+  /* Borders & Dividers */
+  --border-color: #E2E8F0;
+  --border-subtle: #E2E8F0;
+  --border-focus: #4F46E5;
+  --border-active: rgba(79, 70, 229, 0.5);
+  --card-border: #E2E8F0;
+
+  /* Typography */
+  --text-primary: #0F172A;
+  --text-main: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-inverse: #FFFFFF;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.07);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.18);
+  --shadow-pdf: 0 10px 30px rgba(15, 23, 42, 0.15), 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   3. Theme Toggle Button Styling
+   -------------------------------------------------------------------------- */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  min-width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-surface-elevated, rgba(30, 41, 67, 0.85));
+  color: var(--text-primary, #F8FAFC);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.theme-toggle-btn svg,
+.theme-toggle-btn i {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.12));
+  border-color: var(--border-focus, #6366F1);
+  color: var(--primary, #6366F1);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn:hover svg,
+.theme-toggle-btn:hover i {
+  transform: rotate(18deg) scale(1.1);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   4. Light Mode Component Overrides (Parity & Contrast Polish)
+   -------------------------------------------------------------------------- */
+[data-theme="light"] body {
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.04), transparent 50%), #F8FAFC !important;
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .app-layout,
+[data-theme="light"] .app-wrapper,
+[data-theme="light"] .main-container {
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.04), transparent 50%), #F8FAFC !important;
+}
+
+[data-theme="light"] .top-nav {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  color: #0F172A !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme="light"] .nav-brand {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .btn-secondary,
+[data-theme="light"] .btn-ghost,
+[data-theme="light"] .btn-outline {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .btn-secondary:hover,
+[data-theme="light"] .btn-ghost:hover,
+[data-theme="light"] .btn-outline:hover {
+  background: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .card,
+[data-theme="light"] .tool-card,
+[data-theme="light"] .seo-card,
+[data-theme="light"] .feature-box,
+[data-theme="light"] .step-card,
+[data-theme="light"] .faq-item,
+[data-theme="light"] .option-card,
+[data-theme="light"] .mode-card,
+[data-theme="light"] .setting-card,
+[data-theme="light"] .file-card,
+[data-theme="light"] .grid-item,
+[data-theme="light"] .page-card,
+[data-theme="light"] .preview-card-frame,
+[data-theme="light"] .hero-section-card,
+[data-theme="light"] .info-box {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05) !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .card:hover,
+[data-theme="light"] .grid-item:hover {
+  background: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
+}
+
+[data-theme="light"] .dropzone,
+[data-theme="light"] .dropzone-container,
+[data-theme="light"] .upload-area,
+[data-theme="light"] .upload-card,
+[data-theme="light"] .file-drop-area {
+  background: rgba(241, 245, 249, 0.75) !important;
+  border-color: #CBD5E1 !important;
+}
+
+[data-theme="light"] .dropzone:hover,
+[data-theme="light"] .dropzone-container:hover,
+[data-theme="light"] .dropzone.dragover,
+[data-theme="light"] .dropzone-container.dragover,
+[data-theme="light"] .upload-area:hover,
+[data-theme="light"] .upload-area.dragover {
+  background: rgba(99, 102, 241, 0.06) !important;
+  border-color: #6366F1 !important;
+}
+
+[data-theme="light"] .dropzone-title,
+[data-theme="light"] .hero-title,
+[data-theme="light"] .page-title,
+[data-theme="light"] .section-title,
+[data-theme="light"] .tool-title,
+[data-theme="light"] .card-title,
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .dropzone-subtitle,
+[data-theme="light"] .hero-desc,
+[data-theme="light"] .hero-subtitle,
+[data-theme="light"] .page-subtitle,
+[data-theme="light"] .card-desc,
+[data-theme="light"] .card p,
+[data-theme="light"] .text-muted,
+[data-theme="light"] .text-secondary {
+  color: #64748B !important;
+}
+
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="number"],
+[data-theme="light"] input[type="password"],
+[data-theme="light"] input[type="email"],
+[data-theme="light"] input[type="search"],
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+[data-theme="light"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #6366F1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+}
+
+[data-theme="light"] .comparison-table th,
+[data-theme="light"] .table th {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .comparison-table td,
+[data-theme="light"] .table td {
+  border-color: #E2E8F0 !important;
+  color: #334155 !important;
+}
+
+[data-theme="light"] .comparison-table tr:hover td {
+  background: #F8FAFC !important;
+}
+
+[data-theme="light"] .faq-question {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .faq-answer,
+[data-theme="light"] .faq-item p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .site-footer {
+  background: #F8FAFC !important;
+  border-top-color: #E2E8F0 !important;
+  color: #64748B !important;
+}
+
+[data-theme="light"] .site-footer a {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .site-footer a:hover {
+  color: #6366F1 !important;
+}
+
+[data-theme="light"] .cookie-banner {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #0F172A !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12) !important;
+}
+
+[data-theme="light"] .modal-content,
+[data-theme="light"] .modal-card,
+[data-theme="light"] .dialog-card {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #0F172A !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .tool-dock,
+[data-theme="light"] .bottom-dock,
+[data-theme="light"] .floating-toolbar,
+[data-theme="light"] .props-bar {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1) !important;
+}
+
+[data-theme="light"] .tool-btn {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .tool-btn:hover {
+  color: #6366F1 !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+
+[data-theme="light"] .tool-btn.active {
+  color: #6366F1 !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
+[data-theme="light"] #canvas-stage-wrapper {
+  background-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .breadcrumb-nav a {
+  color: #64748B !important;
+}
+
+[data-theme="light"] .breadcrumb-current {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .step-number {
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  color: #FFFFFF !important;
+}

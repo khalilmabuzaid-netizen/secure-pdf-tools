@@ -68,10 +68,46 @@ const translations = {
     footer_privacy: "Privacy Policy",
     footer_terms: "Terms of Service",
     footer_contact: "Contact Us",
-    footer_copyright: "© 2026 PDF Hub. All rights reserved.",
+    footer_copyright: "© 2026 PDF Netizen. All rights reserved.",
     cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
     cookie_learn_more: "Privacy Policy",
     cookie_accept_btn: "Accept",
+
+    // Annotator Tool SEO, Steps, Features & FAQ
+    annotator_seo_badge: "Interactive & Private PDF Annotator",
+    annotator_seo_title: "How to Annotate, Draw & Edit PDF Files Online for Free",
+    annotator_seo_subtitle: "Add freehand drawings, highlights, text notes, and LaTeX mathematical equations directly to your documents with 100% client-side privacy.",
+    annotator_step1_title: "1. Open PDF File",
+    annotator_step1_desc: "Open or drag and drop your PDF file into the local interactive canvas.",
+    annotator_step2_title: "2. Select Markup Tool",
+    annotator_step2_desc: "Select your markup tool: Freehand Pen, Highlighter, Text box, or MathJax LaTeX formula.",
+    annotator_step3_title: "3. Annotate & Edit",
+    annotator_step3_desc: "Draw, annotate, highlight text, or insert LaTeX mathematical equations interactively on any page.",
+    annotator_step4_title: "4. Save & Export",
+    annotator_step4_desc: "Click 'Download PDF' to flatten your markup and export your annotated PDF instantly.",
+    annotator_feat1_title: "100% Client-Side Privacy",
+    annotator_feat1_desc: "Zero server uploads. All rendering, drawing, and annotation processing takes place exclusively in your browser memory.",
+    annotator_feat2_title: "MathJax & Formula Support",
+    annotator_feat2_desc: "Insert complex mathematical equations, scientific notations, and matrix formulas rendered with MathJax vector precision.",
+    annotator_feat3_title: "Smooth Freehand Drawing",
+    annotator_feat3_desc: "Enjoy fluid pen and highlighter strokes with adjustable brush size, opacity, and custom hex color palettes.",
+    annotator_feat4_title: "Multi-Page & Vector Export",
+    annotator_feat4_desc: "Easily navigate multi-page documents and export crystal-clear vector annotations embedded into the original PDF.",
+    annotator_feat5_title: "Offline PWA Capability",
+    annotator_feat5_desc: "Install PDF Netizen as a Progressive Web App to annotate and edit PDFs anywhere, even without an active internet connection.",
+    annotator_feat6_title: "No Limits or Watermarks",
+    annotator_feat6_desc: "100% free with no file size limits, no page count restrictions, and no watermark additions to your documents.",
+    annotator_faq_title: "Frequently Asked Questions",
+    annotator_faq_q1: "Is it safe to annotate confidential documents here?",
+    annotator_faq_a1: "Yes, absolutely. All rendering and annotation occurs 100% locally in your browser memory. Your files and annotations never touch any remote server or the internet, guaranteeing total privacy and compliance.",
+    annotator_faq_q2: "How do I add math formulas or symbols to my PDF?",
+    annotator_faq_a2: "Select the Math LaTeX tool from the dock, enter standard LaTeX syntax (such as $E = mc^2$ or calculus integrals), view the live rendered MathJax preview, and click insert to place it anywhere on your page.",
+    annotator_faq_q3: "Can I annotate PDFs offline without an internet connection?",
+    annotator_faq_a3: "Yes! PDF Netizen is designed as an offline-first Progressive Web App (PWA). Once cached in your browser, you can annotate documents without internet access.",
+    annotator_faq_q4: "Is there a page count or file size limit?",
+    annotator_faq_a4: "No. PDF Netizen Annotator is 100% free with no arbitrary limits, no page caps, and no watermark additions. Processing speed depends only on your local device hardware.",
+    annotator_faq_q5: "How can I annotate a PDF document online for free?",
+    annotator_faq_a5: "Simply drag and drop your PDF file into the workspace, choose your markup tool (Pen, Highlighter, Text, or Math Formula), draw or annotate on your document, and click 'Download PDF' to export instantly.",
 
     // OCR Tool SEO & FAQ
     ocr_seo_badge: "Privacy-First Text Recognition",
@@ -237,10 +273,46 @@ const translations = {
     footer_privacy: "سياسة الخصوصية",
     footer_terms: "شروط الاستخدام",
     footer_contact: "اتصل بنا",
-    footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
+    footer_copyright: "© ٢٠٢٦ PDF Netizen. جميع الحقوق محفوظة.",
     cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
     cookie_learn_more: "سياسة الخصوصية",
     cookie_accept_btn: "موافق",
+
+    // Annotator Tool SEO, Steps, Features & FAQ
+    annotator_seo_badge: "محرر وملاحظات PDF تفاعلي وخاص",
+    annotator_seo_title: "كيفية تدوين الملاحظات والرسم وتعديل ملفات PDF مجاناً",
+    annotator_seo_subtitle: "أضف رسومات حرة وتظليلات وملاحظات نصية ومعادلات رياضية LaTeX مباشرة داخل المتصفح مع خصوصية محلية ١٠٠٪.",
+    annotator_step1_title: "١. فتح ملف PDF",
+    annotator_step1_desc: "افتح أو اسحب وأفلت ملف PDF الخاص بك في لوحة العمل التفاعلية المحلية.",
+    annotator_step2_title: "٢. اختيار أداة الملاحظات",
+    annotator_step2_desc: "اختر أداتك المفضلة: القلم الحر، قلم التظليل، مربع النص، أو معادلة MathJax LaTeX.",
+    annotator_step3_title: "٣. الرسم وتدوين الملاحظات",
+    annotator_step3_desc: "ارسم، ودون ملاحظاتك، وظلل النصوص، أو أدرج معادلات رياضية تفاعلية في أي صفحة.",
+    annotator_step4_title: "٤. الحفظ والتصدير الفوري",
+    annotator_step4_desc: "انقر على زر 'تحميل PDF' لدمج تعديلاتك وتصدير ملفك النهائي فوراً بدون علامات مائية.",
+    annotator_feat1_title: "خصوصية محلية ١٠٠٪",
+    annotator_feat1_desc: "معالجة محلية بالكامل بدون أي رفع للسحابة أو الخوادم. لا تغادر مستنداتك جهازك أبداً.",
+    annotator_feat2_title: "دعم معادلات MathJax و LaTeX",
+    annotator_feat2_desc: "أدرج معادلات رياضية معقدة، وصيغاً علمية، ومصفوفات بدقة متجهات فائقة الجودة.",
+    annotator_feat3_title: "رسم حر سلس وألوان مخصصة",
+    annotator_feat3_desc: "استمتع بضربات قلم وتظليل ناعمة مع إمكانية تخصيص حجم الفرشاة والشفافية ولوحة ألوان متكاملة.",
+    annotator_feat4_title: "تنقل متعدد الصفحات وتصدير عالي الدقة",
+    annotator_feat4_desc: "تنقل بسهولة بين صفحات المستند وصدّر ملاحظات متجهة فائقة الوضوح مدمجة في ملف PDF الأصلي.",
+    annotator_feat5_title: "يعمل دون اتصال بالإنترنت (PWA)",
+    annotator_feat5_desc: "ثبّت التطبيق كتطبيق ويب تقدمي (PWA) للعمل على مستنداتك وتعديلها في أي مكان بدون اتصال بالإنترنت.",
+    annotator_feat6_title: "بدون قيود أو علامات مائية",
+    annotator_feat6_desc: "مجاني ١٠٠٪ بدون أي حدود للحجم، وبدون قيود على عدد الصفحات، وبدون إضافة أي علامات مائية.",
+    annotator_faq_title: "الأسئلة الشائعة",
+    annotator_faq_q1: "هل من الآمن تدوين الملاحظات على المستندات السرية هنا؟",
+    annotator_faq_a1: "نعم بكل تأكيد. تتم معالجة المستندات وتدوين الملاحظات محلياً بنسبة ١٠٠٪ داخل ذاكرة متصفحك. لا تغادر ملفاتك جهازك أبداً ولا يتم رفعها لأي خادم على الإنترنت، مما يضمن الخصوصية التامة والامتثال للأمان.",
+    annotator_faq_q2: "كيف يمكنني إضافة معادلات ورموز رياضية إلى ملف PDF؟",
+    annotator_faq_a2: "اختر أداة معادلات Math LaTeX من شريط الأدوات، واكتب صيغة LaTeX القياسية (مثل $E = mc^2$ أو التكاملات والمصفوفات)، وعاين المعادلة مباشرة عبر تقنية MathJax، ثم انقر لإدراجها في أي مكان بالصفحة.",
+    annotator_faq_q3: "هل يمكنني تدوين الملاحظات وتعديل ملفات PDF دون اتصال بالإنترنت؟",
+    annotator_faq_a3: "نعم! تم تصميم PDF Netizen كتطبيق ويب تقدمي (PWA) يعمل بدون إنترنت. بمجرد تحميله في المتصفح، يمكنك تدوين الملاحظات وتعديل الملفات دون الحاجة لاتصال بالإنترنت.",
+    annotator_faq_q4: "هل يوجد حد أقصى لعدد الصفحات أو حجم الملف؟",
+    annotator_faq_a4: "كلا. محرر PDF Netizen مجاني ١٠٠٪ بدون أي قيود على حجم الملفات أو عدد الصفحات، وبدون اشتراك أو إضافة علامات مائية.",
+    annotator_faq_q5: "كيف يمكنني تدوين الملاحظات على مستند PDF عبر الإنترنت مجاناً؟",
+    annotator_faq_a5: "ببساطة اسحب وأفلت ملف PDF في مساحة العمل، واختر أداتك (قلم، تمييز، نص، أو معادلة)، وقم بتدوين ملاحظاتك ثم اضغط 'تحميل PDF' لتصدير الملف فوراً.",
 
     // OCR Tool SEO & FAQ
     ocr_seo_badge: "التعرف الضوئي على النصوص مع حماية الخصوصية",
@@ -391,7 +463,12 @@ function setLanguage(lang) {
   elements.forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[currentLang] && translations[currentLang][key]) {
-      el.textContent = translations[currentLang][key];
+      const translation = translations[currentLang][key];
+      if (translation.includes('<span') || translation.includes('<strong>') || translation.includes('<i')) {
+        el.innerHTML = translation;
+      } else {
+        el.textContent = translation;
+      }
     }
   });
 
@@ -415,7 +492,17 @@ function setLanguage(lang) {
     }
   }
 
-  // 6. CRITICAL - Canvas Protection: Enforce LTR on rendering workspace
+  // 6. Persist Language Preference
+  try {
+    localStorage.setItem('pdfnetizen_lang', currentLang);
+  } catch (e) {}
+
+  // 7. Refresh Lucide Icons
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+
+  // 8. CRITICAL - Canvas Protection: Enforce LTR on rendering workspace
   protectCanvasLTR();
 }
 
@@ -469,6 +556,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initPaginationAndZoom();
   initMathJaxModal();
   initLanguageToggle();
+
+  // Restore saved language preference
+  try {
+    const savedLang = localStorage.getItem('pdfnetizen_lang') || 'en';
+    if (savedLang !== 'en') {
+      setLanguage(savedLang);
+    }
+  } catch (e) {}
 
   // Initialize Lucide Icons
   if (window.lucide) {

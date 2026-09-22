@@ -85,6 +85,9 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
+    <!-- Theme Controller (executed early to prevent flash) -->
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
   <!-- Application Stylesheet -->
   <link rel="stylesheet" href="style.css">
 
@@ -258,6 +261,11 @@
         </button>
 
         <div class="nav-divider"></div>
+
+                <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle-btn btn btn-secondary" title="Switch Theme / تبديل المظهر" aria-label="Toggle theme">
+          <i data-lucide="sun"></i>
+        </button>
 
         <!-- Language Toggle Button -->
         <button id="btn-language-toggle" class="btn btn-secondary" title="Switch Language / تغيير اللغة"

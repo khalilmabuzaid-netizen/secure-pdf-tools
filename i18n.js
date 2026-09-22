@@ -1205,7 +1205,7 @@ const translations = {
     "footer_privacy": "سياسة الخصوصية",
     "footer_terms": "شروط الاستخدام",
     "footer_contact": "اتصل بنا",
-    "footer_copyright": "© ٢٠٢٦ PDF Netizen. جميع الحقوق محفوظة.",
+    "footer_copyright": "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
     "cookie_consent_text": "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
     "cookie_learn_more": "سياسة الخصوصية",
     "cookie_accept_btn": "موافق",
