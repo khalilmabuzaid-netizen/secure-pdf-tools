@@ -187,14 +187,14 @@
       flex-direction: column;
       line-height: 1.6;
       overflow-x: hidden;
-      background-image: 
+      background-image:
         radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
         radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
       background-attachment: fixed;
     }
 
     [data-theme="light"] body {
-      background-image: 
+      background-image:
         radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.03) 0%, transparent 40%);
     }
@@ -476,7 +476,8 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    .dropzone-card:hover, .dropzone-card.drag-over {
+    .dropzone-card:hover,
+    .dropzone-card.drag-over {
       border-color: var(--accent-primary);
       background: var(--bg-card-hover);
       box-shadow: var(--accent-glow);
@@ -1078,10 +1079,25 @@
       left: 24px;
     }
 
-    .toast-success { border-color: rgba(16, 185, 129, 0.5); color: #10b981; }
-    .toast-error { border-color: rgba(239, 68, 68, 0.5); color: #ef4444; }
-    .toast-warning { border-color: rgba(245, 158, 11, 0.5); color: #f59e0b; }
-    .toast-info { border-color: rgba(99, 102, 241, 0.5); color: #6366f1; }
+    .toast-success {
+      border-color: rgba(16, 185, 129, 0.5);
+      color: #10b981;
+    }
+
+    .toast-error {
+      border-color: rgba(239, 68, 68, 0.5);
+      color: #ef4444;
+    }
+
+    .toast-warning {
+      border-color: rgba(245, 158, 11, 0.5);
+      color: #f59e0b;
+    }
+
+    .toast-info {
+      border-color: rgba(99, 102, 241, 0.5);
+      color: #6366f1;
+    }
 
     /* Spinner */
     .spinner {
@@ -1094,17 +1110,33 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .hidden {
@@ -1125,13 +1157,31 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      .hero-title { font-size: 1.85rem; }
-      .nav-links { display: none; }
-      .workspace-panel { padding: 18px 14px; }
-      .dropzone-card { padding: 32px 16px; }
-      .seo-card { padding: 1.75rem 1.25rem; }
+      .hero-title {
+        font-size: 1.85rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .workspace-panel {
+        padding: 18px 14px;
+      }
+
+      .dropzone-card {
+        padding: 32px 16px;
+      }
+
+      .seo-card {
+        padding: 1.75rem 1.25rem;
+      }
     }
   </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -1167,7 +1217,8 @@
       </button>
 
       <!-- Language Toggle Button -->
-      <button id="btn-language-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
+      <button id="btn-language-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm"
+        aria-label="Toggle language" title="Toggle Language (English / العربية)">
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
@@ -1187,7 +1238,8 @@
         Ask AI Questions from <span class="gradient-text">PDF Documents</span> Instantly
       </h1>
       <p class="hero-subtitle" data-i18n="hero_subtitle">
-        Extract instant answers, insights, and summaries directly inside your browser. No accounts, zero server uploads, and complete data privacy.
+        Extract instant answers, insights, and summaries directly inside your browser. No accounts, zero server uploads,
+        and complete data privacy.
       </p>
     </section>
 
@@ -1216,8 +1268,10 @@
       </p>
 
       <div class="dropzone-actions">
-        <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" onchange="window.handleSelectedFile(this.files[0])">
-        <button type="button" id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20" onclick="document.getElementById('pdf-file-input').click()">
+        <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;"
+          onchange="window.handleSelectedFile(this.files[0])">
+        <button type="button" id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20"
+          onclick="document.getElementById('pdf-file-input').click()">
           <i class="fas fa-file-upload me-2"></i>
           <span data-i18n="btn_browse_file">Browse PDF File</span>
         </button>
@@ -1228,15 +1282,18 @@
       </div>
 
       <div class="feature-pills">
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_local">100% On-Device Neural Model</span></span>
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_offline">Works Offline After 1st Download</span></span>
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_privacy">Zero Server Uploads & Private</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_local">100% On-Device
+            Neural Model</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_offline">Works Offline
+            After 1st Download</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_privacy">Zero Server
+            Uploads & Private</span></span>
       </div>
     </section>
 
     <!-- Active Workspace Panel -->
     <section class="workspace-panel hidden" id="workspace-panel" aria-label="AI Q&A Workspace">
-      
+
       <!-- Document Overview Card -->
       <div class="file-overview-card">
         <div class="file-overview-left">
@@ -1263,14 +1320,16 @@
         <div class="progress-header">
           <span class="progress-label">
             <div class="spinner"></div>
-            <span id="progress-status-text" data-i18n="progress_downloading">Downloading Local AI Model (~35 MB)...</span>
+            <span id="progress-status-text" data-i18n="progress_downloading">Downloading Local AI Model (~35
+              MB)...</span>
           </span>
           <span class="progress-percent" id="progress-percent">0%</span>
         </div>
         <div class="progress-track">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
-        <span class="progress-subtext" id="progress-subtext" data-i18n="progress_init">Initializing ONNX Runtime WebAssembly...</span>
+        <span class="progress-subtext" id="progress-subtext" data-i18n="progress_init">Initializing ONNX Runtime
+          WebAssembly...</span>
       </div>
 
       <!-- Question Input Form -->
@@ -1279,12 +1338,12 @@
           <i data-lucide="message-square-plus"></i>
           <span data-i18n="label_question">Ask a Question About Your PDF</span>
         </label>
-        
+
         <div class="question-box">
           <input type="text" id="user-question" class="question-input"
             placeholder="e.g., What are the key findings or main topic of this document?"
             data-i18n-placeholder="placeholder_question" autocomplete="off" spellcheck="false">
-          
+
           <button id="ask-ai-btn" class="btn btn-primary btn-lg">
             <i data-lucide="zap"></i>
             <span id="btn-ask-text" data-i18n="btn_ask_ai">Ask AI</span>
@@ -1296,13 +1355,15 @@
         <div class="suggestions-group">
           <div class="suggestions-title" data-i18n="suggestions_title">Suggested Questions:</div>
           <div class="suggestions-chips">
-            <button class="suggestion-chip" data-question="What is the main topic of this document?" data-i18n="suggestion_1">
+            <button class="suggestion-chip" data-question="What is the main topic of this document?"
+              data-i18n="suggestion_1">
               What is the main topic of this document?
             </button>
             <button class="suggestion-chip" data-question="Summarize the key takeaways" data-i18n="suggestion_2">
               Summarize the key takeaways
             </button>
-            <button class="suggestion-chip" data-question="What are the important requirements or dates?" data-i18n="suggestion_3">
+            <button class="suggestion-chip" data-question="What are the important requirements or dates?"
+              data-i18n="suggestion_3">
               What are the important requirements or dates?
             </button>
           </div>
@@ -1357,7 +1418,8 @@
           </div>
           <h2 class="seo-title" data-i18n="ask_seo_title">How to Chat with PDF & Ask AI Questions Online Privately</h2>
           <p class="seo-subtitle" data-i18n="ask_seo_subtitle">
-            Analyze PDF files with cutting-edge local AI models running entirely in your browser without sacrificing privacy or speed.
+            Analyze PDF files with cutting-edge local AI models running entirely in your browser without sacrificing
+            privacy or speed.
           </p>
         </div>
 
@@ -1365,33 +1427,44 @@
           <div class="step-card">
             <div class="step-number">1</div>
             <h3 data-i18n="ask_step1_title">1. Upload Your PDF Document</h3>
-            <p data-i18n="ask_step1_desc">Select any PDF file up to 50MB. PDFNetizen extracts document text 100% locally in your device memory.</p>
+            <p data-i18n="ask_step1_desc">Select any PDF file up to 50MB. PDFNetizen extracts document text 100% locally
+              in your device memory.</p>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <h3 data-i18n="ask_step2_title">2. Ask Any Question</h3>
-            <p data-i18n="ask_step2_desc">Type your query or click one of the suggested prompts to investigate specific details, contracts, or summaries.</p>
+            <p data-i18n="ask_step2_desc">Type your query or click one of the suggested prompts to investigate specific
+              details, contracts, or summaries.</p>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
             <h3 data-i18n="ask_step3_title">3. Instant Local AI Answers</h3>
-            <p data-i18n="ask_step3_desc">The lightweight on-device AI model scans the document text to extract precise answers without sending data to any cloud.</p>
+            <p data-i18n="ask_step3_desc">The lightweight on-device AI model scans the document text to extract precise
+              answers without sending data to any cloud.</p>
           </div>
         </div>
 
-        <h3 class="seo-title" style="font-size: 1.4rem; margin-top: 2rem;" data-i18n="ask_faq_title">Frequently Asked Questions</h3>
+        <h3 class="seo-title" style="font-size: 1.4rem; margin-top: 2rem;" data-i18n="ask_faq_title">Frequently Asked
+          Questions</h3>
         <div class="faq-grid">
           <div class="faq-item">
-            <div class="faq-q" data-i18n="ask_faq_q1">Are my documents sent to OpenAI, ChatGPT, or external cloud servers?</div>
-            <div class="faq-a" data-i18n="ask_faq_a1">No. Our AI question-answering engine runs 100% client-side inside your browser via WebAssembly and Web Workers. Your private documents, financial sheets, and legal contracts never leave your machine.</div>
+            <div class="faq-q" data-i18n="ask_faq_q1">Are my documents sent to OpenAI, ChatGPT, or external cloud
+              servers?</div>
+            <div class="faq-a" data-i18n="ask_faq_a1">No. Our AI question-answering engine runs 100% client-side inside
+              your browser via WebAssembly and Web Workers. Your private documents, financial sheets, and legal
+              contracts never leave your machine.</div>
           </div>
           <div class="faq-item">
-            <div class="faq-q" data-i18n="ask_faq_q2">Why is there a one-time ~35 MB download on the first question?</div>
-            <div class="faq-a" data-i18n="ask_faq_a2">To guarantee 100% privacy, a lightweight quantized ONNX neural model is downloaded directly into your browser cache. Subsequent queries and future visits execute instantly offline with 0 MB download.</div>
+            <div class="faq-q" data-i18n="ask_faq_q2">Why is there a one-time ~35 MB download on the first question?
+            </div>
+            <div class="faq-a" data-i18n="ask_faq_a2">To guarantee 100% privacy, a lightweight quantized ONNX neural
+              model is downloaded directly into your browser cache. Subsequent queries and future visits execute
+              instantly offline with 0 MB download.</div>
           </div>
           <div class="faq-item">
             <div class="faq-q" data-i18n="ask_faq_q3">Does this tool work with scanned image PDFs?</div>
-            <div class="faq-a" data-i18n="ask_faq_a3">AskPDF is optimized for text and vector PDF documents. For scanned image files, use our free OCR Text Extractor tool first, then query the extracted text.</div>
+            <div class="faq-a" data-i18n="ask_faq_a3">AskPDF is optimized for text and vector PDF documents. For scanned
+              image files, use our free OCR Text Extractor tool first, then query the extracted text.</div>
           </div>
         </div>
       </article>

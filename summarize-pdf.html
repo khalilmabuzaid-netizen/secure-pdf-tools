@@ -196,14 +196,14 @@
       flex-direction: column;
       line-height: 1.6;
       overflow-x: hidden;
-      background-image: 
+      background-image:
         radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
         radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.08) 0%, transparent 40%);
       background-attachment: fixed;
     }
 
     [data-theme="light"] body {
-      background-image: 
+      background-image:
         radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
         radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.04) 0%, transparent 40%);
     }
@@ -507,7 +507,8 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    .dropzone-card:hover, .dropzone-card.drag-over {
+    .dropzone-card:hover,
+    .dropzone-card.drag-over {
       border-color: var(--accent-primary);
       background: var(--bg-card-hover);
       box-shadow: var(--accent-glow);
@@ -1103,7 +1104,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .hidden {
@@ -1126,12 +1129,15 @@
       .hero-title {
         font-size: 2.1rem;
       }
+
       .nav-links {
         display: none;
       }
+
       .faq-grid {
         grid-template-columns: 1fr;
       }
+
       .footer-content {
         flex-direction: column;
         text-align: center;
@@ -1140,12 +1146,25 @@
 
     /* Clean Print Formatting */
     @media print {
-      .top-nav, .hero-section, .model-banner, .warning-banner, .dropzone-card,
-      .controls-card, .progress-card, .summary-actions, .ad-placeholder,
-      .seo-section, .site-footer, .toast {
+
+      .top-nav,
+      .hero-section,
+      .model-banner,
+      .warning-banner,
+      .dropzone-card,
+      .controls-card,
+      .progress-card,
+      .summary-actions,
+      .ad-placeholder,
+      .seo-section,
+      .site-footer,
+      .toast {
         display: none !important;
       }
-      body, .main-container, .summary-output-card {
+
+      body,
+      .main-container,
+      .summary-output-card {
         background: #ffffff !important;
         color: #000000 !important;
         box-shadow: none !important;
@@ -1153,6 +1172,7 @@
         padding: 0 !important;
         margin: 0 !important;
       }
+
       .summary-body {
         font-size: 12pt !important;
         line-height: 1.5 !important;
@@ -1160,6 +1180,10 @@
       }
     }
   </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9937472934541370"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -1196,7 +1220,8 @@
       </button>
 
       <!-- Language Toggle Button -->
-      <button id="btn-language-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm" aria-label="Toggle language" title="Toggle Language (English / العربية)">
+      <button id="btn-language-toggle" class="btn-language-toggle lang-switch-btn btn btn-secondary btn-sm"
+        aria-label="Toggle language" title="Toggle Language (English / العربية)">
         <i data-lucide="globe"></i>
         <span id="lang-toggle-text">العربية</span>
       </button>
@@ -1216,7 +1241,8 @@
         Smart AI <span class="gradient-text">PDF Summarizer</span>
       </h1>
       <p class="hero-subtitle" data-i18n="summarize_hero_subtitle">
-        Generate clear bullet points or executive overviews from your PDF documents directly inside your browser. 100% private with zero cloud uploads.
+        Generate clear bullet points or executive overviews from your PDF documents directly inside your browser. 100%
+        private with zero cloud uploads.
       </p>
     </section>
 
@@ -1249,12 +1275,15 @@
 
       <h2 class="dropzone-title" data-i18n="summarize_dropzone_title">Drop your PDF file here</h2>
       <p class="dropzone-subtitle" data-i18n="summarize_dropzone_subtitle">
-        Drag and drop any PDF document under 50MB to generate an instant on-device AI summary, or browse from your device
+        Drag and drop any PDF document under 50MB to generate an instant on-device AI summary, or browse from your
+        device
       </p>
 
       <div class="dropzone-actions">
-        <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;" onchange="window.handleSelectedFile(this.files[0])">
-        <button type="button" id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20" onclick="document.getElementById('pdf-file-input').click()">
+        <input type="file" id="pdf-file-input" accept="application/pdf,.pdf" style="display: none;"
+          onchange="window.handleSelectedFile(this.files[0])">
+        <button type="button" id="browse-btn" class="btn btn-primary btn-lg browse-btn relative z-20"
+          onclick="document.getElementById('pdf-file-input').click()">
           <i class="fas fa-file-upload me-2"></i>
           <span data-i18n="browse_pdf_file">Browse PDF File</span>
         </button>
@@ -1265,16 +1294,20 @@
       </div>
 
       <div class="feature-pills">
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_local">100% On-Device Neural Model</span></span>
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_offline">Works Offline After 1st Download</span></span>
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_privacy">Zero Server Uploads & Private</span></span>
-        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="summarize_max_limit">Up to 50 MB Safe Processing</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_local">100% On-Device
+            Neural Model</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_offline">Works Offline
+            After 1st Download</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="feature_privacy">Zero Server
+            Uploads & Private</span></span>
+        <span class="feature-pill"><i data-lucide="check-circle-2"></i> <span data-i18n="summarize_max_limit">Up to 50
+            MB Safe Processing</span></span>
       </div>
     </section>
 
     <!-- Active Workspace Panel -->
     <section class="workspace-panel hidden" id="workspace-panel" aria-label="PDF Summarizer Workspace">
-      
+
       <!-- Document Overview Card -->
       <div class="file-overview-card">
         <div class="file-overview-left">
@@ -1350,14 +1383,16 @@
         <div class="progress-header">
           <span class="progress-label">
             <div class="spinner"></div>
-            <span id="progress-status-text" data-i18n="summarize_progress_downloading">Downloading Local AI Model (~40 MB)...</span>
+            <span id="progress-status-text" data-i18n="summarize_progress_downloading">Downloading Local AI Model (~40
+              MB)...</span>
           </span>
           <span class="progress-percent" id="progress-percent">0%</span>
         </div>
         <div class="progress-track">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
-        <span class="progress-subtext" id="progress-subtext" data-i18n="summarize_progress_init">Initializing ONNX Runtime WebAssembly...</span>
+        <span class="progress-subtext" id="progress-subtext" data-i18n="summarize_progress_init">Initializing ONNX
+          Runtime WebAssembly...</span>
       </div>
 
       <!-- Summary Output Card -->
@@ -1410,7 +1445,8 @@
           </div>
           <h2 class="seo-title" data-i18n="summarize_seo_title">How to Summarize PDF Documents Online Privately</h2>
           <p class="seo-subtitle" data-i18n="summarize_seo_subtitle">
-            Condense lengthy reports, legal agreements, academic research papers, and books into concise summaries using local in-browser artificial intelligence.
+            Condense lengthy reports, legal agreements, academic research papers, and books into concise summaries using
+            local in-browser artificial intelligence.
           </p>
         </div>
 
@@ -1418,42 +1454,56 @@
           <div class="step-card">
             <div class="step-number">1</div>
             <h3 data-i18n="summarize_step1_title">1. Upload PDF Document</h3>
-            <p data-i18n="summarize_step1_desc">Drag and drop any PDF file up to 50MB. Text extraction executes 100% locally in your device memory.</p>
+            <p data-i18n="summarize_step1_desc">Drag and drop any PDF file up to 50MB. Text extraction executes 100%
+              locally in your device memory.</p>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <h3 data-i18n="summarize_step2_title">2. Select Summary Style</h3>
-            <p data-i18n="summarize_step2_desc">Choose between Key Bullet Points or an Executive Overview, and adjust depth from quick takeaways to comprehensive.</p>
+            <p data-i18n="summarize_step2_desc">Choose between Key Bullet Points or an Executive Overview, and adjust
+              depth from quick takeaways to comprehensive.</p>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
             <h3 data-i18n="summarize_step3_title">3. Generate AI Summary</h3>
-            <p data-i18n="summarize_step3_desc">Click Summarize to initiate off-thread neural inference with automatic token window chunking.</p>
+            <p data-i18n="summarize_step3_desc">Click Summarize to initiate off-thread neural inference with automatic
+              token window chunking.</p>
           </div>
           <div class="step-card">
             <div class="step-number">4</div>
             <h3 data-i18n="summarize_step4_title">4. Copy, Export or Print</h3>
-            <p data-i18n="summarize_step4_desc">Copy the formatted insights to your clipboard, download as a text file, or print with clean document formatting.</p>
+            <p data-i18n="summarize_step4_desc">Copy the formatted insights to your clipboard, download as a text file,
+              or print with clean document formatting.</p>
           </div>
         </div>
 
-        <h3 class="seo-title" style="font-size: 1.4rem; margin-top: 2rem;" data-i18n="summarize_faq_title">Frequently Asked Questions</h3>
+        <h3 class="seo-title" style="font-size: 1.4rem; margin-top: 2rem;" data-i18n="summarize_faq_title">Frequently
+          Asked Questions</h3>
         <div class="faq-grid">
           <div class="faq-item">
-            <div class="faq-q" data-i18n="summarize_faq_q1">Are my confidential PDF documents uploaded to external servers?</div>
-            <div class="faq-a" data-i18n="summarize_faq_a1">No. All text extraction and neural summarization execute 100% locally inside your browser via WebAssembly and Web Workers. Your files never touch any external server.</div>
+            <div class="faq-q" data-i18n="summarize_faq_q1">Are my confidential PDF documents uploaded to external
+              servers?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a1">No. All text extraction and neural summarization execute
+              100% locally inside your browser via WebAssembly and Web Workers. Your files never touch any external
+              server.</div>
           </div>
           <div class="faq-item">
-            <div class="faq-q" data-i18n="summarize_faq_q2">What is the maximum file size and page limit for summarization?</div>
-            <div class="faq-a" data-i18n="summarize_faq_a2">The maximum recommended file size is 50 MB to ensure optimal browser memory performance. For documents exceeding 80 pages, the tool analyzes and summarizes the first 80 pages with chunked processing.</div>
+            <div class="faq-q" data-i18n="summarize_faq_q2">What is the maximum file size and page limit for
+              summarization?</div>
+            <div class="faq-a" data-i18n="summarize_faq_a2">The maximum recommended file size is 50 MB to ensure optimal
+              browser memory performance. For documents exceeding 80 pages, the tool analyzes and summarizes the first
+              80 pages with chunked processing.</div>
           </div>
           <div class="faq-item">
             <div class="faq-q" data-i18n="summarize_faq_q3">Why is there a one-time ~40 MB download on first use?</div>
-            <div class="faq-a" data-i18n="summarize_faq_a3">To guarantee complete privacy, a lightweight quantized ONNX neural model is cached directly in your browser. All future visits and summarization queries run instantly offline with 0 MB download.</div>
+            <div class="faq-a" data-i18n="summarize_faq_a3">To guarantee complete privacy, a lightweight quantized ONNX
+              neural model is cached directly in your browser. All future visits and summarization queries run instantly
+              offline with 0 MB download.</div>
           </div>
           <div class="faq-item">
             <div class="faq-q" data-i18n="summarize_faq_q4">Can I export or print the generated summary?</div>
-            <div class="faq-a" data-i18n="summarize_faq_a4">Yes! You can instantly copy the summary to your clipboard, export it as a plain text file (.txt), or use the built-in clean print formatting.</div>
+            <div class="faq-a" data-i18n="summarize_faq_a4">Yes! You can instantly copy the summary to your clipboard,
+              export it as a plain text file (.txt), or use the built-in clean print formatting.</div>
           </div>
         </div>
       </article>
