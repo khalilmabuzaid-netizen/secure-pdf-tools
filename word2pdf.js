@@ -12,6 +12,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       word2pdf_hero_badge: "100% Client-Side Word to PDF • Fast & Private",
       word2pdf_hero_title: 'Convert Word (.docx) to <span class="gradient-text">PDF Document</span>',
       word2pdf_hero_subtitle: "Transform Microsoft Word documents into beautiful, print-ready PDF files directly in your browser. 100% private with zero server uploads and full Arabic RTL support.",
@@ -58,6 +59,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Hub. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -90,6 +92,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       word2pdf_hero_badge: "تحويل Word إلى PDF محلياً ١٠٠٪ • سرعة وخصوصية",
       word2pdf_hero_title: 'تحويل مستندات Word (.docx) إلى <span class="gradient-text">ملف PDF</span>',
       word2pdf_hero_subtitle: "حوّل مستندات مايكروسوفت وورد إلى ملفات PDF احترافية وجاهزة للطباعة مباشرة في متصفحك بأمان تام وبدون رفع إلى أي خوادم مع دعم كامل للعربية.",
@@ -136,6 +139,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",

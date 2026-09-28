@@ -17,6 +17,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       ocr_hero_badge: "Local OCR • Extract Text From Images & PDFs",
       ocr_hero_title: 'Extract Text with <span class="gradient-text">Optical Character Recognition</span>',
       ocr_hero_subtitle: "Convert scanned documents, photos, screenshots, and PDF pages into clean, editable text directly in your browser. 100% private with zero server uploads.",
@@ -53,6 +54,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Hub. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -83,6 +85,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       ocr_hero_badge: "التعرف الضوئي على النصوص (OCR) • محلي وآمن",
       ocr_hero_title: 'استخراج النصوص بتقنية <span class="gradient-text">التعرف الضوئي OCR</span>',
       ocr_hero_subtitle: "حوّل المستندات الممسوحة ضوئياً، والصور، ولقطات الشاشة، وملفات PDF إلى نصوص قابلة للنسخ والتعديل مباشرة في متصفحك وبأمان تام.",
@@ -119,6 +122,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",

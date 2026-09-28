@@ -20,6 +20,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       breadcrumb_home: "Home",
       breadcrumb_current: "Print PDF",
       hero_badge: "100% Client-Side • Instant Direct Printing • Zero Server Uploads",
@@ -91,6 +92,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Netizen. All rights reserved.",
       toast_loaded: "PDF loaded successfully: {pages} pages available.",
       toast_sample_loaded: "Sample 3-page business document generated and loaded!",
@@ -103,6 +105,7 @@
     ar: {
       badge_client_side: "100% معالجة محلية",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       breadcrumb_home: "الرئيسية",
       breadcrumb_current: "طباعة PDF",
       hero_badge: "100% معالجة داخل المتصفح • طباعة فورية ومباشرة • بدون رفع على خوادم",
@@ -174,6 +177,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الخدمة",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© 2026 PDF Netizen. جميع الحقوق محفوظة.",
       toast_loaded: "تم تحميل ملف PDF بنجاح: {pages} صفحة متوفرة.",
       toast_sample_loaded: "تم إنشاء وتحميل مستند نموذجي مكون من 3 صفحات!",

@@ -20,6 +20,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       breadcrumb_home: "Home",
       breadcrumb_current: "Compare PDF",
       hero_badge: "100% Client-Side • Visual Pixel Diff & Synchronized Comparison • Zero Server Uploads",
@@ -107,6 +108,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Netizen. All rights reserved.",
       toast_doc_a_loaded: "Document A (Original) loaded: {pages} pages.",
       toast_doc_b_loaded: "Document B (Modified) loaded: {pages} pages.",
@@ -119,6 +121,7 @@
     ar: {
       badge_client_side: "100% معالجة محلية",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       breadcrumb_home: "الرئيسية",
       breadcrumb_current: "مقارنة ملفات PDF",
       hero_badge: "100% معالجة داخل المتصفح • كشف الفروقات البصرية • بدون رفع على خوادم",
@@ -206,6 +209,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الخدمة",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© 2026 PDF Netizen. جميع الحقوق محفوظة.",
       toast_doc_a_loaded: "تم تحميل المستند أ (الأصلي): {pages} صفحات.",
       toast_doc_b_loaded: "تم تحميل المستند ب (المعدل): {pages} صفحات.",

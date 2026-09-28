@@ -12,6 +12,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       sign_hero_badge: "Local eSign • Secure & Private Document Signing",
       sign_hero_title: 'Sign Your <span class="gradient-text">PDF Documents</span> Electronically',
       sign_hero_subtitle: "Draw your custom electronic signature smoothly with mouse or touch, and securely stamp it onto any page of your PDF. 100% client-side privacy.",
@@ -51,6 +52,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Hub. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -82,6 +84,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       sign_hero_badge: "توقيع إلكتروني محلي • آمن وخاص تماماً",
       sign_hero_title: 'توقيع <span class="gradient-text">مستندات PDF</span> إلكترونياً',
       sign_hero_subtitle: "ارسم توقيعك الإلكتروني بسلاسة ودقة باستخدام الماوس أو شاشة اللمس، وثبّته في أي صفحة ومكان تريده داخل مستند PDF بأمان تام.",
@@ -121,6 +124,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",

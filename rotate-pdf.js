@@ -18,6 +18,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       nav_annotator: "Annotator",
       nav_compress: "Compress PDF",
       nav_split: "Split PDF",
@@ -101,6 +102,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDFNetizen. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -117,6 +119,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       nav_annotator: "المحرر",
       nav_compress: "ضغط PDF",
       nav_split: "تقسيم PDF",
@@ -200,6 +203,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDFNetizen. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",

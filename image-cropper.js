@@ -12,6 +12,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       imgcrop_hero_badge: "100% Client-Side Image Cropper & Resizer • Zero Uploads",
       imgcrop_hero_title: 'Crop & Resize <span class="gradient-text">Images</span>',
       imgcrop_hero_subtitle: "Crop photos with precision aspect ratios (1:1, 16:9, 4:3, 9:16), rotate, flip, and resize by pixels or scale. 100% private in-browser processing.",
@@ -47,6 +48,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Hub. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -88,6 +90,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       imgcrop_hero_badge: "قص وتصغير الصور محلياً ١٠٠٪ • بدون أي رفع سحابي",
       imgcrop_hero_title: 'قص وتعديل أبعاد <span class="gradient-text">الصور</span>',
       imgcrop_hero_subtitle: "قص الصور بنسب أبعاد دقيقة (1:1، 16:9، 4:3، 9:16)، مع إمكانية التدوير، والقلب، والتحجيم بالبكسل. معالجة محلية ١٠٠٪ داخل متصفحك وبأعلى خصوصية.",
@@ -123,6 +126,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",

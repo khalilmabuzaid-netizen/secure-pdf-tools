@@ -20,6 +20,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       breadcrumb_home: "Home",
       breadcrumb_current: "Extract Images",
       hero_badge: "100% Client-Side • Lossless Embedded Photo Extraction • Zero Server Uploads",
@@ -93,6 +94,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_tagline: "100% Client-side, private, and secure document processing directly in your browser.",
       footer_copyright: "© 2026 PDF Netizen. All rights reserved.",
       toast_loaded: "PDF loaded successfully!",
@@ -108,6 +110,7 @@
     ar: {
       badge_client_side: "100% معالجة محلية",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       breadcrumb_home: "الرئيسية",
       breadcrumb_current: "استخراج الصور",
       hero_badge: "100% معالجة داخل المتصفح • استخراج الصور الأصلية • بدون رفع على خوادم",
@@ -181,6 +184,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الخدمة",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_tagline: "معالجة مستندات آمنة، خاصة، ومحلية 100% داخل متصفحك مباشرة.",
       footer_copyright: "© 2026 PDF Netizen. جميع الحقوق محفوظة.",
       toast_loaded: "تم تحميل ملف PDF بنجاح!",

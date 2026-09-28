@@ -19,6 +19,8 @@ const translations = {
   en: {
     badge_client_side: "100% Client-Side",
     nav_home: "Home",
+    nav_blog: "Blog",
+    footer_blog: "Blog",
     nav_annotator: "Annotator",
     nav_merge: "Merge PDF",
     nav_split: "Split PDF",
@@ -104,6 +106,8 @@ const translations = {
   ar: {
     badge_client_side: "محلي ١٠٠٪ في المتصفح",
     nav_home: "الرئيسية",
+    nav_blog: "المدونة",
+    footer_blog: "المدونة",
     nav_annotator: "محرر PDF",
     nav_merge: "دمج PDF",
     nav_split: "تقسيم PDF",

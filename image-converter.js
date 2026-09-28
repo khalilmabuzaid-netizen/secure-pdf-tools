@@ -12,6 +12,7 @@
     en: {
       badge_client_side: "100% Client-Side",
       nav_home: "Home",
+    nav_blog: "Blog",
       imgconv_hero_badge: "100% Client-Side Image Converter • Zero Server Uploads",
       imgconv_hero_title: 'Convert <span class="gradient-text">Image Formats</span>',
       imgconv_hero_subtitle: "Transform PNG, JPG/JPEG, and WebP images instantly inside your browser. Fast, private, and 100% client-side with custom quality control and transparency options.",
@@ -42,6 +43,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service",
       footer_contact: "Contact Us",
+    footer_blog: "Blog",
       footer_copyright: "© 2026 PDF Hub. All rights reserved.",
       cookie_consent_text: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
       cookie_learn_more: "Privacy Policy",
@@ -84,6 +86,7 @@
     ar: {
       badge_client_side: "محلي ١٠٠٪ في المتصفح",
       nav_home: "الرئيسية",
+    nav_blog: "المدونة",
       imgconv_hero_badge: "تحويل صيغ الصور محلياً ١٠٠٪ • بدون أي رفع سحابي",
       imgconv_hero_title: 'تحويل <span class="gradient-text">صيغ الصور</span>',
       imgconv_hero_subtitle: "حوّل صور PNG و JPG/JPEG و WebP فورياً ومباشرة في متصفحك. سريع، خاص، وبمعالجة محلية ١٠٠٪ مع تحكم في الجودة وخيارات الشفافية.",
@@ -114,6 +117,7 @@
       footer_privacy: "سياسة الخصوصية",
       footer_terms: "شروط الاستخدام",
       footer_contact: "اتصل بنا",
+    footer_blog: "المدونة",
       footer_copyright: "© ٢٠٢٦ PDF Hub. جميع الحقوق محفوظة.",
       cookie_consent_text: "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك. باستمرارك في زيارة هذا الموقع، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
       cookie_learn_more: "سياسة الخصوصية",
